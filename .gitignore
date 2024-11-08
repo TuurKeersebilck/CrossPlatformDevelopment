@@ -1,0 +1,53 @@
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.*
+
+# React Native files
+/ios/Pods/
+*.xcodeproj/
+/android/.gradle/
+/android/app/build/
+/android/build/
+/ios/build/
+/ios/DerivedData/
+/ios/Pods/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata
+android/app/src/main/res/drawable-*/*
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.ios.bundle
+android/app/src/main/assets/sourcemaps/
+android/app/src/main/assets/main.jsbundle
+android/app/src/main/assets/node_modules/
+
+# Testing
+/coverage/
+/*.spec.js
+
+# Miscellaneous
+.expo
+.expo-shared
