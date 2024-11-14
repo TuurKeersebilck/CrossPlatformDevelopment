@@ -1,36 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import TrackRow from "../components/tracklist/trackRow";
 import trackMockData from "../assets/trackmockup";
 
 const HomeScreen = () => {
+	var tracks = trackMockData;
+
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>Track List</Text>
-			<ScrollView contentContainerStyle={styles.scrollView}>
-				{trackMockData.map((track, index) => (
-					<TrackRow key={index} track={track} />
-				))}
-			</ScrollView>
-		</View>
+		<ScrollView contentContainerStyle={styles.scrollView}>
+			{tracks.map((track, index) => (
+				<TrackRow key={index} track={track} />
+			))}
+		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 10,
-	},
 	scrollView: {
 		flexGrow: 1,
 		padding: 10,
-	},
-	title: {
-		fontSize: 24,
-		fontWeight: "bold",
-		marginBottom: 10,
-		textAlign: "center",
-		paddingTop: 25,
 	},
 });
 
