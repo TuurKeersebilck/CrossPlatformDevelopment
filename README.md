@@ -4,8 +4,6 @@
 
 - Toont een lijst van nummers die beschikbaar zijn in de database en opgehaald worden via de API.
 
-- Een zoekveld waarmee je kunt zoeken op naam van het nummer, artiest, of genre.
-
 ## 2. Search pagina
 
 - Laat de user zoeken op liedje of artiest
@@ -28,9 +26,9 @@
 
   - **Thema**: Kies tussen een licht en donker thema, dat toegepast wordt op de gehele app.
 
- // - **Taalkeuze**: Selecteer de taal waarin je de details wilt weergeven (bijvoorbeeld Engels of Nederlands).
+// - **Taalkeuze**: Selecteer de taal waarin je de details wilt weergeven (bijvoorbeeld Engels of Nederlands).
 
- // - **Favorieten**: Een overzicht van favoriete nummers die gemarkeerd kunnen worden in de overzichtspagina.
+// - **Favorieten**: Een overzicht van favoriete nummers die gemarkeerd kunnen worden in de overzichtspagina.
 
 ## Navigatiestructuur
 
