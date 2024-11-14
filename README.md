@@ -6,19 +6,23 @@
 
 - Een zoekveld waarmee je kunt zoeken op naam van het nummer, artiest, of genre.
 
-## 2. Detailpagina van een geselecteerd Nummer (Song Detail)
+## 2. Search pagina
+
+- Laat de user zoeken op liedje of artiest
+
+## 3. Detailpagina van een geselecteerd Nummer (Song Detail)
 
 - Geeft alle details weer van het geselecteerde nummer, zoals titel, artiest, album, genre, releasedatum.
 
 - Je kunt het nummer toevoegen aan favorieten, zodat het gemarkeerd kan worden in de lijst.
 
-## 3. Overzicht van Artiesten (Artist List - Gelinkt scherm)
+## 4. Overzicht van Artiesten (Artist List - Gelinkt scherm)
 
 - Vanaf de detailpagina van een nummer kun je doorklikken op de artiestennaam om naar een pagina te gaan die alle informatie over die artiest toont.
 
 - Hier kun je albums, biografie, en een lijst van nummers van de artiest zien.
 
-## 4. Instellingenpagina
+## 5. Instellingenpagina
 
 - Bevat de volgende instellingen:
 
