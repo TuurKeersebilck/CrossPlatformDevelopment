@@ -1,73 +1,100 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, ScrollView } from "react-native";
-
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import TrackRow from "../components/tracklist/trackRow";
 import trackMockData from "../assets/trackmockup";
 
 const SearchScreen = () => {
-	const [query, setQuery] = useState("");
-	const [filteredTracks, setFilteredTracks] = useState(trackMockData);
+    const [query, setQuery] = useState("");
+    const [filteredTracks, setFilteredTracks] = useState(trackMockData);
 
-	const handleSearch = (text) => {
-		setQuery(text);
-		if (text) {
-			const filtered = trackMockData.filter(
-				(track) =>
-					track.title.toLowerCase().includes(text.toLowerCase()) ||
-					track.artist.toLowerCase().includes(text.toLowerCase())
-			);
-			setFilteredTracks(filtered);
-		} else {
-			setFilteredTracks(trackMockData);
-		}
-	};
+    const handleSearch = (text) => {
+        setQuery(text);
+        if (text) {
+            const filtered = trackMockData.filter((track) =>
+                track.title.toLowerCase().includes(text.toLowerCase()) ||
+                track.artist.toLowerCase().includes(text.toLowerCase())
+            );
+            setFilteredTracks(filtered);
+        } else {
+            setFilteredTracks(trackMockData);
+        }
+    };
 
-	return (
-		<View style={styles.container}>
-			<View style={styles.searchContainer}>
-				<TextInput
-					style={styles.searchBar}
-					placeholder="Search by track name or artist"
-					value={query}
-					onChangeText={handleSearch}
-				/>
-			</View>
+    const clearSearch = () => {
+        setQuery("");
+        setFilteredTracks(trackMockData);
+    };
 
-			<ScrollView contentContainerStyle={styles.scrollView}>
-				{query === "" ? (
-					<Text style={{ textAlign: "center" }}>
-						Search for tracks or artists
-					</Text>
-				) : filteredTracks.length === 0 ? (
-					<Text style={{ textAlign: "center" }}>
-						No tracks found for "{query}"
-					</Text>
-				) : (
-					filteredTracks.map((track, index) => (
-						<TrackRow key={index} track={track} />
-					))
-				)}
-			</ScrollView>
-		</View>
-	);
+    return (
+        <View style={styles.container}>
+            <View style={styles.searchContainer}>
+
+                <Ionicons name="search" size={20} color="gray" style={styles.searchIcon} />
+
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search by track name or artist"
+                    value={query}
+                    onChangeText={handleSearch}
+                />
+
+                {query.length > 0 && (
+                    <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+                        <Ionicons name="close-circle" size={20} color="gray" />
+                    </TouchableOpacity>
+                )}
+            </View>
+
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                {query === "" ? (
+                    <Text style={styles.message}>Search for tracks or artists</Text> // leeg
+                ) : filteredTracks.length === 0 ? (
+                    <Text style={styles.message}>No tracks found for "{query}"</Text> // niet gevonden
+                ) : (
+                    filteredTracks.map((track, index) => (
+                        <TrackRow key={index} track={track} /> // gefilterde tracks
+                    ))
+                )}
+            </ScrollView>
+
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 10,
-	},
-	searchBar: {
-		height: 40,
-		borderColor: "gray",
-		borderWidth: 1,
-		borderRadius: 50,
-		paddingLeft: 10,
-		marginBottom: 10,
-	},
-	scrollView: {
-		flexGrow: 1,
-	},
+    container: {
+        flex: 1,
+        padding: 10,
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 10,
+        marginBottom: 10,
+    },
+    searchIcon: {
+        marginRight: 10,
+    },
+    searchBar: {
+        flex: 1,
+        height: 40,
+    },
+    clearButton: {
+        paddingRight: 10,
+    },
+    scrollView: {
+        flexGrow: 1,
+    },
+    message: {
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 16,
+        color: 'gray',
+    },
 });
 
 export default SearchScreen;
