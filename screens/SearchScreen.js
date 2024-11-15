@@ -4,7 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import TrackRow from "../components/tracklist/trackRow";
 import trackMockData from "../assets/trackmockup";
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
     const [query, setQuery] = useState("");
     const [filteredTracks, setFilteredTracks] = useState(trackMockData);
 
@@ -53,7 +53,7 @@ const SearchScreen = () => {
                     <Text style={styles.message}>No tracks found for "{query}"</Text> // niet gevonden
                 ) : (
                     filteredTracks.map((track, index) => (
-                        <TrackRow key={index} track={track} /> // gefilterde tracks
+                        <TrackRow key={index} track={track} navigation={navigation} />
                     ))
                 )}
             </ScrollView>
