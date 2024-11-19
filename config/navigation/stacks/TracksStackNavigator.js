@@ -9,7 +9,7 @@ const TracksStackNavigator = () => {
 	return (
 		<Stack.Navigator initialRouteName="Tracks">
 			<Stack.Screen name="Tracks" component={HomeScreen} />
-			<Stack.Screen name="Track" component={TrackDetailScreen} />
+			<Stack.Screen name="TrackDetail" component={TrackDetailScreen} />
 		</Stack.Navigator>
 	);
 };
