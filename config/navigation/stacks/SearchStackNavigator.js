@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import SearchScreen from "../screens/SearchScreen";
-import TrackDetailScreen from "../screens/TrackDetailScreen";
+import SearchScreen from "../../../screens/SearchScreen";
+import TrackDetailScreen from "../../../screens/TrackDetailScreen";
 
 const Stack = createStackNavigator();
 
