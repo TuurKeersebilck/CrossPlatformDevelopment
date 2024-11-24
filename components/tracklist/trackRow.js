@@ -3,12 +3,6 @@ import PropTypes from "prop-types";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import trackModel from "../../models/trackModel";
 
-const formatDuration = (seconds) => {
-	const minutes = Math.floor(seconds / 60);
-	const remainingSeconds = seconds % 60;
-	return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-};
-
 const TrackRow = ({ track, navigation }) => {
 	return (
 		<TouchableOpacity
@@ -18,9 +12,7 @@ const TrackRow = ({ track, navigation }) => {
 				<Image source={track.img_url} style={styles.trackImage} />
 				<View style={styles.trackInfo}>
 					<Text style={styles.trackTitle}>{track.title}</Text>
-					<Text style={styles.trackDuration}>
-						{formatDuration(track.duration)}
-					</Text>
+					<Text style={styles.trackDuration}>{track.duration} </Text>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -53,9 +45,9 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	trackDuration: {
-        fontSize: 14,
-        color: "gray",
-    },
+		fontSize: 14,
+		color: "gray",
+	},
 });
 
 export default TrackRow;
