@@ -1,18 +1,18 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import SearchScreen from "../../../screens/SearchScreen";
+import HomeScreen from "../../../screens/ArtistsScreen";
 import TrackDetailScreen from "../../../screens/TrackDetailScreen";
 import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
 
 const Stack = createStackNavigator();
 
-const SearchStackNavigator = () => {
+const ArtistsStackNavigator = () => {
 	return (
-		<Stack.Navigator initialRouteName="SearchHome">
+		<Stack.Navigator initialRouteName="ArtistsHome">
 			<Stack.Screen
-				name="SearchHome"
-				component={SearchScreen}
-				options={{ title: "Search" }}
+				name="ArtistsHome"
+				component={HomeScreen}
+				options={{ title: "Artists" }}
 			/>
 			<Stack.Screen
 				name="TrackDetail"
@@ -28,4 +28,4 @@ const SearchStackNavigator = () => {
 	);
 };
 
-export default SearchStackNavigator;
+export default ArtistsStackNavigator;

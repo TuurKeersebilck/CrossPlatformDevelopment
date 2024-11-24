@@ -1,15 +1,15 @@
 import React from "react";
 import { StyleSheet, ScrollView } from "react-native";
-import TrackRow from "../components/tracklist/trackRow";
-import trackMockData from "../assets/trackmockup";
+import ArtistRow from "../components/artistList/artistRow";
+import artistMockData from "../assets/mockupData/artistMockup";
 
 const HomeScreen = ({ navigation }) => {
-	var tracks = trackMockData;
+	var artists = artistMockData;
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollView}>
-			{tracks.map((track, index) => (
-				<TrackRow key={index} track={track} navigation={navigation} />
+			{artists.map((artist, index) => (
+				<ArtistRow key={index} artist={artist} navigation={navigation} />
 			))}
 		</ScrollView>
 	);

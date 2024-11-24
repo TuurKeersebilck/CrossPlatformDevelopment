@@ -1,12 +1,12 @@
-class trackModel {
+class albumModel {
 	constructor(data) {
 		this._id = data._id;
 		this.title = data.title;
         this.img_url = data.img_url;
-		this.duration = data.duration;
 		this.artistId = data.artistId;
-		this.albumId = data.albumId;
+		this.releaseDate = data.releaseDate;
+		this.tracks = data.tracks;
 	}
 }
 
-export default trackModel;
+export default albumModel;
