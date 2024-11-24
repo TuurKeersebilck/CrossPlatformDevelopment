@@ -6,7 +6,7 @@ const TrackDetailScreen = ({ route }) => {
 
 	return (
 		<View style={styles.container}>
-			<Image source={{ uri: track.image }} style={styles.trackImage} />
+			<Image source={{ uri: track.img_url }} style={styles.trackImage} />
 			<Text style={styles.trackTitle}>{track.title}</Text>
 			<Text style={styles.trackArtist}>{track.artist}</Text>
 			<Text style={styles.trackDuration}>{track.duration}</Text>

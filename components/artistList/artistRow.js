@@ -9,7 +9,7 @@ const ArtistRow = ({ artist, navigation }) => {
 			onPress={() => navigation.navigate("ArtistDetail", { artist })}
 		>
 			<View style={styles.artist}>
-				<Image source={{ uri: artist.img_url }} style={styles.artistImage} />
+				<Image source={artist.img_url} style={styles.artistImage} />
 				<View style={styles.artistInfo}>
 					<Text style={styles.artistName}>{artist.name}</Text>
 					<Text style={styles.artistBio}>{artist.bio}</Text>
