@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, SectionList } from "react-native";
+import { View, Text, Image, StyleSheet, SectionList, TouchableOpacity } from "react-native";
 import albumMockData from "../assets/mockupData/albumMockup";
 import trackMockData from "../assets/mockupData/trackMockup";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { useTheme } from "../context/ThemeContext";
+import TrackRow from "../components/trackList/trackRow";
 
-const ArtistDetailScreen = ({ route }) => {
+const ArtistDetailScreen = ({ route, navigation }) => {
     const { artist } = route.params;
+    const { isDarkMode } = useTheme();
     const [sections, setSections] = useState([]);
+    const [isFavorited, setIsFavorited] = useState(false);
 
     useEffect(() => {
         const artistAlbums = albumMockData.filter(
@@ -18,6 +23,7 @@ const ArtistDetailScreen = ({ route }) => {
             );
             return {
                 title: album.title,
+                img_url: album.img_url,
                 data: albumTracks,
             };
         });
@@ -25,76 +31,115 @@ const ArtistDetailScreen = ({ route }) => {
         setSections(sectionsData);
     }, [artist]);
 
+    const toggleFavorite = () => {
+        setIsFavorited(!isFavorited);
+    };
+
     const renderSectionHeader = ({ section }) => (
-        <View style={styles.sectionHeader}>
-            <Text style={styles.sectionHeaderText}>{section.title}</Text>
+        <View style={[styles.sectionHeader, isDarkMode && styles.sectionHeaderDark]}>
+            <Image source={section.img_url} style={styles.albumImage} />
+            <Text style={[styles.sectionHeaderText, isDarkMode && styles.sectionHeaderTextDark]}>
+                {section.title}
+            </Text>
         </View>
     );
 
     const renderItem = ({ item }) => (
-        <View style={styles.item}>
-            <Text style={styles.itemText}>{item.title}</Text>
+        <TrackRow track={item} navigation={navigation} />
+    );
+
+    const renderHeader = () => (
+        <View style={styles.header}>
+            <Image source={artist.img_url} style={styles.image} />
+            <Text style={[styles.name, isDarkMode && styles.nameDark]}>
+                {artist.name}
+            </Text>
+            <Text style={[styles.bio, isDarkMode && styles.bioDark]}>
+                {artist.bio}
+            </Text>
+            <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+                <Ionicons
+                    name={isFavorited ? "heart" : "heart-outline"}
+                    size={30}
+                    color={isFavorited ? "red" : "gray"}
+                />
+            </TouchableOpacity>
         </View>
     );
 
     return (
-        <View style={styles.container}>
-            <Image source={artist.img_url} style={styles.image} />
-            <Text style={styles.name}>{artist.name}</Text>
-            <Text style={styles.bio}>{artist.bio}</Text>
-
-            <SectionList
-                sections={sections}
-                keyExtractor={(item) => item._id}
-                renderSectionHeader={renderSectionHeader}
-                renderItem={renderItem}
-                contentContainerStyle={styles.sectionList}
-            />
-			
-        </View>
+        <SectionList
+            sections={sections}
+            keyExtractor={(item) => item._id}
+            renderSectionHeader={renderSectionHeader}
+            renderItem={renderItem}
+            ListHeaderComponent={renderHeader}
+            contentContainerStyle={[styles.container, isDarkMode && styles.containerDark]}
+        />
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         padding: 20,
+        backgroundColor: "white",
+    },
+    containerDark: {
+        backgroundColor: "black",
+    },
+    header: {
+        alignItems: "center",
+        marginBottom: 20,
     },
     image: {
         width: 200,
         height: 200,
         marginBottom: 20,
-        alignSelf: "center",
     },
     name: {
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 10,
         textAlign: "center",
+        color: "black",
+    },
+    nameDark: {
+        color: "white",
     },
     bio: {
         fontSize: 16,
         textAlign: "center",
         marginBottom: 20,
+        color: "black",
     },
-    sectionList: {
-        paddingBottom: 20,
+    bioDark: {
+        color: "white",
+    },
+    favoriteButton: {
+        marginBottom: 20,
     },
     sectionHeader: {
         backgroundColor: "#f4f4f4",
         padding: 10,
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    sectionHeaderDark: {
+        backgroundColor: "#333",
     },
     sectionHeaderText: {
         fontSize: 18,
         fontWeight: "bold",
+        color: "black",
+        marginLeft: 10,
     },
-    item: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
+    sectionHeaderTextDark: {
+        color: "white",
     },
-    itemText: {
-        fontSize: 16,
+    albumImage: {
+        width: 50,
+        height: 50,
     },
 });
 
