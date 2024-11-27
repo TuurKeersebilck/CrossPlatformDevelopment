@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import ArtistRow from "../components/artistList/artistRow";
-import artistMockData from "../assets/mockupData/artistMockup";
+import { getArtists } from "../api/api_calls";
 
 const HomeScreen = ({ navigation }) => {
-	var artists = artistMockData;
+	const [artists, setArtists] = useState([]);
+
+	useEffect(() => {
+		const fetchArtists = () => {
+			getArtists()
+				.then((artistsData) => {
+					setArtists(artistsData);
+				})
+				.catch((error) => {
+					console.error("Error fetching artists:", error);
+				});
+		};
+
+		fetchArtists();
+	}, []);
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollView}>

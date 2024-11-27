@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import artistModel from "../../models/artistModel";
 
 const ArtistRow = ({ artist, navigation }) => {
 	return (
@@ -9,7 +7,7 @@ const ArtistRow = ({ artist, navigation }) => {
 			onPress={() => navigation.navigate("ArtistDetail", { artist })}
 		>
 			<View style={styles.artist}>
-				<Image source={artist.img_url} style={styles.artistImage} />
+				<Image source={{ uri: artist.imgUrl }} style={styles.artistImage} />
 				<View style={styles.artistInfo}>
 					<Text style={styles.artistName}>{artist.name}</Text>
 					<Text style={styles.artistBio}>{artist.bio}</Text>
@@ -17,11 +15,6 @@ const ArtistRow = ({ artist, navigation }) => {
 			</View>
 		</TouchableOpacity>
 	);
-};
-
-ArtistRow.propTypes = {
-	artist: PropTypes.instanceOf(artistModel).isRequired,
-	navigation: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
