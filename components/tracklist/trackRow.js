@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import {
     View,
     Text,
@@ -64,17 +63,6 @@ const TrackRow = ({ track, navigation }) => {
             </View>
         </TouchableOpacity>
     );
-};
-
-TrackRow.propTypes = {
-    track: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        imgUrl: PropTypes.string,
-        albumTitle: PropTypes.string,
-        duration: PropTypes.string,
-    }).isRequired,
-    navigation: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
