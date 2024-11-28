@@ -19,6 +19,25 @@ export const getArtists = async () => {
     }
 };
 
+export const fetchArtistDetails = async (artistId) => {
+    try {
+        const response = await fetch(`${BASE_URL}/artists/${artistId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching artist details:", error.message);
+        throw error;
+    }
+}
+
 export const getTracks = async () => {
     try {
         const response = await fetch(`${BASE_URL}/tracks`, {
@@ -86,12 +105,13 @@ export const toggleArtistFavorite = async (artistId) => {
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-        return response.json();
+        const data = await response.json();
+        return { success: true, isFavorited: data.favorite };
     } catch (error) {
         console.error("Error toggling artist favorite:", error.message);
-        throw error;
+        return { success: false, error: error.message };
     }
-}
+};
 
 export const toggleAlbumFavorite = async (albumId) => {
     try {
