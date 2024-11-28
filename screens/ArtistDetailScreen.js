@@ -10,7 +10,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../context/ThemeContext";
 import TrackRow from "../components/trackList/trackRow";
-import { fetchArtistAlbums } from "../api/api_calls";
+import { fetchArtistAlbums, toggleArtistFavorite } from "../api/api_calls";
 
 const ArtistDetailScreen = ({ route, navigation }) => {
     const { artist } = route.params;
@@ -18,21 +18,27 @@ const ArtistDetailScreen = ({ route, navigation }) => {
     const [sections, setSections] = useState([]);
     const [isFavorited, setIsFavorited] = useState(false);
 
-	useEffect(() => {
-		const getAlbums = () => {
-			fetchArtistAlbums(artist.id)
-				.then((sectionsData) => {
-					setSections(sectionsData);
-				})
-				.catch((error) => {
-					console.error("Error fetching albums:", error);
-				});
-		};
-	
-		getAlbums();
-	}, [artist]);
+    useEffect(() => {
+        const getAlbums = () => {
+            fetchArtistAlbums(artist.id)
+                .then((albums) => {
+                    const sectionsData = albums.map((album) => ({
+                        title: album.title,
+                        imgUrl: album.imgUrl,
+                        data: album.tracks,
+                    }));
+                    setSections(sectionsData);
+                })
+                .catch((error) => {
+                    console.error("Error fetching albums:", error);
+                });
+        };
+
+        getAlbums();
+    }, [artist]);
 
     const toggleFavorite = () => {
+        toggleArtistFavorite(artist.id);
         setIsFavorited(!isFavorited);
     };
 
@@ -78,7 +84,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
     return (
         <SectionList
             sections={sections}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.id}
             renderSectionHeader={renderAlbumHeader}
             renderItem={renderAlbumTrack}
             ListHeaderComponent={renderArtist}

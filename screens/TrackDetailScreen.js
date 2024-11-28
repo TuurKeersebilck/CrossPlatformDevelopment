@@ -3,10 +3,9 @@ import { View, Text, Image, StyleSheet } from "react-native";
 
 const TrackDetailScreen = ({ route }) => {
 	const { track } = route.params;
-
 	return (
 		<View style={styles.container}>
-			<Image source={track.img_url} style={styles.trackImage} />
+			<Image source={{ uri: track.imgUrl }} style={styles.trackImage} />
 			<Text style={styles.trackTitle}>{track.title}</Text>
 			<Text style={styles.trackArtist}>{track.artist}</Text>
 			<Text style={styles.trackDuration}>{track.duration}</Text>
