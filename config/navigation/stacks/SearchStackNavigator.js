@@ -44,7 +44,7 @@ const SearchStackNavigator = () => {
 			<Stack.Screen
 				name="ArtistDetail"
 				component={ArtistDetailScreen}
-				options={({ route }) => ({ title: route.params.artist.name })}
+				options={({ route }) => ({ title: route.params.name })}
 			/>
 		</Stack.Navigator>
 	);

@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import TrackRow from "../components/trackList/trackRow";
+import TrackRow from "../components/tracklist/trackRow";
 import ArtistRow from "../components/artistList/artistRow";
 import { getArtists, getTracks } from "../api/api_calls";
 

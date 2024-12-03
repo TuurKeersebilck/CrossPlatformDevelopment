@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../context/ThemeContext";
-import TrackRow from "../components/trackList/trackRow";
+import TrackRow from "../components/tracklist/trackRow";
 import {
 	fetchArtistAlbums,
 	fetchArtistDetails,
