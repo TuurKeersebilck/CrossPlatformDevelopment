@@ -39,7 +39,7 @@ const ArtistsStackNavigator = () => {
             <Stack.Screen
                 name="TrackDetail"
                 component={TrackDetailScreen}
-                options={({ route }) => ({ title: route.params.track.title })}
+                options={({ route }) => ({ title: route.params.title })}
             />
             <Stack.Screen
                 name="ArtistDetail"

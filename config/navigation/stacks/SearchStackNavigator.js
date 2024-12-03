@@ -9,11 +9,11 @@ import { Ionicons } from "@expo/vector-icons";
 const Stack = createStackNavigator();
 
 const SearchStackNavigator = () => {
-	const { isDarkMode } = useTheme();
+    const { isDarkMode } = useTheme();
 
-	return (
-		<Stack.Navigator
-			initialRouteName="SearchHome"
+    return (
+        <Stack.Navigator
+            initialRouteName="SearchHome"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: isDarkMode ? "black" : "white",
@@ -31,23 +31,23 @@ const SearchStackNavigator = () => {
                 ),
             }}
         >
-			<Stack.Screen
-				name="SearchHome"
-				component={SearchScreen}
-				options={{ title: "Search" }}
-			/>
-			<Stack.Screen
-				name="TrackDetail"
-				component={TrackDetailScreen}
-				options={({ route }) => ({ title: route.params.track.title })}
-			/>
-			<Stack.Screen
-				name="ArtistDetail"
-				component={ArtistDetailScreen}
-				options={({ route }) => ({ title: route.params.name })}
-			/>
-		</Stack.Navigator>
-	);
+            <Stack.Screen
+                name="SearchHome"
+                component={SearchScreen}
+                options={{ title: "Search" }}
+            />
+            <Stack.Screen
+                name="TrackDetail"
+                component={TrackDetailScreen}
+                options={({ route }) => ({ title: route.params.title })}
+            />
+            <Stack.Screen
+                name="ArtistDetail"
+                component={ArtistDetailScreen}
+                options={({ route }) => ({ title: route.params.name })}
+            />
+        </Stack.Navigator>
+    );
 };
 
 export default SearchStackNavigator;

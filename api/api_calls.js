@@ -148,3 +148,22 @@ export const toggleTrackFavorite = async (trackId) => {
         throw error;
     }
 }
+
+export const fetchTrackDetails = async (trackId) => {
+    try {
+        const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching track details:", error.message);
+        throw error;
+    }
+};
