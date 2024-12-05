@@ -63,7 +63,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 
 	const toggleFavorite = async () => {
 		try {
-			const response = await toggleArtistFavorite(artistId);
+			const response = await toggleArtistFavorite(artistId, !isFavorited);
 			if (response.success) {
 				setIsFavorited(response.isFavorited);
 			} else {

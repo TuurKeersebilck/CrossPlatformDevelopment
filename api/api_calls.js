@@ -94,61 +94,6 @@ export const fetchArtistAlbums = async (artistId) => {
     }
 };
 
-export const toggleArtistFavorite = async (artistId) => {
-    try {
-        const response = await fetch(`${BASE_URL}/artists/${artistId}/toggle-favorite`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        const data = await response.json();
-        return { success: true, isFavorited: data.favorite };
-    } catch (error) {
-        console.error("Error toggling artist favorite:", error.message);
-        return { success: false, error: error.message };
-    }
-};
-
-export const toggleAlbumFavorite = async (albumId) => {
-    try {
-        const response = await fetch(`${BASE_URL}/albums/${albumId}/toggle-favorite`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.json();
-    } catch (error) {
-        console.error("Error toggling album favorite:", error.message);
-        throw error;
-    }
-}
-
-export const toggleTrackFavorite = async (trackId) => {
-    try {
-        const response = await fetch(`${BASE_URL}/tracks/${trackId}/toggle-favorite`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.json();
-    } catch (error) {
-        console.error("Error toggling artist favorite:", error.message);
-        throw error;
-    }
-}
-
 export const fetchTrackDetails = async (trackId) => {
     try {
         const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
@@ -165,5 +110,65 @@ export const fetchTrackDetails = async (trackId) => {
     } catch (error) {
         console.error("Error fetching track details:", error.message);
         throw error;
+    }
+};
+
+export const toggleArtistFavorite = async (artistId, isFavorited) => {
+    try {
+        const response = await fetch(`${BASE_URL}/artists/${artistId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ favorite: isFavorited }),
+        });
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return { success: true, isFavorited: data.favorite };
+    } catch (error) {
+        console.error("Error toggling artist favorite:", error.message);
+        return { success: false, error: error.message };
+    }
+};
+
+export const toggleAlbumFavorite = async (albumId, isFavorited) => {
+    try {
+        const response = await fetch(`${BASE_URL}/albums/${albumId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ favorite: isFavorited }),
+        });
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return { success: true, isFavorited: data.favorite };
+    } catch (error) {
+        console.error("Error toggling album favorite:", error.message);
+        return { success: false, error: error.message };
+    }
+};
+
+export const toggleTrackFavorite = async (trackId, isFavorited) => {
+    try {
+        const response = await fetch(`${BASE_URL}/tracks/${trackId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ favorite: isFavorited }),
+        });
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return { success: true, isFavorited: data.favorite };
+    } catch (error) {
+        console.error("Error toggling track favorite:", error.message);
+        return { success: false, error: error.message };
     }
 };
