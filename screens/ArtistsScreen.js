@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
-import ArtistRow from "../components/artistList/artistRow";
+import ArtistRow from "../components/rows/artistRow";
 import { getArtists } from "../api/api_calls";
 
 const HomeScreen = ({ navigation }) => {
