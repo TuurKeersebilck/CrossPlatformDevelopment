@@ -8,8 +8,8 @@ import {
     TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import TrackRow from "../components/rows/trackRow";
-import ArtistRow from "../components/rows/artistRow";
+import TrackRow from "../components/rows/TrackRow";
+import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists, getTracks } from "../api/api_calls";
 
 const SearchScreen = ({ navigation }) => {

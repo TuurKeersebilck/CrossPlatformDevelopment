@@ -7,7 +7,7 @@ import {
     ActivityIndicator,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import TrackRow from "../components/rows/trackRow";
+import TrackRow from "../components/rows/TrackRow";
 import ArtistHeader from "../components/headers/ArtistHeader";
 import AlbumHeader from "../components/headers/AlbumHeader";
 import {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
-import ArtistRow from "../components/rows/artistRow";
+import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
+import { useTheme } from "../context/ThemeContext";
 
 const HomeScreen = ({ navigation }) => {
 	const [artists, setArtists] = useState([]);
-
+	const { isDarkMode } = useTheme();
 	useEffect(() => {
 		const fetchArtists = () => {
 			getArtists()
@@ -21,7 +22,7 @@ const HomeScreen = ({ navigation }) => {
 	}, []);
 
 	return (
-		<ScrollView contentContainerStyle={styles.scrollView}>
+        <ScrollView contentContainerStyle={[styles.scrollView, isDarkMode && styles.scrollViewDark]}>
 			{artists.map((artist, index) => (
 				<ArtistRow key={index} artist={artist} navigation={navigation} />
 			))}
@@ -34,6 +35,9 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		padding: 10,
 	},
+	scrollViewDark: {
+        backgroundColor: "black",
+    },
 });
 
 export default HomeScreen;
