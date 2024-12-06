@@ -11,6 +11,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import TrackRow from "../components/rows/TrackRow";
 import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists, getTracks } from "../api/api_calls";
+import { Colors } from "../styling/Colors";
+import { useTheme } from "../context/ThemeContext";
 
 const SearchScreen = ({ navigation }) => {
     const [query, setQuery] = useState("");
@@ -18,6 +20,8 @@ const SearchScreen = ({ navigation }) => {
     const [filteredArtists, setFilteredArtists] = useState([]);
     const [allTracks, setAllTracks] = useState([]);
     const [allArtists, setAllArtists] = useState([]);
+    const { isDarkMode } = useTheme();
+    const colors = isDarkMode ? Colors.dark : Colors.light;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,41 +65,63 @@ const SearchScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.searchContainer}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <View style={[styles.searchContainer, { borderColor: colors.border, backgroundColor: colors.headerBackground }]}>
                 <Ionicons
                     name="search"
                     size={20}
-                    color="gray"
+                    color={colors.secondaryText}
                     style={styles.searchIcon}
                 />
 
                 <TextInput
-                    style={styles.searchBar}
+                    style={[styles.searchBar, { color: colors.primaryText }]}
                     placeholder="Search by track name or artist"
+                    placeholderTextColor={colors.secondaryText}
                     value={query}
                     onChangeText={handleSearch}
                 />
 
                 {query.length > 0 && (
                     <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-                        <Ionicons name="close-circle" size={20} color="gray" />
+                        <Ionicons 
+                            name="close-circle" 
+                            size={20} 
+                            color={colors.secondaryText} 
+                        />
                     </TouchableOpacity>
                 )}
             </View>
 
-            <ScrollView contentContainerStyle={styles.scrollView}>
+            <ScrollView 
+                contentContainerStyle={styles.scrollView}
+                showsVerticalScrollIndicator={false}
+            >
                 {query === "" ? (
-                    <Text style={styles.message}>Search for tracks or artists</Text>
+                    <Text style={[styles.message, { color: colors.secondaryText }]}>
+                        Search for tracks or artists
+                    </Text>
                 ) : filteredTracks.length === 0 && filteredArtists.length === 0 ? (
-                    <Text style={styles.message}>No results found for "{query}"</Text>
+                    <Text style={[styles.message, { color: colors.secondaryText }]}>
+                        No results found for "{query}"
+                    </Text>
                 ) : (
                     <>
                         {filteredArtists.map((artist) => (
-                            <ArtistRow key={artist.id} artist={artist} navigation={navigation} />
+                            <ArtistRow 
+                                key={artist.id} 
+                                artist={artist} 
+                                navigation={navigation} 
+                                colorScheme={colors}
+                            />
                         ))}
                         {filteredTracks.map((track) => (
-                            <TrackRow key={track.id} track={track} navigation={navigation} />
+                            <TrackRow 
+                                key={track.id} 
+                                track={track} 
+                                navigation={navigation} 
+                                colorScheme={colors}
+                            />
                         ))}
                     </>
                 )}
@@ -112,10 +138,9 @@ const styles = StyleSheet.create({
     searchContainer: {
         flexDirection: "row",
         alignItems: "center",
-        borderColor: "gray",
         borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 10,
+        borderRadius: 25,
+        paddingHorizontal: 15,
         marginBottom: 10,
     },
     searchIcon: {
@@ -123,7 +148,7 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         flex: 1,
-        height: 40,
+        height: 45,
     },
     clearButton: {
         paddingRight: 10,
@@ -135,7 +160,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginTop: 20,
         fontSize: 16,
-        color: "gray",
     },
 });
 

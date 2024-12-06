@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { toggleAlbumFavorite } from "../../api/api_calls";
+import { Colors } from '../../styling/Colors';
 
 const AlbumHeader = ({ section, isDarkMode }) => {
     const [isFavorited, setIsFavorited] = useState(section.favorite);
     const [error, setError] = useState(null);
+    const colors = isDarkMode ? Colors.dark : Colors.light;
 
     const toggleFavorite = async () => {
         try {
@@ -13,28 +15,34 @@ const AlbumHeader = ({ section, isDarkMode }) => {
             if (response.success) {
                 setIsFavorited(response.isFavorited);
             } else {
-                setError("Failed to update favorite status. Please try again.");
+                setError("Failed to update favorite status.");
             }
         } catch (error) {
-            setError("Failed to update favorite status. Please try again.");
+            setError("Failed to update favorite status.");
         }
     };
 
     return (
-        <View style={[styles.sectionHeader, isDarkMode && styles.sectionHeaderDark]}>
-            <Image source={{ uri: section.imgUrl }} style={styles.albumImage} />
-            <Text style={[styles.sectionHeaderText, isDarkMode && styles.sectionHeaderTextDark]}>
+        <View style={[styles.sectionHeader, { backgroundColor: colors.background }]}>
+            <Image 
+                source={{ uri: section.imgUrl }} 
+                style={styles.albumImage} 
+            />
+            <Text 
+                style={[styles.sectionHeaderText, { color: colors.primaryText }]}
+                numberOfLines={1}
+            >
                 {section.title}
             </Text>
             <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
                 <Ionicons
                     name={isFavorited ? "heart" : "heart-outline"}
                     size={24}
-                    color={isFavorited ? "red" : "gray"}
+                    color={colors.accent}
                 />
             </TouchableOpacity>
             {error && (
-                <Text style={[styles.errorText, isDarkMode && styles.errorTextDark]}>
+                <Text style={[styles.errorText, { color: 'red' }]}>
                     {error}
                 </Text>
             )}
@@ -44,39 +52,31 @@ const AlbumHeader = ({ section, isDarkMode }) => {
 
 const styles = StyleSheet.create({
     sectionHeader: {
-        backgroundColor: "#f4f4f4",
-        padding: 10,
         flexDirection: "row",
         alignItems: "center",
-    },
-    sectionHeaderDark: {
-        backgroundColor: "#333",
+        padding: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#282828',
     },
     sectionHeaderText: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "black",
-        marginLeft: 10,
+        marginLeft: 12,
         flex: 1,
     },
-    sectionHeaderTextDark: {
-        color: "white",
-    },
     albumImage: {
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
+        borderRadius: 8,
     },
     favoriteButton: {
-        marginBottom: 20,
+        padding: 8,
     },
     errorText: {
-        fontSize: 16,
-        color: "red",
-        textAlign: "center",
-        marginTop: 10,
-    },
-    errorTextDark: {
-        color: "lightcoral",
+        position: 'absolute',
+        bottom: -20,
+        alignSelf: 'center',
+        fontSize: 14,
     },
 });
 

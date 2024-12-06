@@ -10,18 +10,18 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../context/ThemeContext";
 import { toggleTrackFavorite } from "../../api/api_calls";
+import { Colors } from '../../styling/Colors';
 
 const TrackRow = ({ track, navigation }) => {
     const [isFavorited, setIsFavorited] = useState(track.favorite);
     const { isDarkMode } = useTheme();
+    const colors = isDarkMode ? Colors.dark : Colors.light;
 
     const toggleFavorite = async () => {
         try {
             const response = await toggleTrackFavorite(track.id, !isFavorited);
             if (response.success) {
                 setIsFavorited(response.isFavorited);
-            } else {
-                console.error("Failed to update favorite status:", response.error);
             }
         } catch (error) {
             console.error("Failed to update favorite status:", error.message);
@@ -39,17 +39,28 @@ const TrackRow = ({ track, navigation }) => {
                     title: track.title,
                 })
             }
+            style={styles.container}
         >
-            <View style={[styles.track, isDarkMode && styles.trackDark]}>
-                <Image source={{ uri: track.imgUrl }} style={styles.trackImage} />
+            <View style={[styles.track, { backgroundColor: colors.background }]}>
+                <Image 
+                    source={{ uri: track.imgUrl }} 
+                    style={styles.trackImage} 
+                />
                 <View style={styles.trackInfo}>
-                    <Text style={[styles.trackTitle, isDarkMode && styles.trackTitleDark]}>
+                    <Text 
+                        style={[styles.trackTitle, { color: colors.primaryText }]} 
+                        numberOfLines={1}
+                    >
                         {track.title}
                     </Text>
-                    <Text style={[styles.artistName, isDarkMode && styles.artistNameDark]}>
+                    <Text 
+                        style={[styles.artistName, { color: colors.secondaryText }]} 
+                        numberOfLines={1}
+                    >
                         {track.artistName}
                     </Text>
                 </View>
+
                 <View style={styles.trackAlbum}>
                     <Text style={[styles.albumTitle, isDarkMode && styles.albumTitleDark]}>
                         {track.albumTitle}
@@ -62,11 +73,12 @@ const TrackRow = ({ track, navigation }) => {
                         </Text>
                     </View>
                 )}
+                
                 <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
                     <Ionicons
                         name={isFavorited ? "heart" : "heart-outline"}
                         size={24}
-                        color={isFavorited ? "red" : "gray"}
+                        color={colors.accent}
                     />
                 </TouchableOpacity>
             </View>
@@ -75,46 +87,37 @@ const TrackRow = ({ track, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        borderRadius: 8,
+        marginVertical: 4,
+        marginHorizontal: 8,
+    },
     track: {
         flexDirection: "row",
         alignItems: "center",
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ccc",
-    },
-    trackDark: {
-        backgroundColor: "#333",
+        padding: 12,
+        borderRadius: 8,
     },
     trackImage: {
         width: 50,
         height: 50,
+        borderRadius: 8,
+        marginRight: 12,
     },
     trackInfo: {
-        marginLeft: 10,
         flex: 1,
+        justifyContent: 'center',
     },
     trackTitle: {
         fontSize: 16,
-    },
-    trackTitleDark: {
-        color: "white",
+        fontWeight: '600',
     },
     artistName: {
         fontSize: 14,
-        color: "#888",
+        marginTop: 4,
     },
-    artistNameDark: {
-        color: "#ccc",
-    },
-    trackAlbum: {
+    favoriteButton: {
         marginLeft: 10,
-    },
-    albumTitle: {
-        fontSize: 14,
-        color: "#888",
-    },
-    albumTitleDark: {
-        color: "#ccc",
     },
     trackDurationContainer: {
         marginLeft: 10,
@@ -126,9 +129,7 @@ const styles = StyleSheet.create({
     trackDurationDark: {
         color: "#ccc",
     },
-    favoriteButton: {
-        marginLeft: 10,
-    },
 });
+
 
 export default TrackRow;

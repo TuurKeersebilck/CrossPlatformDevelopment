@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
 import { fetchTrackDetails } from "../api/api_calls";
+import { useTheme } from "../context/ThemeContext";
+import { Colors } from "../styling/Colors";
 
 const TrackDetailScreen = ({ route, navigation }) => {
     const { trackId } = route.params;
+    const { isDarkMode } = useTheme();
+    const colors = isDarkMode ? Colors.dark : Colors.light;
     const [track, setTrack] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,29 +28,33 @@ const TrackDetailScreen = ({ route, navigation }) => {
     }, [trackId]);
 
     if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
+        return (
+            <View style={[styles.container, { backgroundColor: colors.background }]}>
+                <ActivityIndicator size="large" color={colors.primaryText} />
+            </View>
+        );
     }
 
     if (error) {
         return (
-            <View style={styles.container}>
-                <Text style={styles.errorText}>Error: {error}</Text>
+            <View style={[styles.container, { backgroundColor: colors.background }]}>
+                <Text style={[styles.errorText, { color: colors.errorText }]}>Error: {error}</Text>
             </View>
         );
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
             {track && (
                 <>
                     <Image source={{ uri: track.imgUrl }} style={styles.trackImage} />
-                    <Text style={styles.trackTitle}>{track.title}</Text>
+                    <Text style={[styles.trackTitle, { color: colors.primaryText }]}>{track.title}</Text>
                     <TouchableOpacity
                         onPress={() => navigation.navigate("ArtistDetail", { artistId: track.artistId, name: track.artistName })}
                     >
-                        <Text style={styles.trackArtist}>{track.artistName}</Text>
+                        <Text style={[styles.trackArtist, { color: colors.linkText }]}>{track.artistName}</Text>
                     </TouchableOpacity>
-                    <Text style={styles.trackDuration}>{track.duration}</Text>
+                    <Text style={[styles.trackDuration, { color: colors.secondaryText }]}>{track.duration}</Text>
                 </>
             )}
         </View>
@@ -73,14 +81,11 @@ const styles = StyleSheet.create({
     trackArtist: {
         fontSize: 18,
         marginBottom: 10,
-        color: "blue", // Make the artist name look clickable
     },
     trackDuration: {
         fontSize: 16,
-        color: "#888",
     },
     errorText: {
-        color: "red",
         fontSize: 18,
     },
 });

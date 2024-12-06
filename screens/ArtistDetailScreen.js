@@ -10,10 +10,8 @@ import { useTheme } from "../context/ThemeContext";
 import TrackRow from "../components/rows/TrackRow";
 import ArtistHeader from "../components/headers/ArtistHeader";
 import AlbumHeader from "../components/headers/AlbumHeader";
-import {
-    fetchArtistAlbums,
-    fetchArtistDetails,
-} from "../api/api_calls";
+import { fetchArtistAlbums, fetchArtistDetails } from "../api/api_calls";
+import { Colors } from "../styling/Colors";
 
 const ArtistDetailScreen = ({ route, navigation }) => {
     const { artistId } = route.params;
@@ -22,6 +20,8 @@ const ArtistDetailScreen = ({ route, navigation }) => {
     const [sections, setSections] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const colors = isDarkMode ? Colors.dark : Colors.light;
 
     useEffect(() => {
         const fetchArtistData = async () => {
@@ -36,13 +36,15 @@ const ArtistDetailScreen = ({ route, navigation }) => {
                 }
 
                 setArtist(artistDetails);
-                setSections(albums.map(album => ({
-                    title: album.title,
-                    imgUrl: album.imgUrl,
-                    data: album.tracks,
-                    albumId: album.id,
-                    favorite: album.favorite,
-                })));
+                setSections(
+                    albums.map((album) => ({
+                        title: album.title,
+                        imgUrl: album.imgUrl,
+                        data: album.tracks,
+                        albumId: album.id,
+                        favorite: album.favorite,
+                    }))
+                );
             } catch (error) {
                 setError("Failed to load artist data. Please try again.");
             } finally {
@@ -55,16 +57,16 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 
     if (loading) {
         return (
-            <View style={[styles.container, isDarkMode && styles.containerDark]}>
-                <ActivityIndicator size="large" color={isDarkMode ? "white" : "black"} />
+            <View style={[styles.container, { backgroundColor: colors.background }]}>
+                <ActivityIndicator size="large" color={colors.primaryText} />
             </View>
         );
     }
 
     return (
-        <View style={[styles.container, isDarkMode && styles.containerDark]}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
             {error && (
-                <Text style={[styles.errorText, isDarkMode && styles.errorTextDark]}>
+                <Text style={[styles.errorText, { color: colors.errorText }]}>
                     {error}
                 </Text>
             )}
@@ -72,21 +74,18 @@ const ArtistDetailScreen = ({ route, navigation }) => {
                 sections={sections}
                 keyExtractor={(item) => item.id}
                 renderSectionHeader={({ section }) => (
-                    <AlbumHeader
-                        section={section}
-                        isDarkMode={isDarkMode}
-                    />
+                    <AlbumHeader section={section} isDarkMode={isDarkMode} />
                 )}
                 renderItem={({ item }) => (
                     <TrackRow track={item} navigation={navigation} />
                 )}
                 ListHeaderComponent={() => (
-                    <ArtistHeader
-                        artist={artist}
-                        isDarkMode={isDarkMode}
-                    />
+                    <ArtistHeader artist={artist} isDarkMode={isDarkMode} />
                 )}
-                contentContainerStyle={[styles.sectionList, isDarkMode && styles.sectionListDark]}
+                contentContainerStyle={[
+                    styles.sectionList,
+                    { backgroundColor: colors.background },
+                ]}
             />
         </View>
     );
@@ -96,25 +95,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: "white",
-    },
-    containerDark: {
-        backgroundColor: "black",
     },
     errorText: {
         fontSize: 16,
-        color: "red",
         textAlign: "center",
         marginTop: 20,
     },
-    errorTextDark: {
-        color: "lightcoral",
-    },
     sectionList: {
         paddingBottom: 20,
-    },
-    sectionListDark: {
-        backgroundColor: "black",
     },
 });
 
