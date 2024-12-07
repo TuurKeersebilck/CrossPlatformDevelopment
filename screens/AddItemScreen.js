@@ -1,38 +1,131 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+    View,
+    Text,
+    TextInput,
+    Button,
+    StyleSheet,
+    Picker,
+} from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Colors } from "../styling/Colors";
+import { getArtists, fetchArtistAlbums } from "../api/api_calls";
 
 const AddItemScreen = ({ navigation }) => {
     const { isDarkMode } = useTheme();
     const colors = isDarkMode ? Colors.dark : Colors.light;
     const [name, setName] = useState("");
-    const [type, setType] = useState("artist"); // Default type is artist
+    const [type, setType] = useState("");
+    const [artists, setArtists] = useState([]);
+    const [albums, setAlbums] = useState([]);
+    const [selectedArtist, setSelectedArtist] = useState("");
+    const [selectedAlbum, setSelectedAlbum] = useState("");
+
+    useEffect(() => {
+        const fetchArtists = async () => {
+            try {
+                const artistsData = await getArtists();
+                setArtists(artistsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchArtists();
+    }, []);
+
+    useEffect(() => {
+        const fetchAlbums = async () => {
+            if (selectedArtist) {
+                try {
+                    const albumsData = await fetchArtistAlbums(selectedArtist);
+                    setAlbums(albumsData);
+                } catch (error) {
+                    console.error("Error fetching albums:", error);
+                }
+            } else {
+                setAlbums([]);
+            }
+        };
+
+        fetchAlbums();
+    }, [selectedArtist]);
+
+    const handleTypeChange = (newType) => {
+        setType(newType);
+        setName("");
+        setSelectedArtist("");
+        setSelectedAlbum("");
+        setAlbums([]);
+    };
 
     const handleAdd = () => {
-        // Handle the addition of the artist, album, or track
         console.log(`Adding ${type}: ${name}`);
-        // Navigate back to the previous screen
+        if (type === "album" || type === "track") {
+            console.log(`Linked to artist: ${selectedArtist}`);
+        }
+        if (type === "track" && selectedAlbum) {
+            console.log(`Linked to album: ${selectedAlbum}`);
+        }
         navigation.goBack();
     };
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <Text style={[styles.label, { color: colors.primaryText }]}>Name:</Text>
-            <TextInput
-                style={[styles.input, { color: colors.primaryText, borderColor: colors.border }]}
-                value={name}
-                onChangeText={setName}
-                placeholder="Enter name"
-                placeholderTextColor={colors.secondaryText}
-            />
-            <Text style={[styles.label, { color: colors.primaryText }]}>Type:</Text>
+
+            <Text style={[styles.label, { color: colors.primaryText }]}>Select Type:</Text> 
             <View style={styles.buttonContainer}>
-                <Button title="Artist" onPress={() => setType("artist")} />
-                <Button title="Album" onPress={() => setType("album")} />
-                <Button title="Track" onPress={() => setType("track")} />
+                <Button title="Artist" onPress={() => handleTypeChange("artist")} />
+                <Button title="Album" onPress={() => handleTypeChange("album")} />
+                <Button title="Track" onPress={() => handleTypeChange("track")} />
             </View>
-            <Button title="Add" onPress={handleAdd} />
+
+            {type !== "" && (
+                <>
+                    <Text style={[styles.label, { color: colors.primaryText }]}>Name:</Text>
+                    <TextInput
+                        style={[styles.input, { color: colors.primaryText, borderColor: colors.border }]}
+                        value={name}
+                        onChangeText={setName}
+                        placeholder="Enter name"
+                        placeholderTextColor={colors.secondaryText}
+                    />
+
+                    {(type === "album" || type === "track") && (
+                        <>
+                            <Text style={[styles.label, { color: colors.primaryText }]}>Select Artist:</Text>
+                            <Picker
+                                selectedValue={selectedArtist}
+                                style={[styles.picker, { color: colors.primaryText, borderColor: colors.border }]}
+                                onValueChange={(itemValue) => setSelectedArtist(itemValue)}
+                            >
+                                <Picker.Item label="Select an artist" value="" />
+                                {artists.map((artist) => (
+                                    <Picker.Item key={artist.id} label={artist.name} value={artist.id} />
+                                ))}
+                            </Picker>
+                        </>
+                    )}
+
+                    {type === "track" && (
+                        <>
+                            <Text style={[styles.label, { color: colors.primaryText }]}>Select Album (optional):</Text>
+                            <Picker
+                                selectedValue={selectedAlbum}
+                                style={[styles.picker, { color: colors.primaryText, borderColor: colors.border }]}
+                                onValueChange={(itemValue) => setSelectedAlbum(itemValue)}
+                            >
+                                <Picker.Item label="None" value="" />
+                                {albums.map((album) => (
+                                    <Picker.Item key={album.id} label={album.title} value={album.id} />
+                                ))}
+                            </Picker>
+                        </>
+                    )}
+                    
+                    <Button title="Add" onPress={handleAdd} />
+                </>
+            )}
         </View>
     );
 };
@@ -57,6 +150,11 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
+        marginBottom: 20,
+    },
+    picker: {
+        height: 50,
+        width: "100%",
         marginBottom: 20,
     },
 });
