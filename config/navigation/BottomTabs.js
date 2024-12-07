@@ -5,6 +5,7 @@ import SearchStackNavigator from "./stacks/SearchStackNavigator";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "../../context/ThemeContext";
+import SettingsStackNavigator from "./stacks/SettingStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -48,7 +49,11 @@ const BottomTabs = () => {
 				component={SearchStackNavigator}
 				options={{ headerShown: false }}
 			/>
-			<Tab.Screen name="Settings" component={SettingsScreen} />
+			<Tab.Screen
+				name="Settings"
+				component={SettingsStackNavigator}
+				options={{ headerShown: false }}
+			/>
 		</Tab.Navigator>
 	);
 };

@@ -4,7 +4,7 @@ import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
 
-const HomeScreen = ({ navigation }) => {
+const ArtistsScreen = ({ navigation }) => {
 	const [artists, setArtists] = useState([]);
 	const { isDarkMode } = useTheme();
 	useEffect(() => {
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeScreen;
+export default ArtistsScreen;

@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../../../screens/ArtistsScreen";
+import ArtistsScreen from "../../../screens/ArtistsScreen";
 import TrackDetailScreen from "../../../screens/TrackDetailScreen";
 import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
 import { useTheme } from "../../../context/ThemeContext";
@@ -13,7 +13,7 @@ const ArtistsStackNavigator = () => {
 
     return (
         <Stack.Navigator
-            initialRouteName="ArtistsHome"
+            initialRouteName="ArtistsScreen"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: isDarkMode ? "black" : "white",
@@ -32,8 +32,8 @@ const ArtistsStackNavigator = () => {
             }}
         >
             <Stack.Screen
-                name="ArtistsHome"
-                component={HomeScreen}
+                name="ArtistsScreen"
+                component={ArtistsScreen}
                 options={{ title: "Artists" }}
             />
             <Stack.Screen

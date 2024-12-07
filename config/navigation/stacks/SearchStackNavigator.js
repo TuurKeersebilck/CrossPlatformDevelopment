@@ -13,7 +13,7 @@ const SearchStackNavigator = () => {
 
     return (
         <Stack.Navigator
-            initialRouteName="SearchHome"
+            initialRouteName="SearchScreen"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: isDarkMode ? "black" : "white",
@@ -32,7 +32,7 @@ const SearchStackNavigator = () => {
             }}
         >
             <Stack.Screen
-                name="SearchHome"
+                name="SearchScreen"
                 component={SearchScreen}
                 options={{ title: "Search" }}
             />
