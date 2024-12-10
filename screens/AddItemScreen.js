@@ -9,13 +9,23 @@ import {
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Colors } from "../styling/Colors";
-import { getArtists, fetchArtistAlbums } from "../api/api_calls";
+import {
+	getArtists,
+	fetchArtistAlbums,
+	addArtist,
+	addAlbum,
+	addTrack,
+} from "../api/api_calls";
 
 const AddItemScreen = ({ navigation }) => {
 	const { isDarkMode } = useTheme();
 	const colors = isDarkMode ? Colors.dark : Colors.light;
 	const [name, setName] = useState("");
 	const [type, setType] = useState("");
+	const [imgUrl, setImgUrl] = useState("");
+	const [bio, setBio] = useState("");
+	const [releaseDate, setReleaseDate] = useState("");
+	const [duration, setDuration] = useState("");
 	const [artists, setArtists] = useState([]);
 	const [albums, setAlbums] = useState([]);
 	const [selectedArtist, setSelectedArtist] = useState("");
@@ -54,20 +64,44 @@ const AddItemScreen = ({ navigation }) => {
 	const handleTypeChange = (newType) => {
 		setType(newType);
 		setName("");
+		setImgUrl("");
+		setBio("");
+		setReleaseDate("");
+		setDuration("");
 		setSelectedArtist("");
 		setSelectedAlbum("");
 		setAlbums([]);
 	};
 
-	const handleAdd = () => {
-		console.log(`Adding ${type}: ${name}`);
-		if (type === "album" || type === "track") {
-			console.log(`Linked to artist: ${selectedArtist}`);
+	const handleAdd = async () => {
+		try {
+			let response;
+			if (type === "artist") {
+				const artist = { name, imgUrl, bio };
+				response = await addArtist(artist);
+			} else if (type === "album") {
+				const album = {
+					title: name,
+					imgUrl,
+					releaseDate,
+					artistId: selectedArtist,
+				};
+				response = await addAlbum(album);
+			} else if (type === "track") {
+				const track = {
+					title: name,
+					imgUrl,
+					duration,
+					artistId: selectedArtist,
+					albumId: selectedAlbum,
+				};
+				response = await addTrack(track);
+			}
+			if (response.error) throw new Error(response.error);
+			navigation.goBack();
+		} catch (error) {
+			console.error("Error adding item:", error.message);
 		}
-		if (type === "track" && selectedAlbum) {
-			console.log(`Linked to album: ${selectedAlbum}`);
-		}
-		navigation.goBack();
 	};
 
 	return (
@@ -97,6 +131,38 @@ const AddItemScreen = ({ navigation }) => {
 						placeholderTextColor={colors.secondaryText}
 					/>
 
+					<Text style={[styles.label, { color: colors.primaryText }]}>
+						Image URL:
+					</Text>
+					<TextInput
+						style={[
+							styles.input,
+							{ color: colors.primaryText, borderColor: colors.border },
+						]}
+						value={imgUrl}
+						onChangeText={setImgUrl}
+						placeholder="Enter image URL"
+						placeholderTextColor={colors.secondaryText}
+					/>
+
+					{type === "artist" && (
+						<>
+							<Text style={[styles.label, { color: colors.primaryText }]}>
+								Bio:
+							</Text>
+							<TextInput
+								style={[
+									styles.input,
+									{ color: colors.primaryText, borderColor: colors.border },
+								]}
+								value={bio}
+								onChangeText={setBio}
+								placeholder="Enter bio"
+								placeholderTextColor={colors.secondaryText}
+							/>
+						</>
+					)}
+
 					{(type === "album" || type === "track") && (
 						<>
 							<Text style={[styles.label, { color: colors.primaryText }]}>
@@ -119,6 +185,24 @@ const AddItemScreen = ({ navigation }) => {
 						</>
 					)}
 
+					{type === "album" && (
+						<>
+							<Text style={[styles.label, { color: colors.primaryText }]}>
+								Release Date:
+							</Text>
+							<TextInput
+								style={[
+									styles.input,
+									{ color: colors.primaryText, borderColor: colors.border },
+								]}
+								value={releaseDate}
+								onChangeText={setReleaseDate}
+								placeholder="Enter release date (YYYY-MM-DD)"
+								placeholderTextColor={colors.secondaryText}
+							/>
+						</>
+					)}
+
 					{type === "track" && (
 						<>
 							<Text style={[styles.label, { color: colors.primaryText }]}>
@@ -138,6 +222,20 @@ const AddItemScreen = ({ navigation }) => {
 									/>
 								))}
 							</Picker>
+
+							<Text style={[styles.label, { color: colors.primaryText }]}>
+								Duration:
+							</Text>
+							<TextInput
+								style={[
+									styles.input,
+									{ color: colors.primaryText, borderColor: colors.border },
+								]}
+								value={duration}
+								onChangeText={setDuration}
+								placeholder="Enter duration (e.g., 03:45)"
+								placeholderTextColor={colors.secondaryText}
+							/>
 						</>
 					)}
 
@@ -164,7 +262,7 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		paddingHorizontal: 10,
 		marginBottom: 20,
-        backgroundColor: "white"
+		backgroundColor: "white",
 	},
 	buttonContainer: {
 		flexDirection: "row",
