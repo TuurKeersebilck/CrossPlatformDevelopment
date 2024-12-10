@@ -36,7 +36,6 @@ const ArtistHeader = ({ artist, isDarkMode }) => {
                     </Text>
                     <Text 
                         style={[styles.bio, { color: colors.secondaryText }]}
-                        numberOfLines={3}
                     >
                         {artist.bio}
                     </Text>

@@ -41,6 +41,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
                         title: album.title,
                         imgUrl: album.imgUrl,
                         data: album.tracks,
+                        releaseDate: album.releaseDate,
                         albumId: album.id,
                         favorite: album.favorite,
                     }))

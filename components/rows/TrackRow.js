@@ -49,13 +49,11 @@ const TrackRow = ({ track, navigation }) => {
                 <View style={styles.trackInfo}>
                     <Text 
                         style={[styles.trackTitle, { color: colors.primaryText }]} 
-                        numberOfLines={1}
                     >
                         {track.title}
                     </Text>
                     <Text 
                         style={[styles.artistName, { color: colors.secondaryText }]} 
-                        numberOfLines={1}
                     >
                         {track.artistName}
                     </Text>

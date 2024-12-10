@@ -28,12 +28,18 @@ const AlbumHeader = ({ section, isDarkMode }) => {
                 source={{ uri: section.imgUrl }} 
                 style={styles.albumImage} 
             />
-            <Text 
-                style={[styles.sectionHeaderText, { color: colors.primaryText }]}
-                numberOfLines={1}
-            >
-                {section.title}
-            </Text>
+            <View style={styles.textContainer}>
+                <Text 
+                    style={[styles.sectionHeaderText, { color: colors.primaryText }]}
+                >
+                    {section.title}
+                </Text>
+                <Text 
+                    style={[styles.releaseDateText, { color: colors.secondaryText }]}
+                >
+                    {new Date(section.releaseDate).getFullYear()}
+                </Text>
+            </View>
             <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
                 <Ionicons
                     name={isFavorited ? "heart" : "heart-outline"}
@@ -58,11 +64,19 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#282828',
     },
+    textContainer: {
+        marginLeft: 12,
+        flex: 1,
+    },
     sectionHeaderText: {
         fontSize: 18,
         fontWeight: "bold",
-        marginLeft: 12,
-        flex: 1,
+    },
+    releaseDateText: {
+        fontSize: 14,
+        marginTop: 4,
+        color: '#888',
+        fontWeight: "bold",
     },
     albumImage: {
         width: 60,
