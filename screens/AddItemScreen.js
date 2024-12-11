@@ -5,7 +5,7 @@ import {
 	TextInput,
 	Button,
 	StyleSheet,
-	Picker,
+	TouchableOpacity,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Colors } from "../styling/Colors";
@@ -16,6 +16,7 @@ import {
 	addAlbum,
 	addTrack,
 } from "../api/api_calls";
+import ModalPicker from "../components/ModalPicker";
 
 const AddItemScreen = ({ navigation }) => {
 	const { isDarkMode } = useTheme();
@@ -28,8 +29,10 @@ const AddItemScreen = ({ navigation }) => {
 	const [duration, setDuration] = useState("");
 	const [artists, setArtists] = useState([]);
 	const [albums, setAlbums] = useState([]);
-	const [selectedArtist, setSelectedArtist] = useState("");
-	const [selectedAlbum, setSelectedAlbum] = useState("");
+	const [selectedArtist, setSelectedArtist] = useState(null);
+	const [selectedAlbum, setSelectedAlbum] = useState(null);
+	const [isArtistModalVisible, setIsArtistModalVisible] = useState(false);
+	const [isAlbumModalVisible, setIsAlbumModalVisible] = useState(false);
 
 	useEffect(() => {
 		const fetchArtists = async () => {
@@ -68,8 +71,8 @@ const AddItemScreen = ({ navigation }) => {
 		setBio("");
 		setReleaseDate("");
 		setDuration("");
-		setSelectedArtist("");
-		setSelectedAlbum("");
+		setSelectedArtist(null);
+		setSelectedAlbum(null);
 		setAlbums([]);
 	};
 
@@ -102,6 +105,78 @@ const AddItemScreen = ({ navigation }) => {
 		} catch (error) {
 			console.error("Error adding item:", error.message);
 		}
+	};
+
+	const renderArtistSelect = () => {
+		const selectedArtistName = selectedArtist
+			? artists.find((a) => a.id === selectedArtist)?.name
+			: "Select an artist";
+
+		return (
+			<View>
+				<Text style={[styles.label, { color: colors.primaryText }]}>
+					Select Artist:
+				</Text>
+				<TouchableOpacity
+					style={[
+						styles.pickerButton,
+						{
+							backgroundColor: colors.background,
+							borderColor: colors.border,
+						},
+					]}
+					onPress={() => setIsArtistModalVisible(true)}
+				>
+					<Text style={{ color: colors.primaryText }}>
+						{selectedArtistName}
+					</Text>
+				</TouchableOpacity>
+
+				<ModalPicker
+					visible={isArtistModalVisible}
+					onClose={() => setIsArtistModalVisible(false)}
+					items={artists}
+					onSelect={setSelectedArtist}
+					title="Select Artist"
+					colors={colors}
+				/>
+			</View>
+		);
+	};
+
+	const renderAlbumSelect = () => {
+		const selectedAlbumName = selectedAlbum
+			? albums.find((a) => a.id === selectedAlbum)?.title
+			: "Select an album (optional)";
+
+		return (
+			<View>
+				<Text style={[styles.label, { color: colors.primaryText }]}>
+					Select Album (optional):
+				</Text>
+				<TouchableOpacity
+					style={[
+						styles.pickerButton,
+						{
+							backgroundColor: colors.background,
+							borderColor: colors.border,
+						},
+					]}
+					onPress={() => setIsAlbumModalVisible(true)}
+				>
+					<Text style={{ color: colors.primaryText }}>{selectedAlbumName}</Text>
+				</TouchableOpacity>
+
+				<ModalPicker
+					visible={isAlbumModalVisible}
+					onClose={() => setIsAlbumModalVisible(false)}
+					items={albums}
+					onSelect={setSelectedAlbum}
+					title="Select Album"
+					colors={colors}
+				/>
+			</View>
+		);
 	};
 
 	return (
@@ -163,27 +238,7 @@ const AddItemScreen = ({ navigation }) => {
 						</>
 					)}
 
-					{(type === "album" || type === "track") && (
-						<>
-							<Text style={[styles.label, { color: colors.primaryText }]}>
-								Select Artist:
-							</Text>
-							<Picker
-								selectedValue={selectedArtist}
-								style={[styles.input, { borderColor: colors.border }]}
-								onValueChange={(itemValue) => setSelectedArtist(itemValue)}
-							>
-								<Picker.Item label="Select an artist" value="" />
-								{artists.map((artist) => (
-									<Picker.Item
-										key={artist.id}
-										label={artist.name}
-										value={artist.id}
-									/>
-								))}
-							</Picker>
-						</>
-					)}
+					{(type === "album" || type === "track") && renderArtistSelect()}
 
 					{type === "album" && (
 						<>
@@ -205,23 +260,7 @@ const AddItemScreen = ({ navigation }) => {
 
 					{type === "track" && (
 						<>
-							<Text style={[styles.label, { color: colors.primaryText }]}>
-								Select Album (optional):
-							</Text>
-							<Picker
-								selectedValue={selectedAlbum}
-								style={[styles.input, { borderColor: colors.border }]}
-								onValueChange={(itemValue) => setSelectedAlbum(itemValue)}
-							>
-								<Picker.Item label="None" value="" />
-								{albums.map((album) => (
-									<Picker.Item
-										key={album.id}
-										label={album.title}
-										value={album.id}
-									/>
-								))}
-							</Picker>
+							{renderAlbumSelect()}
 
 							<Text style={[styles.label, { color: colors.primaryText }]}>
 								Duration:
@@ -262,11 +301,18 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		paddingHorizontal: 10,
 		marginBottom: 20,
-		backgroundColor: "white",
 	},
 	buttonContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
+		marginBottom: 20,
+	},
+	pickerButton: {
+		height: 40,
+		borderWidth: 1,
+		borderRadius: 5,
+		justifyContent: "center",
+		paddingHorizontal: 10,
 		marginBottom: 20,
 	},
 });
