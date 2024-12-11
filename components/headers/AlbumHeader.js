@@ -48,7 +48,7 @@ const AlbumHeader = ({ section, isDarkMode }) => {
                 />
             </TouchableOpacity>
             {error && (
-                <Text style={[styles.errorText, { color: 'red' }]}>
+                <Text style={styles.errorText}>
                     {error}
                 </Text>
             )}
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
         bottom: -20,
         alignSelf: 'center',
         fontSize: 14,
+        color: 'red',
     },
 });
 

@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "https://music-api-java-e4ee3f7354b0.herokuapp.com/api";
 
 // GETTERS
 export const getArtists = async () => {
