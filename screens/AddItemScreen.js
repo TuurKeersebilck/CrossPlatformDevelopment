@@ -10,7 +10,6 @@ import {
     KeyboardAvoidingView,
     Platform,
 } from "react-native";
-import { format, parseISO } from "date-fns";
 import { useTheme } from "../context/ThemeContext";
 import { Colors } from "../styling/Colors";
 import {
@@ -91,6 +90,10 @@ const AddItemScreen = ({ navigation }) => {
         if (type === "album" && !releaseDate) newErrors.releaseDate = "Release date is required";
         if (type === "track" && !duration) newErrors.duration = "Duration is required";
 
+        if (type === "album" && releaseDate && !/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
+            newErrors.releaseDate = "Release date must be in YYYY-MM-DD format";
+        }
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
@@ -100,15 +103,16 @@ const AddItemScreen = ({ navigation }) => {
             let response;
             if (type === "artist") {
                 const artist = { name, imgUrl, bio };
+                console.log("Adding artist:", artist);
                 response = await addArtist(artist);
             } else if (type === "album") {
-                const formattedReleaseDate = format(parseISO(releaseDate), "yyyy-MM-dd");
                 const album = {
                     title: name,
                     imgUrl,
-                    releaseDate: formattedReleaseDate,
+                    releaseDate,
                     artistId: selectedArtist,
                 };
+                console.log("Adding album:", album);
                 response = await addAlbum(album);
             } else if (type === "track") {
                 const track = {
@@ -118,6 +122,7 @@ const AddItemScreen = ({ navigation }) => {
                     artistId: selectedArtist,
                     albumId: selectedAlbum,
                 };
+                console.log("Adding track:", track);
                 response = await addTrack(track);
             }
             if (response.error) throw new Error(response.error);
@@ -146,7 +151,7 @@ const AddItemScreen = ({ navigation }) => {
                     style={[
                         styles.pickerButton,
                         {
-                            backgroundColor: colors.background,
+                            backgroundColor: colors.backgroundColor,
                             borderColor: colors.border,
                         },
                     ]}
@@ -183,7 +188,7 @@ const AddItemScreen = ({ navigation }) => {
                     style={[
                         styles.pickerButton,
                         {
-                            backgroundColor: colors.background,
+                            backgroundColor: colors.backgroundColor,
                             borderColor: colors.border,
                         },
                     ]}
@@ -204,13 +209,18 @@ const AddItemScreen = ({ navigation }) => {
         );
     };
 
+    const handleNumericInput = (value, setter) => {
+        const numericValue = value.replace(/[^0-9]/g, '');
+        setter(numericValue);
+    };
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={[styles.container, { backgroundColor: colors.background }]}>
+                <View style={[styles.container, { backgroundColor: colors.backgroundColor }]}>
                     <Text style={[styles.label, { color: colors.primaryText }]}>
                         Select Type:
                     </Text>
