@@ -1,42 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
+import { View } from "react-native-web";
 
 const ArtistsScreen = ({ navigation }) => {
-	const [artists, setArtists] = useState([]);
-	const { isDarkMode } = useTheme();
-	useEffect(() => {
-		const fetchArtists = () => {
-			getArtists()
-				.then((artistsData) => {
-					setArtists(artistsData);
-				})
-				.catch((error) => {
-					console.error("Error fetching artists:", error);
-				});
-		};
+    const [artists, setArtists] = useState([]);
+    const { isDarkMode } = useTheme();
 
-		fetchArtists();
-	}, []);
+    const fetchArtists = async () => {
+        try {
+            const artistsData = await getArtists();
+            setArtists(artistsData);
+        } catch (error) {
+            console.error("Error fetching artists:", error);
+        }
+    };
 
-	return (
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchArtists();
+        }, [])
+    );
+
+    return (
+        <View style={{backgroundColor: isDarkMode ? "black" : "#F2F2F2" , flex: 1}}>
         <ScrollView contentContainerStyle={[styles.scrollView, isDarkMode && styles.scrollViewDark]}>
-			{artists.map((artist, index) => (
-				<ArtistRow key={index} artist={artist} navigation={navigation} />
-			))}
-		</ScrollView>
-	);
+            {artists.map((artist) => (
+                <ArtistRow key={artist.id} artist={artist} navigation={navigation} />
+            ))}
+        </ScrollView>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-	scrollView: {
-		flexGrow: 1,
-		padding: 10,
-	},
-	scrollViewDark: {
-        backgroundColor: "black",
+    scrollView: {
+        padding: 20,
+    },
+    scrollViewDark: {
+        backgroundColor: "#000",
     },
 });
 

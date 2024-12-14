@@ -1,5 +1,5 @@
-const BASE_URL = "https://music-api-java-e4ee3f7354b0.herokuapp.com/api";
-// const BASE_URL = "http://localhost:8080/api";
+//const BASE_URL = "https://music-api-java-e4ee3f7354b0.herokuapp.com/api";
+const BASE_URL = "http://localhost:8080/api";
 
 // GETTERS
 export const getArtists = async () => {
@@ -61,7 +61,7 @@ export const getTracks = async () => {
 
 export const fetchArtistSingles = async (artistId) => {
 	try {
-		const response = await fetch(`${BASE_URL}/artist/${artistId}/singles`);
+		const response = await fetch(`${BASE_URL}/artists/${artistId}/singles`);
 		if (!response.ok) {
 			throw new Error(`Network response was not ok: ${response.statusText}`);
 		}

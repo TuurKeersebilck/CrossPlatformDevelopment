@@ -10,7 +10,7 @@ import { useTheme } from "../context/ThemeContext";
 import TrackRow from "../components/rows/TrackRow";
 import ArtistHeader from "../components/headers/ArtistHeader";
 import AlbumHeader from "../components/headers/AlbumHeader";
-import { fetchArtistAlbums, fetchArtistDetails } from "../api/api_calls";
+import { fetchArtistAlbums, fetchArtistDetails, fetchArtistSingles } from "../api/api_calls";
 import { Colors } from "../styling/Colors";
 
 const ArtistDetailScreen = ({ route, navigation }) => {
@@ -26,26 +26,41 @@ const ArtistDetailScreen = ({ route, navigation }) => {
     useEffect(() => {
         const fetchArtistData = async () => {
             try {
-                const [artistDetails, albums] = await Promise.all([
+                const [artistDetails, albums, singles] = await Promise.all([
                     fetchArtistDetails(artistId),
                     fetchArtistAlbums(artistId),
+                    fetchArtistSingles(artistId),
                 ]);
 
-                if (artistDetails.error || albums.error) {
-                    throw new Error(artistDetails.error || albums.error);
+                if (artistDetails.error || albums.error || singles.error) {
+                    throw new Error(artistDetails.error || albums.error || singles.error);
                 }
 
                 setArtist(artistDetails);
-                setSections(
-                    albums.map((album) => ({
-                        title: album.title,
-                        imgUrl: album.imgUrl,
-                        data: album.tracks,
-                        releaseDate: album.releaseDate,
-                        albumId: album.id,
-                        favorite: album.favorite,
-                    }))
-                );
+                const albumSections = albums.map((album) => ({
+                    title: album.title,
+                    imgUrl: album.imgUrl,
+                    data: album.tracks,
+                    releaseDate: album.releaseDate,
+                    albumId: album.id,
+                    favorite: album.favorite,
+                }));
+
+                const singlesSection = {
+                    title: "Singles",
+                    imgUrl: null,
+                    data: singles,
+                    releaseDate: null,
+                    albumId: null,
+                    favorite: null,
+                };
+
+                const sections = singles.length > 0 ? [singlesSection] : [];
+                if (albums.length > 0) {
+                    sections.push({ title: "Albums", data: [] }, ...albumSections);
+                }
+
+                setSections(sections);
             } catch (error) {
                 setError("Failed to load artist data. Please try again.");
             } finally {
@@ -64,6 +79,20 @@ const ArtistDetailScreen = ({ route, navigation }) => {
         );
     }
 
+    const renderSectionHeader = ({ section }) => {
+        if (section.title === "Singles" || section.title === "Albums") {
+            return (
+                <View style={[styles.sectionHeader, { backgroundColor: colors.background }]}>
+                    <Text style={[styles.sectionHeaderText, { color: colors.primaryText }]}>
+                        {section.title}
+                    </Text>
+                </View>
+            );
+        } else {
+            return <AlbumHeader section={section} isDarkMode={isDarkMode} />;
+        }
+    };
+
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             {error && (
@@ -74,9 +103,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
             <SectionList
                 sections={sections}
                 keyExtractor={(item) => item.id}
-                renderSectionHeader={({ section }) => (
-                    <AlbumHeader section={section} isDarkMode={isDarkMode} />
-                )}
+                renderSectionHeader={renderSectionHeader}
                 renderItem={({ item }) => (
                     <TrackRow track={item} navigation={navigation} />
                 )}
@@ -104,6 +131,16 @@ const styles = StyleSheet.create({
     },
     sectionList: {
         paddingBottom: 20,
+    },
+    sectionHeader: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    sectionHeaderText: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
 

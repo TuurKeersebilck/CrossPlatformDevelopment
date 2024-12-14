@@ -6,10 +6,11 @@ import {
     Button,
     StyleSheet,
     TouchableOpacity,
-    TouchableWithoutFeedback,
-    Keyboard,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
 } from "react-native";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { useTheme } from "../context/ThemeContext";
 import { Colors } from "../styling/Colors";
 import {
@@ -101,7 +102,7 @@ const AddItemScreen = ({ navigation }) => {
                 const artist = { name, imgUrl, bio };
                 response = await addArtist(artist);
             } else if (type === "album") {
-                const formattedReleaseDate = format(new Date(releaseDate), "yyyy-MM-dd");
+                const formattedReleaseDate = format(parseISO(releaseDate), "yyyy-MM-dd");
                 const album = {
                     title: name,
                     imgUrl,
@@ -110,14 +111,12 @@ const AddItemScreen = ({ navigation }) => {
                 };
                 response = await addAlbum(album);
             } else if (type === "track") {
-                const formattedReleaseDate = format(new Date(releaseDate), "yyyy-MM-dd");
                 const track = {
                     title: name,
                     imgUrl,
                     duration,
                     artistId: selectedArtist,
                     albumId: selectedAlbum,
-                    releaseDate: formattedReleaseDate,
                 };
                 response = await addTrack(track);
             }
@@ -206,135 +205,140 @@ const AddItemScreen = ({ navigation }) => {
     };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[styles.container, { backgroundColor: colors.background }]}>
-                <Text style={[styles.label, { color: colors.primaryText }]}>
-                    Select Type:
-                </Text>
-                <View style={styles.buttonContainer}>
-                    <Button title="Artist" onPress={() => handleTypeChange("artist")} />
-                    <Button title="Album" onPress={() => handleTypeChange("album")} />
-                    <Button title="Track" onPress={() => handleTypeChange("track")} />
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={[styles.container, { backgroundColor: colors.background }]}>
+                    <Text style={[styles.label, { color: colors.primaryText }]}>
+                        Select Type:
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <Button title="Artist" onPress={() => handleTypeChange("artist")} />
+                        <Button title="Album" onPress={() => handleTypeChange("album")} />
+                        <Button title="Track" onPress={() => handleTypeChange("track")} />
+                    </View>
+
+                    {type !== "" && (
+                        <>
+                            <Text style={[styles.label, { color: colors.primaryText }]}>
+                                Name:*
+                            </Text>
+                            {errors.name && (
+                                <Text style={[styles.errorText, { color: colors.errorText }]}>
+                                    {errors.name}
+                                </Text>
+                            )}
+                            <TextInput
+                                style={[
+                                    styles.input,
+                                    { color: colors.primaryText, borderColor: colors.border },
+                                ]}
+                                value={name}
+                                onChangeText={setName}
+                                placeholder="Enter name"
+                                placeholderTextColor={colors.secondaryText}
+                            />
+
+                            <Text style={[styles.label, { color: colors.primaryText }]}>
+                                Image URL:*
+                            </Text>
+                            {errors.imgUrl && (
+                                <Text style={[styles.errorText, { color: colors.errorText }]}>
+                                    {errors.imgUrl}
+                                </Text>
+                            )}
+                            <TextInput
+                                style={[
+                                    styles.input,
+                                    { color: colors.primaryText, borderColor: colors.border },
+                                ]}
+                                value={imgUrl}
+                                onChangeText={setImgUrl}
+                                placeholder="Enter image URL"
+                                placeholderTextColor={colors.secondaryText}
+                            />
+
+                            {type === "artist" && (
+                                <>
+                                    <Text style={[styles.label, { color: colors.primaryText }]}>
+                                        Bio:
+                                    </Text>
+                                    {errors.bio && (
+                                        <Text style={[styles.errorText, { color: colors.errorText }]}>
+                                            {errors.bio}
+                                        </Text>
+                                    )}
+                                    <TextInput
+                                        style={[
+                                            styles.input,
+                                            { color: colors.primaryText, borderColor: colors.border },
+                                        ]}
+                                        value={bio}
+                                        onChangeText={setBio}
+                                        placeholder="Enter bio"
+                                        placeholderTextColor={colors.secondaryText}
+                                    />
+                                </>
+                            )}
+
+                            {(type === "album" || type === "track") && renderArtistSelect()}
+
+                            {type === "album" && (
+                                <>
+                                    <Text style={[styles.label, { color: colors.primaryText }]}>
+                                        Release Date:*
+                                    </Text>
+                                    {errors.releaseDate && (
+                                        <Text style={[styles.errorText, { color: colors.errorText }]}>
+                                            {errors.releaseDate}
+                                        </Text>
+                                    )}
+                                    <TextInput
+                                        style={[
+                                            styles.input,
+                                            { color: colors.primaryText, borderColor: colors.border },
+                                        ]}
+                                        value={releaseDate}
+                                        onChangeText={setReleaseDate}
+                                        placeholder="Enter release date (YYYY-MM-DD)"
+                                        placeholderTextColor={colors.secondaryText}
+                                    />
+                                </>
+                            )}
+
+                            {type === "track" && (
+                                <>
+                                    {renderAlbumSelect()}
+
+                                    <Text style={[styles.label, { color: colors.primaryText }]}>
+                                        Duration:*
+                                    </Text>
+                                    {errors.duration && (
+                                        <Text style={[styles.errorText, { color: colors.errorText }]}>
+                                            {errors.duration}
+                                        </Text>
+                                    )}
+                                    <TextInput
+                                        style={[
+                                            styles.input,
+                                            { color: colors.primaryText, borderColor: colors.border },
+                                        ]}
+                                        value={duration}
+                                        onChangeText={setDuration}
+                                        placeholder="Enter duration (e.g., 03:45)"
+                                        placeholderTextColor={colors.secondaryText}
+                                    />
+                                </>
+                            )}
+
+                            <Button title="Add" onPress={handleAdd} />
+                        </>
+                    )}
                 </View>
-
-                {type !== "" && (
-                    <>
-                        <Text style={[styles.label, { color: colors.primaryText }]}>
-                            Name:*
-                        </Text>
-                        {errors.name && (
-                            <Text style={[styles.errorText, { color: colors.errorText }]}>
-                                {errors.name}
-                            </Text>
-                        )}
-                        <TextInput
-                            style={[
-                                styles.input,
-                                { color: colors.primaryText, borderColor: colors.border },
-                            ]}
-                            value={name}
-                            onChangeText={setName}
-                            placeholder="Enter name"
-                            placeholderTextColor={colors.secondaryText}
-                        />
-
-                        <Text style={[styles.label, { color: colors.primaryText }]}>
-                            Image URL:*
-                        </Text>
-                        {errors.imgUrl && (
-                            <Text style={[styles.errorText, { color: colors.errorText }]}>
-                                {errors.imgUrl}
-                            </Text>
-                        )}
-                        <TextInput
-                            style={[
-                                styles.input,
-                                { color: colors.primaryText, borderColor: colors.border },
-                            ]}
-                            value={imgUrl}
-                            onChangeText={setImgUrl}
-                            placeholder="Enter image URL"
-                            placeholderTextColor={colors.secondaryText}
-                        />
-
-                        {type === "artist" && (
-                            <>
-                                <Text style={[styles.label, { color: colors.primaryText }]}>
-                                    Bio:
-                                </Text>
-                                {errors.bio && (
-                                    <Text style={[styles.errorText, { color: colors.errorText }]}>
-                                        {errors.bio}
-                                    </Text>
-                                )}
-                                <TextInput
-                                    style={[
-                                        styles.input,
-                                        { color: colors.primaryText, borderColor: colors.border },
-                                    ]}
-                                    value={bio}
-                                    onChangeText={setBio}
-                                    placeholder="Enter bio"
-                                    placeholderTextColor={colors.secondaryText}
-                                />
-                            </>
-                        )}
-
-                        {(type === "album" || type === "track") && renderArtistSelect()}
-
-                        {type === "album" && (
-                            <>
-                                <Text style={[styles.label, { color: colors.primaryText }]}>
-                                    Release Date:*
-                                </Text>
-                                {errors.releaseDate && (
-                                    <Text style={[styles.errorText, { color: colors.errorText }]}>
-                                        {errors.releaseDate}
-                                    </Text>
-                                )}
-                                <TextInput
-                                    style={[
-                                        styles.input,
-                                        { color: colors.primaryText, borderColor: colors.border },
-                                    ]}
-                                    value={releaseDate}
-                                    onChangeText={setReleaseDate}
-                                    placeholder="Enter release date (YYYY-MM-DD)"
-                                    placeholderTextColor={colors.secondaryText}
-                                />
-                            </>
-                        )}
-
-                        {type === "track" && (
-                            <>
-                                {renderAlbumSelect()}
-
-                                <Text style={[styles.label, { color: colors.primaryText }]}>
-                                    Duration:*
-                                </Text>
-                                {errors.duration && (
-                                    <Text style={[styles.errorText, { color: colors.errorText }]}>
-                                        {errors.duration}
-                                    </Text>
-                                )}
-                                <TextInput
-                                    style={[
-                                        styles.input,
-                                        { color: colors.primaryText, borderColor: colors.border },
-                                    ]}
-                                    value={duration}
-                                    onChangeText={setDuration}
-                                    placeholder="Enter duration (e.g., 03:45)"
-                                    placeholderTextColor={colors.secondaryText}
-                                />
-                            </>
-                        )}
-
-                        <Button title="Add" onPress={handleAdd} />
-                    </>
-                )}
-            </View>
-        </TouchableWithoutFeedback>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 

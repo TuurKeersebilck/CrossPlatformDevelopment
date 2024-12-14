@@ -61,8 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         padding: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: '#282828',
+
     },
     textContainer: {
         marginLeft: 12,
