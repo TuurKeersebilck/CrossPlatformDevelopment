@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
-import { View } from "react-native-web";
 
 const ArtistsScreen = ({ navigation }) => {
     const [artists, setArtists] = useState([]);
