@@ -92,7 +92,8 @@ const SearchScreen = ({ navigation }) => {
 
 	return (
 		<KeyboardAvoidingView
-			style={[ styles.container,
+			style={[
+				styles.container,
 				{
 					color: colors.primaryText,
 					borderColor: colors.border,

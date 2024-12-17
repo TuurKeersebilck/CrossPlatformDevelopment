@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
 import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
@@ -13,23 +12,20 @@ const ArtistsScreen = ({ navigation }) => {
 	const { isDarkMode } = useTheme();
 	const colors = isDarkMode ? Colors.dark : Colors.light;
 
-	const fetchArtists = async () => {
-		try {
-			setLoading(true);
-			const artistsData = await getArtists();
-			setArtists(artistsData);
-		} catch (error) {
-			console.error("Error fetching artists:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useFocusEffect(
-		useCallback(() => {
-			fetchArtists();
-		}, [])
-	);
+    useEffect(() => {
+        const fetchArtists = async () => {
+            try {
+                setLoading(true);
+                const artistsData = await getArtists();
+                setArtists(artistsData);
+            } catch (error) {
+                console.error("Error fetching artists:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchArtists();
+    }, []);
 
 	if (loading) {
 		return <LoadingIndicator />;

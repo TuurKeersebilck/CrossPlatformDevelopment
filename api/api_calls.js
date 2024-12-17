@@ -66,16 +66,7 @@ export const fetchArtistSingles = async (artistId) => {
 			throw new Error(`Network response was not ok: ${response.statusText}`);
 		}
 		const artistSingles = await response.json();
-		return artistSingles.map((single) => ({
-			id: single.id,
-			title: single.title,
-			imgUrl: single.imgUrl,
-			duration: single.duration,
-			artistId: single.artistId,
-			albumId: single.albumId,
-			favorite: single.favorite,
-			artistName: single.artistName,
-		}));
+		return artistSingles;
 	} catch (error) {
 		console.error("Error fetching singles:", error);
 		throw error;
@@ -141,6 +132,64 @@ export const fetchTrackDetails = async (trackId) => {
 		throw error;
 	}
 };
+
+export const getFavoriteArtists = async () => {
+	try {
+		const response = await fetch(`${BASE_URL}/artists/favorites`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			throw new Error(`Network response was not ok: ${response.statusText}`);
+		}
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching favorite artists:", error.message);
+		throw error;
+	}
+};
+
+export const getFavoriteTracks = async () => {
+	try {
+		const response = await fetch(`${BASE_URL}/tracks/favorites`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			throw new Error(`Network response was not ok: ${response.statusText}`);
+		}
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching favorite tracks:", error.message);
+		throw error;
+	}
+};
+
+export const getFavoriteAlbums = async () => {
+	try {
+		const response = await fetch(`${BASE_URL}/albums/favorites`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			throw new Error(`Network response was not ok: ${response.statusText}`);
+		}
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching favorite albums:", error.message);
+		throw error;
+	}
+};
+
 // --------------------------------------------------------------------------------------------
 
 // PATCHES
