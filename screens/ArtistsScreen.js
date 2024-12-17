@@ -5,79 +5,87 @@ import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
 import LoadingIndicator from "../components/Loading";
+import { Colors } from "../styling/Colors";
 
 const ArtistsScreen = ({ navigation }) => {
-	const [artists, setArtists] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const { isDarkMode } = useTheme();
+    const [artists, setArtists] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { isDarkMode } = useTheme();
+    const colors = isDarkMode ? Colors.dark : Colors.light;
 
-	const fetchArtists = async () => {
-		try {
-			setLoading(true);
-			const artistsData = await getArtists();
-			setArtists(artistsData);
-		} catch (error) {
-			console.error("Error fetching artists:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
+    const fetchArtists = async () => {
+        try {
+            setLoading(true);
+            const artistsData = await getArtists();
+            setArtists(artistsData);
+        } catch (error) {
+            console.error("Error fetching artists:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-	useFocusEffect(
-		useCallback(() => {
-			fetchArtists();
-		}, [])
-	);
+    useFocusEffect(
+        useCallback(() => {
+            fetchArtists();
+        }, [])
+    );
 
-	if (loading) {
-		return <LoadingIndicator />;
-	}
+    if (loading) {
+        return <LoadingIndicator />;
+    }
 
-	if (artists.length === 0) {
-		return (
-			<View
-				style={[
-					styles.centered,
-					{ backgroundColor: isDarkMode ? "black" : "#F2F2F2" },
-				]}
-			>
-				<Text style={{ color: isDarkMode ? "white" : "black" }}>
-					No artists available
-				</Text>
-			</View>
-		);
-	}
+    if (artists.length === 0) {
+        return (
+            <View
+                style={[styles.centered, { backgroundColor: colors.background }]}
+                accessibilityRole="alert"
+                accessibilityLabel="List of artists is empty"
+            >
+                <Text style={{ color: colors.primaryText }}>
+                    No artists available
+                </Text>
+            </View>
+        );
+    }
 
-	return (
-		<View
-			style={{ backgroundColor: isDarkMode ? "black" : "#F2F2F2", flex: 1 }}
-		>
-			<ScrollView
-				contentContainerStyle={[
-					styles.scrollView,
-					isDarkMode && styles.scrollViewDark,
-				]}
-			>
-				{artists.map((artist) => (
-					<ArtistRow key={artist.id} artist={artist} navigation={navigation} />
-				))}
-			</ScrollView>
-		</View>
-	);
+    return (
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <ScrollView
+                contentContainerStyle={[
+                    styles.scrollView,
+                    { backgroundColor: colors.background },
+                ]}
+                accessibilityRole="scrollbar"
+                accessibilityLabel="List of artists"
+            >
+                {artists.map((artist) => (
+                    <ArtistRow
+                        key={artist.id}
+                        artist={artist}
+                        navigation={navigation}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Artist: ${artist.name}`}
+                    />
+                ))}
+            </ScrollView>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-	scrollView: {
-		padding: 20,
-	},
-	scrollViewDark: {
-		backgroundColor: "#000",
-	},
-	centered: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
+    container: {
+        flex: 1,
+    },
+    scrollView: {
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+    centered: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
 });
 
 export default ArtistsScreen;

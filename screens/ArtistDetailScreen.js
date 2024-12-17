@@ -75,10 +75,15 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	}
 
 	const renderSectionHeader = ({ section }) => {
-		if (section.title === "Singles" || section.title === "Albums") {
+		if (section.title === "Albums") {
 			return (
 				<View
-					style={[styles.sectionHeader, { backgroundColor: colors.background }]}
+					style={[
+						styles.sectionHeader,
+						{ backgroundColor: colors.headerBackground },
+					]}
+					accessibilityRole="header"
+					accessibilityLabel={`Albums section`}
 				>
 					<Text
 						style={[styles.sectionHeaderText, { color: colors.primaryText }]}
@@ -104,15 +109,29 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 				keyExtractor={(item) => item.id}
 				renderSectionHeader={renderSectionHeader}
 				renderItem={({ item }) => (
-					<TrackRow track={item} navigation={navigation} />
+					<TrackRow
+						track={item}
+						navigation={navigation}
+						accessibilityRole="button"
+						accessibilityLabel={`Track: ${item.title}`}
+					/>
 				)}
-				ListHeaderComponent={() => (
-					<ArtistHeader artist={artist} isDarkMode={isDarkMode} />
-				)}
+				ListHeaderComponent={() =>
+					artist && (
+						<ArtistHeader
+							artist={artist}
+							isDarkMode={isDarkMode}
+							accessibilityRole="header"
+							accessibilityLabel={`Artist: ${artist.name}`}
+						/>
+					)
+				}
 				contentContainerStyle={[
 					styles.sectionList,
 					{ backgroundColor: colors.background },
 				]}
+				accessibilityRole="list"
+				accessibilityLabel="List of artist details"
 			/>
 		</View>
 	);

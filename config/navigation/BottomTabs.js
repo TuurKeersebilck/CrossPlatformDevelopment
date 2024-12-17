@@ -37,22 +37,23 @@ const BottomTabs = () => {
 					backgroundColor: isDarkMode ? "black" : "white",
 				},
 				headerTintColor: isDarkMode ? "white" : "black",
+				tabBarAccessibilityLabel: route.name,
 			})}
 		>
 			<Tab.Screen
 				name="Artists"
 				component={ArtistsStackNavigator}
-				options={{ headerShown: false }}
+				options={{ headerShown: false, tabBarAccessibilityLabel: "Artists" }}
 			/>
 			<Tab.Screen
 				name="Search"
 				component={SearchStackNavigator}
-				options={{ headerShown: false }}
+				options={{ headerShown: false, tabBarAccessibilityLabel: "Search" }}
 			/>
 			<Tab.Screen
 				name="Settings"
 				component={SettingsStackNavigator}
-				options={{ headerShown: false }}
+				options={{ headerShown: false, tabBarAccessibilityLabel: "Settings" }}
 			/>
 		</Tab.Navigator>
 	);

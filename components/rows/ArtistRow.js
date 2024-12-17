@@ -16,11 +16,15 @@ const ArtistRow = ({ artist, navigation }) => {
                 })
             }
             style={styles.container}
+            accessibilityRole="button"
+            accessibilityLabel={`View details for artist ${artist.name}`}
         >
-            <View style={[styles.artist, { backgroundColor: colors.background }]}>
+            <View style={[styles.artist, { backgroundColor: colors.headerBackground }]}>
                 <Image 
                     source={{ uri: artist.imgUrl }} 
                     style={styles.artistImage} 
+                    accessibilityRole="image"
+                    accessibilityLabel={`Image of artist ${artist.name}`}
                 />
                 <View style={styles.artistInfo}>
                     <Text style={[styles.artistName, { color: colors.primaryText }]}>

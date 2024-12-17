@@ -29,17 +29,31 @@ const ArtistHeader = ({ artist, isDarkMode }) => {
 					<Image
 						source={{ uri: artist.imgUrl }}
 						style={styles.image}
-						borderRadius={100}
+						accessibilityRole="image"
+						accessibilityLabel={`Image of artist ${artist.name}`}
 					/>
-					<Text style={[styles.name, { color: colors.primaryText }]}>
+					<Text
+						style={[styles.name, { color: colors.primaryText }]}
+						accessibilityRole="header"
+						accessibilityLabel={`Artist name: ${artist.name}`}
+					>
 						{artist.name}
 					</Text>
-					<Text style={[styles.bio, { color: colors.secondaryText }]}>
+					<Text
+						style={[styles.bio, { color: colors.secondaryText }]}
+						accessibilityLabel={`Artist bio: ${artist.bio}`}
+					>
 						{artist.bio}
 					</Text>
 					<TouchableOpacity
 						onPress={toggleFavorite}
 						style={styles.favoriteButton}
+						accessibilityRole="button"
+						accessibilityLabel={
+							isFavorited
+								? `Remove ${artist.name} from favorites`
+								: `Add ${artist.name} to favorites`
+						}
 					>
 						<Ionicons
 							name={isFavorited ? "heart" : "heart-outline"}
@@ -47,7 +61,14 @@ const ArtistHeader = ({ artist, isDarkMode }) => {
 							color={colors.accent}
 						/>
 					</TouchableOpacity>
-					{error && <Text style={styles.errorText}>{error}</Text>}
+					{error && (
+						<Text
+							style={styles.errorText}
+							accessibilityLabel={`Error: ${error}`}
+						>
+							{error}
+						</Text>
+					)}
 				</>
 			)}
 		</View>

@@ -23,24 +23,38 @@ const AlbumHeader = ({ section, isDarkMode }) => {
     };
 
     return (
-        <View style={[styles.sectionHeader, { backgroundColor: colors.background }]}>
+        <View 
+            style={[styles.sectionHeader, { backgroundColor: colors.background }]}
+            accessibilityRole="header"
+            accessibilityLabel={`Album: ${section.title}`}
+        >
             <Image 
                 source={{ uri: section.imgUrl }} 
                 style={styles.albumImage} 
+                accessibilityRole="image"
+                accessibilityLabel={`Image of album ${section.title}`}
             />
             <View style={styles.textContainer}>
                 <Text 
                     style={[styles.sectionHeaderText, { color: colors.primaryText }]}
+                    accessibilityRole="header"
+                    accessibilityLabel={`Album title: ${section.title}`}
                 >
                     {section.title}
                 </Text>
                 <Text 
                     style={[styles.releaseDateText, { color: colors.secondaryText }]}
+                    accessibilityLabel={`Release year: ${new Date(section.releaseDate).getFullYear()}`}
                 >
                     {new Date(section.releaseDate).getFullYear()}
                 </Text>
             </View>
-            <TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+            <TouchableOpacity 
+                onPress={toggleFavorite} 
+                style={styles.favoriteButton}
+                accessibilityRole="button"
+                accessibilityLabel={isFavorited ? `Remove ${section.title} from favorites` : `Add ${section.title} to favorites`}
+            >
                 <Ionicons
                     name={isFavorited ? "heart" : "heart-outline"}
                     size={24}
@@ -48,7 +62,10 @@ const AlbumHeader = ({ section, isDarkMode }) => {
                 />
             </TouchableOpacity>
             {error && (
-                <Text style={styles.errorText}>
+                <Text 
+                    style={styles.errorText}
+                    accessibilityLabel={`Error: ${error}`}
+                >
                     {error}
                 </Text>
             )}
@@ -61,7 +78,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         padding: 12,
-
     },
     textContainer: {
         marginLeft: 12,

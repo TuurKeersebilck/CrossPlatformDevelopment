@@ -46,8 +46,17 @@ const TrackDetailScreen = ({ route, navigation }) => {
 		<View style={[styles.container, { backgroundColor: colors.background }]}>
 			{track && (
 				<>
-					<Image source={{ uri: track.imgUrl }} style={styles.trackImage} />
-					<Text style={[styles.trackTitle, { color: colors.primaryText }]}>
+					<Image
+						source={{ uri: track.imgUrl }}
+						style={styles.trackImage}
+						accessibilityRole="image"
+						accessibilityLabel={`Image of track ${track.title}`}
+					/>
+					<Text
+						style={[styles.trackTitle, { color: colors.primaryText }]}
+						accessibilityRole="header"
+						accessibilityLabel={`Track title: ${track.title}`}
+					>
 						{track.title}
 					</Text>
 					<TouchableOpacity
@@ -57,12 +66,17 @@ const TrackDetailScreen = ({ route, navigation }) => {
 								name: track.artistName,
 							})
 						}
+						accessibilityRole="button"
+						accessibilityLabel={`View details for artist ${track.artistName}`}
 					>
 						<Text style={[styles.trackArtist, { color: colors.linkText }]}>
 							{track.artistName}
 						</Text>
 					</TouchableOpacity>
-					<Text style={[styles.trackDuration, { color: colors.secondaryText }]}>
+					<Text
+						style={[styles.trackDuration, { color: colors.secondaryText }]}
+						accessibilityLabel={`Track duration: ${track.duration}`}
+					>
 						{track.duration}
 					</Text>
 				</>

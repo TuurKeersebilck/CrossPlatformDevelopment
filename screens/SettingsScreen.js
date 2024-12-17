@@ -13,11 +13,24 @@ const SettingsScreen = ({ navigation }) => {
 
 	return (
 		<View style={[styles.container, { backgroundColor: colors.background }]}>
-			<Text style={[styles.text, { color: colors.primaryText }]}>Settings</Text>
-			<Button title="Toggle Theme" onPress={toggleTheme} />
+			<Text
+				style={[styles.text, { color: colors.primaryText }]}
+				accessibilityRole="header"
+				accessibilityLabel="Settings"
+			>
+				Settings
+			</Text>
+			<Button
+				title="Toggle Theme"
+				onPress={toggleTheme}
+				accessibilityRole="button"
+				accessibilityLabel="Toggle between light and dark theme"
+			/>
 			<TouchableOpacity
 				style={[styles.addButton, { backgroundColor: colors.accent }]}
 				onPress={handleAddPress}
+				accessibilityRole="button"
+				accessibilityLabel="Add Artist, Album, or Track"
 			>
 				<Text style={[styles.addButtonText, { color: colors.primaryText }]}>
 					Add Artist/Album/Track
