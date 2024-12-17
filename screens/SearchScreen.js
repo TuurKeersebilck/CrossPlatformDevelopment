@@ -4,7 +4,7 @@ import {
 	Text,
 	TextInput,
 	StyleSheet,
-	ScrollView,
+	FlatList,
 	KeyboardAvoidingView,
 	Platform,
 } from "react-native";
@@ -62,47 +62,67 @@ const SearchScreen = ({ navigation }) => {
 		}
 	};
 
+	const renderItem = ({ item }) => {
+		if (item.type === "artist") {
+			return (
+				<ArtistRow
+					artist={item}
+					navigation={navigation}
+					accessibilityRole="button"
+					accessibilityLabel={`Artist: ${item.name}`}
+				/>
+			);
+		} else if (item.type === "track") {
+			return (
+				<TrackRow
+					track={item}
+					navigation={navigation}
+					accessibilityRole="button"
+					accessibilityLabel={`Track: ${item.title}`}
+				/>
+			);
+		}
+		return null;
+	};
+
+	const combinedData = [
+		...filteredArtists.map((artist) => ({ ...artist, type: "artist" })),
+		...filteredTracks.map((track) => ({ ...track, type: "track" })),
+	];
+
 	return (
 		<KeyboardAvoidingView
-			style={{ flex: 1 }}
+			style={[ styles.container,
+				{
+					color: colors.primaryText,
+					borderColor: colors.border,
+					backgroundColor: colors.background,
+				},
+			]}
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
 		>
+			<TextInput
+				style={[
+					styles.input,
+					{
+						color: colors.primaryText,
+						borderColor: colors.border,
+						backgroundColor: colors.background,
+					},
+				]}
+				value={query}
+				onChangeText={handleSearch}
+				placeholder="Search artists and tracks"
+				placeholderTextColor={colors.secondaryText}
+				accessibilityLabel="Search artists and tracks"
+			/>
 			<View style={[styles.container, { backgroundColor: colors.background }]}>
-				<ScrollView
+				<FlatList
+					data={combinedData}
+					keyExtractor={(item) => item.id.toString()}
+					renderItem={renderItem}
 					contentContainerStyle={styles.scrollView}
-					accessibilityRole="scrollbar"
-					accessibilityLabel="List of search results"
-				>
-					<TextInput
-						style={[
-							styles.input,
-							{ color: colors.primaryText, borderColor: colors.border },
-						]}
-						value={query}
-						onChangeText={handleSearch}
-						placeholder="Search artists and tracks"
-						placeholderTextColor={colors.secondaryText}
-						accessibilityLabel="Search artists and tracks"
-					/>
-					{filteredArtists.map((artist) => (
-						<ArtistRow
-							key={artist.id}
-							artist={artist}
-							navigation={navigation}
-							accessibilityRole="button"
-							accessibilityLabel={`Artist: ${artist.name}`}
-						/>
-					))}
-					{filteredTracks.map((track) => (
-						<TrackRow
-							key={track.id}
-							track={track}
-							navigation={navigation}
-							accessibilityRole="button"
-							accessibilityLabel={`Track: ${track.title}`}
-						/>
-					))}
-					{filteredArtists.length === 0 && filteredTracks.length === 0 && (
+					ListEmptyComponent={
 						<Text
 							style={{
 								color: colors.primaryText,
@@ -114,8 +134,10 @@ const SearchScreen = ({ navigation }) => {
 						>
 							No results found
 						</Text>
-					)}
-				</ScrollView>
+					}
+					accessibilityRole="list"
+					accessibilityLabel="List of search results"
+				/>
 			</View>
 		</KeyboardAvoidingView>
 	);
@@ -124,14 +146,14 @@ const SearchScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 20,
 	},
 	input: {
 		height: 40,
 		borderWidth: 1,
 		borderRadius: 5,
 		paddingHorizontal: 10,
-		marginBottom: 20,
+		marginHorizontal: 15,
+		marginVertical: 10,
 	},
 	scrollView: {
 		flexGrow: 1,

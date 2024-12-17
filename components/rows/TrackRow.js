@@ -43,7 +43,7 @@ const TrackRow = ({ track, navigation }) => {
             accessibilityRole="button"
             accessibilityLabel={`View details for track ${track.title}`}
         >
-            <View style={[styles.track, { backgroundColor: colors.backgroundHeader }]}>
+            <View style={styles.track}>
                 <Image 
                     source={{ uri: track.imgUrl }} 
                     style={styles.trackImage} 

@@ -19,7 +19,7 @@ const ArtistRow = ({ artist, navigation }) => {
             accessibilityRole="button"
             accessibilityLabel={`View details for artist ${artist.name}`}
         >
-            <View style={[styles.artist, { backgroundColor: colors.headerBackground }]}>
+            <View style={styles.artist}>
                 <Image 
                     source={{ uri: artist.imgUrl }} 
                     style={styles.artistImage} 
