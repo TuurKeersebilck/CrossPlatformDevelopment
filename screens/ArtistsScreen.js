@@ -49,7 +49,7 @@ const ArtistsScreen = ({ navigation }) => {
         <View style={[container, { backgroundColor: colors.background }]}>
             <Button
                 title="Add Artist"
-                onPress={() => navigation.navigate("AddItemScreen", { type: "artist" })}
+                onPress={() => navigation.navigate("AddArtistScreen")}
                 accessibilityRole="button"
                 accessibilityLabel="Add artist"
             />

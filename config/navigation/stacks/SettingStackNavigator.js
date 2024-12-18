@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../../context/ThemeContext";
 import SettingsScreen from "../../../screens/SettingsScreen";
-import AddItemScreen from "../../../screens/AddItemScreen";
 import AllFavoritesScreen from "../../../screens/AllFavoritesScreen"; 
 
 const Stack = createStackNavigator();
@@ -38,11 +37,7 @@ const SettingStackNavigator = () => {
 				component={SettingsScreen}
 				options={{ title: "Settings" }}
 			/>
-			<Stack.Screen
-				name="AddItemScreen"
-				component={AddItemScreen}
-				options={{ title: "Add Item" }}
-			/>
+
 			<Stack.Screen
 				name="AllFavoritesScreen"
 				component={AllFavoritesScreen}

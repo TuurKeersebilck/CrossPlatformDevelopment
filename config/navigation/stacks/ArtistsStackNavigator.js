@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ArtistsScreen from "../../../screens/ArtistsScreen";
 import TrackDetailScreen from "../../../screens/TrackDetailScreen";
 import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
+import AddArtistScreen from "../../../screens/AddArtistScreen";
 import { useTheme } from "../../../context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -45,6 +46,11 @@ const ArtistsStackNavigator = () => {
                 name="ArtistDetail"
                 component={ArtistDetailScreen}
                 options={({ route }) => ({ title: route.params.name })}
+            />
+            <Stack.Screen
+            name="AddArtistScreen"
+            component={AddArtistScreen}
+            options={{ title: "Add Artist" }}
             />
         </Stack.Navigator>
     );
