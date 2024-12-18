@@ -6,6 +6,7 @@ import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
 import AddArtistScreen from "../../../screens/AddArtistScreen";
 import AddTrackScreen from "../../../screens/AddTrackScreen";
 import AddAlbumScreen from "../../../screens/AddAlbumScreen";
+import AlbumDetailScreen from "../../../screens/AlbumDetailScreen";
 import { useTheme } from "../../../context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -63,6 +64,11 @@ const ArtistsStackNavigator = () => {
 				name="AddAlbumScreen"
 				component={AddAlbumScreen}
 				options={{ title: "Add Album" }}
+			/>
+			<Stack.Screen
+				name="AlbumDetail"
+				component={AlbumDetailScreen}
+				options={({ route }) => ({ title: route.params.album.title })}
 			/>
 		</Stack.Navigator>
 	);

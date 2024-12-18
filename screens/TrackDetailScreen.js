@@ -13,6 +13,8 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	// TODO: alle styling destructureren
+	// TODO: settings beter stylen
 	useEffect(() => {
 		const getTrackDetails = async () => {
 			try {

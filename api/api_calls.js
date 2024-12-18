@@ -59,6 +59,25 @@ export const getTracks = async () => {
 	}
 };
 
+export const getTracksFromAlbum = async (albumId) => {
+	try {
+		const response = await fetch(`${BASE_URL}/albums/${albumId}/tracks`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			throw new Error(`Network response was not ok: ${response.statusText}`);
+		}
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error fetching tracks from album:", error.message);
+		throw error;
+	}
+};
+
 export const fetchArtistSingles = async (artistId) => {
 	try {
 		const response = await fetch(`${BASE_URL}/artists/${artistId}/singles`);

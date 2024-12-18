@@ -1,0 +1,141 @@
+import React, { useState } from "react";
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	Button,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { toggleArtistFavorite } from "../api/api_calls";
+import { Themes } from "../styling/Themes";
+
+const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
+	const [isFavorited, setIsFavorited] = useState(artist.favorite);
+	const [error, setError] = useState(null);
+	const colors = isDarkMode ? Themes.dark : Themes.light;
+
+	const toggleFavorite = async () => {
+		try {
+			const response = await toggleArtistFavorite(artist.id, !isFavorited);
+			if (response.success) {
+				setIsFavorited(response.isFavorited);
+			} else {
+				setError("Failed to update favorite status.");
+			}
+		} catch (error) {
+			setError("Failed to update favorite status.");
+		}
+	};
+
+	return (
+		<View style={[styles.header, { backgroundColor: colors.background }]}>
+			{artist && (
+				<>
+					<Image
+						source={{ uri: artist.imgUrl }}
+						style={styles.image}
+						accessibilityRole="image"
+						accessibilityLabel={`Image of artist ${artist.name}`}
+					/>
+					<Text
+						style={[styles.name, { color: colors.primaryText }]}
+						accessibilityRole="header"
+						accessibilityLabel={`Artist name: ${artist.name}`}
+					>
+						{artist.name}
+					</Text>
+					<Text
+						style={[styles.bio, { color: colors.secondaryText }]}
+						accessibilityLabel={`Artist bio: ${artist.bio}`}
+					>
+						{artist.bio}
+					</Text>
+					<TouchableOpacity
+						onPress={toggleFavorite}
+						style={styles.favoriteButton}
+						accessibilityRole="button"
+						accessibilityLabel={
+							isFavorited
+								? `Remove ${artist.name} from favorites`
+								: `Add ${artist.name} to favorites`
+						}
+					>
+						<Ionicons
+							name={isFavorited ? "heart" : "heart-outline"}
+							size={30}
+							color={colors.accent}
+						/>
+					</TouchableOpacity>
+					<View style={styles.buttonContainer}>
+						<Button
+							title="Add Track"
+							onPress={() =>
+								navigation.navigate("AddTrackScreen", { artistId: artist.id })
+							}
+							accessibilityRole="button"
+							accessibilityLabel="Add artist"
+						/>
+						<Button
+							title="Add Album"
+							onPress={() =>
+								navigation.navigate("AddAlbumScreen", { artistId: artist.id })
+							}
+							accessibilityRole="button"
+							accessibilityLabel="Add artist"
+						/>
+					</View>
+					{error && (
+						<Text
+							style={styles.errorText}
+							accessibilityLabel={`Error: ${error}`}
+						>
+							{error}
+						</Text>
+					)}
+				</>
+			)}
+		</View>
+	);
+};
+
+const styles = StyleSheet.create({
+	header: {
+		alignItems: "center",
+		paddingVertical: 20,
+		paddingHorizontal: 16,
+	},
+	image: {
+		width: 200,
+		height: 200,
+		marginBottom: 20,
+	},
+	name: {
+		fontSize: 24,
+		fontWeight: "bold",
+		marginBottom: 10,
+		textAlign: "center",
+	},
+	bio: {
+		fontSize: 16,
+		textAlign: "center",
+		marginBottom: 20,
+		paddingHorizontal: 20,
+	},
+	favoriteButton: {
+		marginBottom: 10,
+	},
+	buttonContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "25%",
+	},
+	errorText: {
+		fontSize: 14,
+		textAlign: "center",
+		marginTop: 10,
+	},
+});
+
+export default ArtistHeader;

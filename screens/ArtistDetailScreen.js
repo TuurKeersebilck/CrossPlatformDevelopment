@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, SectionList } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import TrackRow from "../components/rows/TrackRow";
-import ArtistHeader from "../components/headers/ArtistHeader";
-import AlbumHeader from "../components/headers/AlbumHeader";
+import ArtistHeader from "../components/ArtistHeader";
+import AlbumRow from "../components/rows/AlbumRow";
 import {
 	fetchArtistAlbums,
 	fetchArtistDetails,
@@ -41,17 +41,13 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 					imgUrl: album.imgUrl,
 					data: album.tracks,
 					releaseDate: album.releaseDate,
-					albumId: album.id,
+					id: album.id,
 					favorite: album.favorite,
 				}));
 
 				const singlesSection = {
 					title: "Singles",
-					imgUrl: null,
 					data: singles,
-					releaseDate: null,
-					albumId: null,
-					favorite: null,
 				};
 
 				const sections = singles.length > 0 ? [singlesSection] : [];
@@ -93,7 +89,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 				</View>
 			);
 		} else {
-			return <AlbumHeader section={section} isDarkMode={isDarkMode} />;
+			return <AlbumRow album={section} navigation={navigation} />;
 		}
 	};
 

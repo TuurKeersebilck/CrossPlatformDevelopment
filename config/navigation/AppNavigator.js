@@ -5,15 +5,15 @@ import BottomTabs from "./BottomTabs";
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name="HomeTabs"
-                component={BottomTabs}
-                options={{ headerShown: false }}
-            />
-        </Stack.Navigator>
-    );
-}
+	return (
+		<Stack.Navigator>
+			<Stack.Screen
+				name="HomeTabs"
+				component={BottomTabs}
+				options={{ headerShown: false }}
+			/>
+		</Stack.Navigator>
+	);
+};
 
 export default AppNavigator;
