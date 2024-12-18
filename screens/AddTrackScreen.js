@@ -9,14 +9,14 @@ import {
 	Alert,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styling/Colors";
+import { Themes } from "../styling/Themes";
 import { fetchArtistAlbums, addTrack } from "../api/api_calls";
 import ModalPicker from "../components/ModalPicker";
 
 const AddTrackScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+	const colors = isDarkMode ? Themes.dark : Themes.light;
 	const [title, setTitle] = useState("");
 	const [imgUrl, setImgUrl] = useState("");
 	const [duration, setDuration] = useState("");
@@ -66,7 +66,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 			);
 		} catch (error) {
 			console.error("Error adding track:", error.message);
-		}   
+		}
 	};
 
 	return (

@@ -11,7 +11,7 @@ import {
 import TrackRow from "../components/rows/TrackRow";
 import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists, getTracks } from "../api/api_calls";
-import { Colors } from "../styling/Colors";
+import { Themes } from "../styling/Themes";
 import { useTheme } from "../context/ThemeContext";
 
 const SearchScreen = ({ navigation }) => {
@@ -21,7 +21,7 @@ const SearchScreen = ({ navigation }) => {
 	const [allTracks, setAllTracks] = useState([]);
 	const [allArtists, setAllArtists] = useState([]);
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+	const colors = isDarkMode ? Themes.dark : Themes.light;
 
 	useEffect(() => {
 		const fetchData = async () => {

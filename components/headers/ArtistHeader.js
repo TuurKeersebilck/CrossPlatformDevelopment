@@ -9,12 +9,12 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { toggleArtistFavorite } from "../../api/api_calls";
-import { Colors } from "../../styling/Colors";
+import { Themes } from "../../styling/Themes";
 
 const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(artist.favorite);
 	const [error, setError] = useState(null);
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+	const colors = isDarkMode ? Themes.dark : Themes.light;
 
 	const toggleFavorite = async () => {
 		try {

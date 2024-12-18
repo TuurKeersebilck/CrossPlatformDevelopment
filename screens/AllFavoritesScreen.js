@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styling/Colors";
+import { Themes } from "../styling/Themes";
 
-const AllFavoritesScreen = ({ route, navigation }) => {
+const AllFavoritesScreen = ({ route }) => {
     const { title, data, type } = route.params;
     const { isDarkMode } = useTheme();
-    const colors = isDarkMode ? Colors.dark : Colors.light;
+    const colors = isDarkMode ? Themes.dark : Themes.light;
 
     const renderFavoriteItem = ({ item }) => (
         <TouchableOpacity 

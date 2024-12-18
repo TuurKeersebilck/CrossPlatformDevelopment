@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styling/Colors";
+import { Themes } from "../styling/Themes";
 import { addAlbum } from "../api/api_calls";
 
 const AddAlbumScreen = ({ navigation, route }) => {
-    const { artistId } = route.params;
+	const { artistId } = route.params;
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+	const colors = isDarkMode ? Themes.dark : Themes.light;
 	const [title, setTitle] = useState("");
 	const [imgUrl, setImgUrl] = useState("");
 	const [releaseDate, setReleaseDate] = useState("");

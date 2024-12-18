@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { fetchTrackDetails } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styling/Colors";
+import { Themes } from "../styling/Themes";
 import LoadingIndicator from "../components/Loading";
 
 const TrackDetailScreen = ({ route, navigation }) => {
 	const { trackId } = route.params;
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const [track, setTrack] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -28,14 +28,28 @@ const TrackDetailScreen = ({ route, navigation }) => {
 		getTrackDetails();
 	}, [trackId]);
 
+	const {
+		container,
+		trackImage,
+		trackTitle,
+		trackArtist,
+		trackDuration,
+		errorText,
+	} = styles;
+
 	if (loading) {
 		return <LoadingIndicator />;
 	}
 
 	if (error) {
 		return (
-			<View style={[styles.container, { backgroundColor: colors.background }]}>
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
+			<View style={[container, { backgroundColor: theme.background }]}>
+				<Text
+					style={[
+						errorText,
+						{ color: theme.errorText, fontSize: theme.fontSizes.medium },
+					]}
+				>
 					Error: {error}
 				</Text>
 			</View>
@@ -43,17 +57,20 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	}
 
 	return (
-		<View style={[styles.container, { backgroundColor: colors.background }]}>
+		<View style={[container, { backgroundColor: theme.background }]}>
 			{track && (
 				<>
 					<Image
 						source={{ uri: track.imgUrl }}
-						style={styles.trackImage}
+						style={trackImage}
 						accessibilityRole="image"
 						accessibilityLabel={`Image of track ${track.title}`}
 					/>
 					<Text
-						style={[styles.trackTitle, { color: colors.primaryText }]}
+						style={[
+							trackTitle,
+							{ color: theme.primaryText, fontSize: theme.fontSizes.xlarge },
+						]}
 						accessibilityRole="header"
 						accessibilityLabel={`Track title: ${track.title}`}
 					>
@@ -69,12 +86,20 @@ const TrackDetailScreen = ({ route, navigation }) => {
 						accessibilityRole="button"
 						accessibilityLabel={`View details for artist ${track.artistName}`}
 					>
-						<Text style={[styles.trackArtist, { color: colors.linkText }]}>
+						<Text
+							style={[
+								trackArtist,
+								{ color: theme.linkText, fontSize: theme.fontSizes.large },
+							]}
+						>
 							{track.artistName}
 						</Text>
 					</TouchableOpacity>
 					<Text
-						style={[styles.trackDuration, { color: colors.secondaryText }]}
+						style={[
+							trackDuration,
+							{ color: theme.secondaryText, fontSize: theme.fontSizes.medium },
+						]}
 						accessibilityLabel={`Track duration: ${track.duration}`}
 					>
 						{track.duration}
@@ -98,20 +123,14 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 	trackTitle: {
-		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 10,
 	},
 	trackArtist: {
-		fontSize: 18,
 		marginBottom: 10,
 	},
-	trackDuration: {
-		fontSize: 16,
-	},
-	errorText: {
-		fontSize: 18,
-	},
+	trackDuration: {},
+	errorText: {},
 });
 
 export default TrackDetailScreen;

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { toggleAlbumFavorite } from "../../api/api_calls";
-import { Colors } from "../../styling/Colors";
+import { Themes } from "../../styling/Themes";
 
 const AlbumHeader = ({ section, isDarkMode }) => {
 	const [isFavorited, setIsFavorited] = useState(section.favorite);
 	const [error, setError] = useState(null);
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+	const colors = isDarkMode ? Themes.dark : Themes.light;
 
 	const toggleFavorite = async () => {
 		try {
