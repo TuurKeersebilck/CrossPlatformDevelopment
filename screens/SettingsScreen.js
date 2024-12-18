@@ -1,164 +1,188 @@
 import React, { useState, useCallback } from "react";
 import {
-	View,
-	Text,
-	Button,
-	StyleSheet,
-	TouchableOpacity,
-	FlatList,
+    View,
+    Text,
+    TouchableOpacity,
+    FlatList,
+    StyleSheet,
+    SafeAreaView,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "../context/ThemeContext";
 import { Colors } from "../styling/Colors";
 import {
-	getFavoriteArtists,
-	getFavoriteTracks,
-	getFavoriteAlbums,
+    getFavoriteArtists,
+    getFavoriteTracks,
+    getFavoriteAlbums,
 } from "../api/api_calls";
+import Icon from "react-native-vector-icons/Ionicons";
+import ArtistRow from "../components/rows/ArtistRow";
+import TrackRow from "../components/rows/TrackRow";
+import AlbumHeader from "../components/headers/AlbumHeader";
 
 const SettingsScreen = ({ navigation }) => {
-	const { isDarkMode, toggleTheme } = useTheme();
-	const colors = isDarkMode ? Colors.dark : Colors.light;
+    const { isDarkMode, toggleTheme } = useTheme();
+    const colors = isDarkMode ? Colors.dark : Colors.light;
+// TODO: ADD OPSPLITSEN
+// TODO: DARKMODE DUIDELIJKER
+    const [favoriteArtists, setFavoriteArtists] = useState([]);
+    const [favoriteTracks, setFavoriteTracks] = useState([]);
+    const [favoriteAlbums, setFavoriteAlbums] = useState([]);
 
-	const [favoriteArtists, setFavoriteArtists] = useState([]);
-	const [favoriteTracks, setFavoriteTracks] = useState([]);
-	const [favoriteAlbums, setFavoriteAlbums] = useState([]);
+    const fetchFavorites = async () => {
+        try {
+            const [artistsData, tracksData, albumsData] = await Promise.all([
+                getFavoriteArtists(),
+                getFavoriteTracks(),
+                getFavoriteAlbums(),
+            ]);
+            setFavoriteArtists(artistsData);
+            setFavoriteTracks(tracksData);
+            setFavoriteAlbums(albumsData);
+        } catch (error) {
+            console.error("Error fetching favorites:", error);
+        }
+    };
 
-	const fetchFavorites = async () => {
-		try {
-			const [artistsData, tracksData, albumsData] = await Promise.all([
-				getFavoriteArtists(),
-				getFavoriteTracks(),
-				getFavoriteAlbums(),
-			]);
-			setFavoriteArtists(artistsData);
-			setFavoriteTracks(tracksData);
-			setFavoriteAlbums(albumsData);
-		} catch (error) {
-			console.error("Error fetching favorites:", error);
-		}
-	};
+    useFocusEffect(
+        useCallback(() => {
+            fetchFavorites();
+        }, [])
+    );
 
-	useFocusEffect(
-		useCallback(() => {
-			fetchFavorites();
-		}, [])
-	);
+    const handleSeeAllPress = (title, data, type) => {
+        navigation.navigate("AllFavoritesScreen", { title, data, type });
+    };
 
-	const handleAddPress = () => {
-		navigation.navigate("AddItemScreen");
-	};
+    const renderFavoriteSection = (title, data, type) => (
+        <View style={styles.favoriteSection}>
+            <View style={styles.sectionHeader}>
+                <Text style={[styles.sectionTitle, { color: colors.primaryText }]}>
+                    {title}
+                </Text>
+                {data.length > 5 && (
+                    <TouchableOpacity
+                        onPress={() => handleSeeAllPress(title, data, type)}
+                    >
+                        <Text style={[styles.seeAllText, { color: colors.secondaryText }]}>
+                            See All
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+            {data.length > 0 ? (
+                <FlatList
+                    data={data.slice(0, 5)}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => {
+                        if (type === "artist") {
+                            return <ArtistRow artist={item} navigation={navigation} />;
+                        } else if (type === "track") {
+                            return <TrackRow track={item} navigation={navigation} />;
+                        } else if (type === "album") {
+                            return <AlbumHeader section={item} isDarkMode={isDarkMode} />;
+                        }
+                        return null;
+                    }}
+                    scrollEnabled={false}
+                    contentContainerStyle={styles.favoriteList}
+                />
+            ) : (
+                <Text style={[styles.emptyStateText, { color: colors.secondaryText }]}>
+                    No {title.toLowerCase()} yet
+                </Text>
+            )}
+        </View>
+    );
 
-	const renderFavoriteItem = ({ item }) => (
-		<View
-			style={[styles.favoriteItem, { backgroundColor: colors.cardBackground }]}
-		>
-			<Text style={[styles.favoriteItemText, { color: colors.primaryText }]}>
-				{item.name || item.title}
-			</Text>
-		</View>
-	);
+    return (
+        <SafeAreaView
+            style={[styles.container, { backgroundColor: colors.background }]}
+        >
+            <View style={styles.headerContainer}>
+                <Text style={[styles.screenTitle, { color: colors.primaryText }]}>
+                    Your Library
+                </Text>
+                <View style={styles.headerActions}>
+                    <TouchableOpacity
+                        onPress={toggleTheme}
+                        style={styles.headerIconButton}
+                    >
+                        <Icon
+                            name={isDarkMode ? "sunny" : "moon"}
+                            size={25}
+                            color={colors.primaryText}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
 
-	return (
-		<View style={[styles.container, { backgroundColor: colors.background }]}>
-			<Button
-				title="Toggle Theme"
-				onPress={toggleTheme}
-				accessibilityRole="button"
-				accessibilityLabel="Toggle between light and dark theme"
-			/>
-			<TouchableOpacity
-				style={[styles.addButton, { backgroundColor: colors.accent }]}
-				onPress={handleAddPress}
-				accessibilityRole="button"
-				accessibilityLabel="Add Artist, Album, or Track"
-			>
-				<Text style={[styles.addButtonText, { color: colors.primaryText }]}>
-					Add Artist/Album/Track
-				</Text>
-			</TouchableOpacity>
-			<Text
-				style={[styles.subHeader, { color: colors.primaryText }]}
-				accessibilityRole="header"
-				accessibilityLabel="Favorite Artists"
-			>
-				Favorite Artists
-			</Text>
-			<FlatList
-				data={favoriteArtists}
-				keyExtractor={(item) => item.id.toString()}
-				renderItem={renderFavoriteItem}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={styles.favoriteList}
-			/>
-			<Text
-				style={[styles.subHeader, { color: colors.primaryText }]}
-				accessibilityRole="header"
-				accessibilityLabel="Favorite Tracks"
-			>
-				Favorite Tracks
-			</Text>
-			<FlatList
-				data={favoriteTracks}
-				keyExtractor={(item) => item.id.toString()}
-				renderItem={renderFavoriteItem}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={styles.favoriteList}
-			/>
-			<Text
-				style={[styles.subHeader, { color: colors.primaryText }]}
-				accessibilityRole="header"
-				accessibilityLabel="Favorite Albums"
-			>
-				Favorite Albums
-			</Text>
-			<FlatList
-				data={favoriteAlbums}
-				keyExtractor={(item) => item.id.toString()}
-				renderItem={renderFavoriteItem}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={styles.favoriteList}
-			/>
-		</View>
-	);
+            <FlatList
+                data={[
+                    { title: "Favorite Artists", data: favoriteArtists, type: "artist" },
+                    { title: "Favorite Tracks", data: favoriteTracks, type: "track" },
+                    { title: "Favorite Albums", data: favoriteAlbums, type: "album" },
+                ]}
+                keyExtractor={(item) => item.title}
+                renderItem={({ item }) =>
+                    renderFavoriteSection(item.title, item.data, item.type)
+                }
+            />
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-	},
-	subHeader: {
-		fontSize: 20,
-		fontWeight: "bold",
-		marginTop: 20,
-		marginBottom: 10,
-	},
-	addButton: {
-		marginTop: 20,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderRadius: 5,
-		alignSelf: "center",
-	},
-	addButtonText: {
-		fontSize: 16,
-		fontWeight: "bold",
-	},
-	favoriteList: {
-		paddingVertical: 10,
-	},
-	favoriteItem: {
-		padding: 10,
-		borderRadius: 5,
-		marginRight: 10,
-	},
-	favoriteItemText: {
-		fontSize: 16,
-	},
+    container: {
+        flex: 1,
+        paddingHorizontal: 15,
+    },
+    headerContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 20,
+    },
+    headerActions: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    headerIconButton: {
+        marginLeft: 15,
+    },
+    screenTitle: {
+        fontSize: 28,
+        fontWeight: "700",
+    },
+    mainFavoritesList: {
+        paddingBottom: 0,
+    },
+    favoriteSection: {
+        marginBottom: 20,
+    },
+    sectionHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+    },
+    sectionTitle: {
+        fontSize: 22,
+        fontWeight: "700",
+    },
+    seeAllText: {
+        fontSize: 14,
+        fontWeight: "600",
+    },
+    favoriteList: {
+        paddingVertical: 10,
+    },
+    emptyStateText: {
+        fontSize: 16,
+        textAlign: "center",
+        fontStyle: "italic",
+    },
 });
 
 export default SettingsScreen;
