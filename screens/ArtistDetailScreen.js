@@ -121,6 +121,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
                         <ArtistHeader
                             artist={artist}
                             isDarkMode={isDarkMode}
+                            navigation={navigation}
                             accessibilityRole="header"
                             accessibilityLabel={`Artist: ${artist.name}`}
                         />

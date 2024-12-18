@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
 	releaseDateText: {
 		fontSize: 14,
 		marginTop: 4,
-		color: "#888",
 		fontWeight: "bold",
 	},
 	albumImage: {
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
 		bottom: -20,
 		alignSelf: "center",
 		fontSize: 14,
-		color: "red",
 	},
 });
 

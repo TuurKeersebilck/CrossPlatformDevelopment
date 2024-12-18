@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	Button,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { toggleArtistFavorite } from "../../api/api_calls";
 import { Colors } from "../../styling/Colors";
 
-const ArtistHeader = ({ artist, isDarkMode }) => {
+const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(artist.favorite);
 	const [error, setError] = useState(null);
 	const colors = isDarkMode ? Colors.dark : Colors.light;
@@ -61,6 +68,22 @@ const ArtistHeader = ({ artist, isDarkMode }) => {
 							color={colors.accent}
 						/>
 					</TouchableOpacity>
+					<Button
+						title="Add Track"
+						onPress={() =>
+							navigation.navigate("AddTrackScreen", { artistId: artist.id })
+						}
+						accessibilityRole="button"
+						accessibilityLabel="Add artist"
+					/>
+					<Button
+						title="Add Album"
+						onPress={() =>
+							navigation.navigate("AddAlbumScreen", { artistId: artist.id })
+						}
+						accessibilityRole="button"
+						accessibilityLabel="Add artist"
+					/>
 					{error && (
 						<Text
 							style={styles.errorText}
@@ -105,7 +128,6 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: "center",
 		marginTop: 10,
-		color: "red",
 	},
 });
 
