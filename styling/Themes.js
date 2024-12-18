@@ -14,6 +14,10 @@ export const Themes = {
             large: 20,
             xlarge: 24,
         },
+        fontWeights: {
+            normal: "400",
+            bold: "700",
+        },
     },
     dark: {
         background: "#121212",
@@ -29,6 +33,10 @@ export const Themes = {
             medium: 16,
             large: 20,
             xlarge: 24,
+        },
+        fontWeights: {
+            normal: "400",
+            bold: "700",
         },
     },
 };

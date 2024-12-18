@@ -69,7 +69,11 @@ const TrackDetailScreen = ({ route, navigation }) => {
 					<Text
 						style={[
 							trackTitle,
-							{ color: theme.primaryText, fontSize: theme.fontSizes.xlarge },
+							{
+								color: theme.primaryText,
+								fontSize: theme.fontSizes.xlarge,
+								fontWeight: theme.fontWeights.bold,
+							},
 						]}
 						accessibilityRole="header"
 						accessibilityLabel={`Track title: ${track.title}`}
@@ -123,14 +127,11 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 	trackTitle: {
-		fontWeight: "bold",
 		marginBottom: 10,
 	},
 	trackArtist: {
 		marginBottom: 10,
 	},
-	trackDuration: {},
-	errorText: {},
 });
 
 export default TrackDetailScreen;
