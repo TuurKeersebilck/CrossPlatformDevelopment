@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, FlatList } from "react-native";
-import { useTheme } from "../context/ThemeContext";
-import { Themes } from "../styling/Themes";
-import TrackRow from "../components/rows/TrackRow";
-import { getTracksFromAlbum } from "../api/api_calls";
-import LoadingIndicator from "../components/Loading";
+import { useTheme } from "../../context/ThemeContext";
+import { Themes } from "../../styling/Themes";
+import TrackRow from "../../components/rows/TrackRow";
+import { getTracksFromAlbum } from "../../api/api_calls";
+import LoadingIndicator from "../../components/Loading";
 
 const AlbumDetailScreen = ({ route, navigation }) => {
 	const { album } = route.params;

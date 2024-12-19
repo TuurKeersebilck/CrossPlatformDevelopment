@@ -1,12 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ArtistsScreen from "../../../screens/ArtistsScreen";
-import TrackDetailScreen from "../../../screens/TrackDetailScreen";
-import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
-import AddArtistScreen from "../../../screens/AddArtistScreen";
-import AddTrackScreen from "../../../screens/AddTrackScreen";
-import AddAlbumScreen from "../../../screens/AddAlbumScreen";
-import AlbumDetailScreen from "../../../screens/AlbumDetailScreen";
+import AddArtistScreen from "../../../screens/ArtistsScreen";
+import TrackDetailScreen from "../../../screens/DetailScreens/TrackDetailScreen";
+import ArtistDetailScreen from "../../../screens/DetailScreens/ArtistDetailScreen";
+import AlbumDetailScreen from "../../../screens/DetailScreens/AlbumDetailScreen";
+import AddTrackScreen from "../../../screens/AddScreens/AddTrackScreen";
+import AddAlbumScreen from "../../../screens/AddScreens/AddAlbumScreen";
 import { useTheme } from "../../../context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 

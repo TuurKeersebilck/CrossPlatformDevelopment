@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { useTheme } from "../context/ThemeContext";
-import { Themes } from "../styling/Themes";
-import { addAlbum } from "../api/api_calls";
-import useValidUrl from "../hooks/useValidUrl";
+import { useTheme } from "../../context/ThemeContext";
+import { Themes } from "../../styling/Themes";
+import { addAlbum } from "../../api/api_calls";
+import useValidUrl from "../../hooks/useValidUrl";
 
 const AddAlbumScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;

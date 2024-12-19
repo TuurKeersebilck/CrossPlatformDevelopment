@@ -1,13 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "../../../screens/SearchScreen";
-import TrackDetailScreen from "../../../screens/TrackDetailScreen";
-import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
 import { useTheme } from "../../../context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
-import AddTrackScreen from "../../../screens/AddTrackScreen";
-import AddAlbumScreen from "../../../screens/AddAlbumScreen";
-import AlbumDetailScreen from "../../../screens/AlbumDetailScreen";
+import AddTrackScreen from "../../../screens/AddScreens/AddTrackScreen";
+import AddAlbumScreen from "../../../screens/AddScreens/AddAlbumScreen";
+import AlbumDetailScreen from "../../../screens/DetailScreens/AlbumDetailScreen";
+import TrackDetailScreen from "../../../screens/DetailScreens/TrackDetailScreen";
+import ArtistDetailScreen from "../../../screens/DetailScreens/ArtistDetailScreen";
 
 const Stack = createStackNavigator();
 

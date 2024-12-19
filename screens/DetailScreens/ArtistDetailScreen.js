@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, SectionList } from "react-native";
-import { useTheme } from "../context/ThemeContext";
-import TrackRow from "../components/rows/TrackRow";
-import ArtistHeader from "../components/ArtistHeader";
-import AlbumRow from "../components/rows/AlbumRow";
+import { useTheme } from "../../context/ThemeContext";
+import TrackRow from "../../components/rows/TrackRow";
+import ArtistHeader from "../../components/ArtistHeader";
+import AlbumRow from "../../components/rows/AlbumRow";
 import {
 	fetchArtistAlbums,
 	fetchArtistDetails,
 	fetchArtistSingles,
-} from "../api/api_calls";
-import { Themes } from "../styling/Themes";
-import LoadingIndicator from "../components/Loading";
+} from "../../api/api_calls";
+import { Themes } from "../../styling/Themes";
+import LoadingIndicator from "../../components/Loading";
 import { useFocusEffect } from "@react-navigation/native";
 
 const ArtistDetailScreen = ({ route, navigation }) => {

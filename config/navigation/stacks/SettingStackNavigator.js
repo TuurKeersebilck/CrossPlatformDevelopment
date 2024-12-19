@@ -3,11 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../../context/ThemeContext";
 import SettingsScreen from "../../../screens/SettingsScreen";
-import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
-import TrackDetailScreen from "../../../screens/TrackDetailScreen";
-import AlbumDetailScreen from "../../../screens/AlbumDetailScreen";
-import AddAlbumScreen from "../../../screens/AddAlbumScreen";
-import AddTrackScreen from "../../../screens/AddTrackScreen";
+import ArtistDetailScreen from "../../../screens/DetailScreens/ArtistDetailScreen";
+import TrackDetailScreen from "../../../screens/DetailScreens/TrackDetailScreen";
+import AlbumDetailScreen from "../../../screens/DetailScreens/AlbumDetailScreen";
+import AddAlbumScreen from "../../../screens/AddScreens/AddAlbumScreen";
+import AddTrackScreen from "../../../screens/AddScreens/AddTrackScreen";
 
 const Stack = createStackNavigator();
 
@@ -42,7 +42,6 @@ const SettingStackNavigator = () => {
 				options={{ title: "Settings" }}
 			/>
 
-			
 			<Stack.Screen
 				name="AlbumDetailScreen"
 				component={AlbumDetailScreen}
@@ -69,9 +68,9 @@ const SettingStackNavigator = () => {
 				options={({ route }) => ({ title: route.params.title })}
 			/>
 			<Stack.Screen
-			name="AddAlbumScreen"
-			component={AddAlbumScreen}
-			options={{ title: "Add Album" }}
+				name="AddAlbumScreen"
+				component={AddAlbumScreen}
+				options={{ title: "Add Album" }}
 			/>
 		</Stack.Navigator>
 	);

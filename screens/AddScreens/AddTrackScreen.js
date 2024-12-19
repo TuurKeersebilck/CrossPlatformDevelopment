@@ -8,11 +8,11 @@ import {
 	TouchableOpacity,
 	Alert,
 } from "react-native";
-import { useTheme } from "../context/ThemeContext";
-import { Themes } from "../styling/Themes";
-import { fetchArtistAlbums, addTrack } from "../api/api_calls";
-import ModalPicker from "../components/ModalPicker";
-import useValidUrl from "../hooks/useValidUrl";
+import { useTheme } from "../../context/ThemeContext";
+import { Themes } from "../../styling/Themes";
+import { fetchArtistAlbums, addTrack } from "../../api/api_calls";
+import ModalPicker from "../../components/ModalPicker";
+import useValidUrl from "../../hooks/useValidUrl";
 
 const AddTrackScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;

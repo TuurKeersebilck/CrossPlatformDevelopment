@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { fetchTrackDetails } from "../api/api_calls";
-import { useTheme } from "../context/ThemeContext";
-import { Themes } from "../styling/Themes";
-import LoadingIndicator from "../components/Loading";
+import { fetchTrackDetails } from "../../api/api_calls";
+import { useTheme } from "../../context/ThemeContext";
+import { Themes } from "../../styling/Themes";
+import LoadingIndicator from "../../components/Loading";
 
 const TrackDetailScreen = ({ route, navigation }) => {
 	const { trackId } = route.params;
