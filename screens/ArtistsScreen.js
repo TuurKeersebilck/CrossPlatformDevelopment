@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, View, Text, FlatList, Button } from "react-native";
 import ArtistRow from "../components/rows/ArtistRow";
 import { getArtists } from "../api/api_calls";
 import { useTheme } from "../context/ThemeContext";
 import LoadingIndicator from "../components/Loading";
 import { Themes } from "../styling/Themes";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ArtistsScreen = ({ navigation }) => {
 	const [artists, setArtists] = useState([]);
@@ -14,20 +15,23 @@ const ArtistsScreen = ({ navigation }) => {
 
 	const { container, scrollView, centered } = styles;
 
-	useEffect(() => {
-		const fetchArtists = async () => {
-			try {
-				setLoading(true);
-				const artistsData = await getArtists();
-				setArtists(artistsData);
-			} catch (error) {
-				console.error("Error fetching artists:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchArtists();
-	}, []);
+	const fetchArtists = async () => {
+		try {
+			setLoading(true);
+			const artistsData = await getArtists();
+			setArtists(artistsData);
+		} catch (error) {
+			console.error("Error fetching artists:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			fetchArtists();
+		}, [])
+	);
 
 	if (loading) {
 		return <LoadingIndicator />;
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	scrollView: {
-		paddingVertical: 10,
+		marginVertical: 10,
 		paddingHorizontal: 10,
 	},
 	centered: {

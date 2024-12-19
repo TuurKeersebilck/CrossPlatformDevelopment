@@ -4,9 +4,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../../context/ThemeContext";
 import SettingsScreen from "../../../screens/SettingsScreen";
 import ArtistDetailScreen from "../../../screens/ArtistDetailScreen";
-import ArtistsScreen from "../../../screens/ArtistsScreen";
 import TrackDetailScreen from "../../../screens/TrackDetailScreen";
 import AlbumDetailScreen from "../../../screens/AlbumDetailScreen";
+import AddAlbumScreen from "../../../screens/AddAlbumScreen";
+import AddTrackScreen from "../../../screens/AddTrackScreen";
 
 const Stack = createStackNavigator();
 
@@ -40,25 +41,37 @@ const SettingStackNavigator = () => {
 				component={SettingsScreen}
 				options={{ title: "Settings" }}
 			/>
+
+			
 			<Stack.Screen
-				name="ArtistDetail"
+				name="AlbumDetailScreen"
+				component={AlbumDetailScreen}
+				options={({ route }) => ({ title: route.params.album.title })}
+			/>
+			<Stack.Screen
+				name="AddTrackScreen"
+				component={AddTrackScreen}
+				options={{ title: "Add Track" }}
+			/>
+			<Stack.Screen
+				name="AddAlbumScreenScreen"
+				component={AddAlbumScreen}
+				options={{ title: "Add Album" }}
+			/>
+			<Stack.Screen
+				name="ArtistDetailScreen"
 				component={ArtistDetailScreen}
 				options={({ route }) => ({ title: route.params.name })}
 			/>
 			<Stack.Screen
-				name="ArtistsScreen"
-				component={ArtistsScreen}
-				options={{ title: "Artists" }}
-			/>
-			<Stack.Screen
-				name="TrackDetail"
+				name="TrackDetailScreen"
 				component={TrackDetailScreen}
 				options={({ route }) => ({ title: route.params.title })}
 			/>
 			<Stack.Screen
-				name="AlbumDetail"
-				component={AlbumDetailScreen}
-				options={({ route }) => ({ title: route.params.album.title })}
+			name="AddAlbumScreen"
+			component={AddAlbumScreen}
+			options={{ title: "Add Album" }}
 			/>
 		</Stack.Navigator>
 	);

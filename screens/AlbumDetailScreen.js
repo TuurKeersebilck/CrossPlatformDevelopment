@@ -4,6 +4,7 @@ import { useTheme } from "../context/ThemeContext";
 import { Themes } from "../styling/Themes";
 import TrackRow from "../components/rows/TrackRow";
 import { getTracksFromAlbum } from "../api/api_calls";
+import LoadingIndicator from "../components/Loading";
 
 const AlbumDetailScreen = ({ route, navigation }) => {
 	const { album } = route.params;
@@ -29,13 +30,7 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 	}, [album.id]);
 
 	if (loading) {
-		return (
-			<View style={[styles.container, { backgroundColor: colors.background }]}>
-				<Text style={[styles.loadingText, { color: colors.primaryText }]}>
-					Loading...
-				</Text>
-			</View>
-		);
+		return <LoadingIndicator />;
 	}
 
 	if (error) {

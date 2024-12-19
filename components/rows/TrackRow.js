@@ -35,7 +35,7 @@ const TrackRow = ({ track, navigation }) => {
 		<View style={styles.container}>
 			<TouchableOpacity
 				onPress={() =>
-					navigation.navigate("TrackDetail", {
+					navigation.navigate("TrackDetailScreen", {
 						trackId: track.id,
 						title: track.title,
 					})

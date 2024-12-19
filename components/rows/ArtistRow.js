@@ -10,7 +10,7 @@ const ArtistRow = ({ artist, navigation }) => {
 	return (
 		<TouchableOpacity
 			onPress={() =>
-				navigation.navigate("ArtistDetail", {
+				navigation.navigate("ArtistDetailScreen", {
 					artistId: artist.id,
 					name: artist.name,
 				})

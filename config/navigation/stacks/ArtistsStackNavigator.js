@@ -40,20 +40,16 @@ const ArtistsStackNavigator = () => {
 				component={ArtistsScreen}
 				options={{ title: "Artists" }}
 			/>
+
 			<Stack.Screen
-				name="TrackDetail"
+				name="TrackDetailScreen"
 				component={TrackDetailScreen}
 				options={({ route }) => ({ title: route.params.title })}
 			/>
 			<Stack.Screen
-				name="ArtistDetail"
+				name="ArtistDetailScreen"
 				component={ArtistDetailScreen}
 				options={({ route }) => ({ title: route.params.name })}
-			/>
-			<Stack.Screen
-				name="AddArtistScreen"
-				component={AddArtistScreen}
-				options={{ title: "Add Artist" }}
 			/>
 			<Stack.Screen
 				name="AddTrackScreen"
@@ -66,9 +62,14 @@ const ArtistsStackNavigator = () => {
 				options={{ title: "Add Album" }}
 			/>
 			<Stack.Screen
-				name="AlbumDetail"
+				name="AlbumDetailScreen"
 				component={AlbumDetailScreen}
-				options={({ route }) => ({ title: route.params.album.title })}
+				options={({ route }) => ({ title: route.params.title })}
+			/>
+			<Stack.Screen
+				name="AddArtistScreen"
+				component={AddArtistScreen}
+				options={{ title: "Add Artist" }}
 			/>
 		</Stack.Navigator>
 	);

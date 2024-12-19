@@ -84,7 +84,7 @@ const TrackDetailScreen = ({ route, navigation }) => {
 					</Text>
 					<TouchableOpacity
 						onPress={() =>
-							navigation.navigate("ArtistDetail", {
+							navigation.navigate("ArtistDetailScreen", {
 								artistId: track.artistId,
 								name: track.artistName,
 							})

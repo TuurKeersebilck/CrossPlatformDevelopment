@@ -27,7 +27,7 @@ const AlbumRow = ({ album, navigation }) => {
 		<View style={styles.container}>
 			<TouchableOpacity
 				onPress={() =>
-					navigation.navigate("AlbumDetail", {
+					navigation.navigate("AlbumDetailScreen", {
 						album: album,
 					})
 				}
