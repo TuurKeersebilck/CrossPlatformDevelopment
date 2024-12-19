@@ -13,7 +13,6 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
 
-	// TODO: alle styling destructureren
 	// TODO: settings beter stylen
 	useEffect(() => {
 		const getTrackDetails = async () => {

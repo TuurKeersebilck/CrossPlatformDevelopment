@@ -26,7 +26,8 @@ const SettingsScreen = ({ navigation }) => {
 
 	const {
 		container,
-		headerContainer,
+		contentContainer,
+		libraryContainer,
 		headerIconButton,
 		favoriteSection,
 		sectionHeader,
@@ -91,38 +92,45 @@ const SettingsScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={container} accessibilityRole="main">
-			<View style={darkModeSection}>
-				<Text style={sectionTitle}>Dark Mode</Text>
-				<TouchableOpacity
-					onPress={toggleTheme}
-					style={headerIconButton}
-					accessibilityRole="button"
-					accessibilityLabel="Toggle dark mode"
-					accessibilityHint={`Currently ${isDarkMode ? "enabled" : "disabled"}`}
-				>
-					<Icon
-						name={isDarkMode ? "sunny" : "moon"}
-						size={25}
-						color={theme.primaryText}
+			<View style={contentContainer}>
+				<View style={darkModeSection}>
+					<Text style={sectionTitle}>Dark Mode</Text>
+					<TouchableOpacity
+						onPress={toggleTheme}
+						style={headerIconButton}
+						accessibilityRole="button"
+						accessibilityLabel={`Toggle dark mode, currently ${
+							isDarkMode ? "enabled" : "disabled"
+						}`}
+						accessibilityHint="Double tap to toggle dark mode"
+					>
+						<Icon
+							name={isDarkMode ? "sunny" : "moon"}
+							size={25}
+							color={theme.primaryText}
+						/>
+					</TouchableOpacity>
+				</View>
+
+				<View style={libraryContainer}>
+					<Text style={libraryTitle}>Your Library</Text>
+					<FlatList
+						data={[
+							{
+								title: "Favorite Artists",
+								data: favoriteArtists,
+								type: "artist",
+							},
+							{ title: "Favorite Tracks", data: favoriteTracks, type: "track" },
+							{ title: "Favorite Albums", data: favoriteAlbums, type: "album" },
+						]}
+						keyExtractor={(item) => item.title}
+						renderItem={({ item }) =>
+							renderFavoriteSection(item.title, item.data, item.type)
+						}
 					/>
-				</TouchableOpacity>
+				</View>
 			</View>
-
-			<View style={headerContainer}>
-				<Text style={libraryTitle}>Your Library</Text>
-			</View>
-
-			<FlatList
-				data={[
-					{ title: "Favorite Artists", data: favoriteArtists, type: "artist" },
-					{ title: "Favorite Tracks", data: favoriteTracks, type: "track" },
-					{ title: "Favorite Albums", data: favoriteAlbums, type: "album" },
-				]}
-				keyExtractor={(item) => item.title}
-				renderItem={({ item }) =>
-					renderFavoriteSection(item.title, item.data, item.type)
-				}
-			/>
 		</SafeAreaView>
 	);
 };
@@ -131,18 +139,20 @@ const createStyles = (theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
-			paddingHorizontal: 15,
 			backgroundColor: theme.background,
 		},
-		headerContainer: {
-			flexDirection: "row",
-			justifyContent: "space-between",
-			alignItems: "center",
+		contentContainer: {
+			flex: 1,
+			paddingHorizontal: 20,
+		},
+		libraryContainer: {
 			marginTop: 10,
 			marginBottom: 20,
 		},
 		headerIconButton: {
-			marginLeft: 15,
+			padding: 10,
+			borderRadius: 5,
+			backgroundColor: theme.accent,
 		},
 		favoriteSection: {
 			marginBottom: 20,
@@ -167,7 +177,8 @@ const createStyles = (theme) =>
 			justifyContent: "space-between",
 			alignItems: "center",
 			marginBottom: 20,
-			paddingHorizontal: 15,
+			padding: 10,
+			borderRadius: 5,
 		},
 		sectionTitle: {
 			fontSize: theme.fontSizes.large,
