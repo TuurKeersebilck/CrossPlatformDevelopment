@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Themes } from "../styling/Themes";
 import { addAlbum } from "../api/api_calls";
+import useValidUrl from "../hooks/useValidUrl";
 
 const AddAlbumScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;
@@ -12,11 +13,17 @@ const AddAlbumScreen = ({ navigation, route }) => {
 	const [imgUrl, setImgUrl] = useState("");
 	const [releaseDate, setReleaseDate] = useState("");
 	const [errors, setErrors] = useState({});
+	const [errorMessage, setErrorMessage] = useState("");
+	const isValidUrl = useValidUrl();
 
 	const handleAddAlbum = async () => {
 		const newErrors = {};
 		if (!title) newErrors.title = "Title is required";
-		if (!imgUrl) newErrors.imgUrl = "Image URL is required";
+		if (!imgUrl) {
+			newErrors.imgUrl = "Image URL is required";
+		} else if (!isValidUrl(imgUrl)) {
+			newErrors.imgUrl = "Image URL must be a valid URL";
+		}
 		if (!releaseDate) newErrors.releaseDate = "Release date is required";
 
 		if (releaseDate && !/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
@@ -31,14 +38,23 @@ const AddAlbumScreen = ({ navigation, route }) => {
 		try {
 			const album = { title, imgUrl, releaseDate, artistId };
 			const response = await addAlbum(album);
-			if (response.error) throw new Error(response.error);
-			navigation.goBack();
+
+			if (!response.success) {
+				const errorMessages = Object.entries(response.error)
+					.map(([key, value]) => `${key}: ${value}`)
+					.join("\n");
+				setErrorMessage(errorMessages);
+				return;
+			}
+
 			Alert.alert(
 				"Album Added",
 				`The album "${title}" has been added successfully.`
 			);
+			navigation.goBack();
 		} catch (error) {
 			console.error("Error adding album:", error.message);
+			setErrorMessage(error.message);
 		}
 	};
 
@@ -98,6 +114,13 @@ const AddAlbumScreen = ({ navigation, route }) => {
 				placeholder="Enter release date (YYYY-MM-DD)"
 				placeholderTextColor={colors.secondaryText}
 			/>
+
+			{errorMessage ? (
+				<Text style={[styles.errorText, { color: colors.errorText }]}>
+					{errorMessage}
+				</Text>
+			) : null}
+
 			<Button title="Add Album" onPress={handleAddAlbum} />
 		</View>
 	);

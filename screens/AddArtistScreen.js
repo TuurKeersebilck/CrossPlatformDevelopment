@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Themes } from "../styling/Themes";
 import { addArtist } from "../api/api_calls";
+import useValidUrl from "../hooks/useValidUrl";
 
 const AddArtistScreen = ({ navigation }) => {
 	const { isDarkMode } = useTheme();
@@ -11,11 +12,17 @@ const AddArtistScreen = ({ navigation }) => {
 	const [imgUrl, setImgUrl] = useState("");
 	const [bio, setBio] = useState("");
 	const [errors, setErrors] = useState({});
+	const [errorMessage, setErrorMessage] = useState("");
+	const isValidUrl = useValidUrl();
 
 	const handleAddArtist = async () => {
 		const newErrors = {};
 		if (!name) newErrors.name = "Name is required";
-		if (!imgUrl) newErrors.imgUrl = "Image URL is required";
+		if (!imgUrl) {
+			newErrors.imgUrl = "Image URL is required";
+		} else if (!isValidUrl(imgUrl)) {
+			newErrors.imgUrl = "Image URL must be a valid URL";
+		}
 		if (!bio) newErrors.bio = "Bio is required";
 
 		if (Object.keys(newErrors).length > 0) {
@@ -26,14 +33,23 @@ const AddArtistScreen = ({ navigation }) => {
 		try {
 			const artist = { name, imgUrl, bio };
 			const response = await addArtist(artist);
-			if (response.error) throw new Error(response.error);
-			navigation.goBack();
+
+			if (!response.success) {
+				const errorMessages = Object.entries(response.error)
+					.map(([key, value]) => `${key}: ${value}`)
+					.join("\n");
+				setErrorMessage(errorMessages);
+				return;
+			}
+
 			Alert.alert(
 				"Artist Added",
 				`The artist "${name}" has been added successfully.`
 			);
+			navigation.goBack();
 		} catch (error) {
 			console.error("Error adding artist:", error.message);
+			setErrorMessage(error.message);
 		}
 	};
 
@@ -91,6 +107,12 @@ const AddArtistScreen = ({ navigation }) => {
 				placeholder="Enter bio"
 				placeholderTextColor={colors.secondaryText}
 			/>
+
+			{errorMessage ? (
+				<Text style={[styles.errorText, { color: colors.errorText }]}>
+					{errorMessage}
+				</Text>
+			) : null}
 
 			<Button title="Add Artist" onPress={handleAddArtist} />
 		</View>

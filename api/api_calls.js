@@ -1,5 +1,5 @@
-//const BASE_URL = "https://music-api-java-e4ee3f7354b0.herokuapp.com/api";
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "https://music-api-java-e4ee3f7354b0.herokuapp.com/api";
+//const BASE_URL = "http://localhost:8080/api";
 
 // GETTERS
 export const getArtists = async () => {
@@ -275,41 +275,45 @@ export const toggleTrackFavorite = async (trackId, isFavorited) => {
 
 // POSTS
 export const addArtist = async (artist) => {
-	try {
-		const response = await fetch(`${BASE_URL}/artists`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(artist),
-		});
-		if (!response.ok) {
-			throw new Error(`Network response was not ok: ${response.statusText}`);
-		}
-		return { success: true, location: response.headers.get("Location") };
-	} catch (error) {
-		console.error("Error adding artist:", error.message);
-		return { error: error.message };
-	}
+    try {
+        const response = await fetch(`${BASE_URL}/artists`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(artist),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            return { success: false, error: errorData };
+        }
+        const data = response;
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error adding artist:", error.message);
+        return { success: false, error: { message: error.message } };
+    }
 };
 
 export const addAlbum = async (album) => {
-	try {
-		const response = await fetch(`${BASE_URL}/albums`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(album),
-		});
-		if (!response.ok) {
-			throw new Error(`Network response was not ok: ${response.statusText}`);
-		}
-		return { success: true, location: response.headers.get("Location") };
-	} catch (error) {
-		console.error("Error adding album:", error.message);
-		return { error: error.message };
-	}
+    try {
+        const response = await fetch(`${BASE_URL}/albums`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(album),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            return { success: false, error: errorData };
+        }
+        const data = response;
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error adding album:", error.message);
+        return { success: false, error: { message: error.message } };
+    }
 };
 
 export const addTrack = async (track) => {

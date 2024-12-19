@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, SectionList } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import TrackRow from "../components/rows/TrackRow";
@@ -11,6 +11,7 @@ import {
 } from "../api/api_calls";
 import { Themes } from "../styling/Themes";
 import LoadingIndicator from "../components/Loading";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ArtistDetailScreen = ({ route, navigation }) => {
 	const { artistId } = route.params;
@@ -22,49 +23,51 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 
 	const colors = isDarkMode ? Themes.dark : Themes.light;
 
-	useEffect(() => {
-		const fetchArtistData = async () => {
-			try {
-				const [artistDetails, albums, singles] = await Promise.all([
-					fetchArtistDetails(artistId),
-					fetchArtistAlbums(artistId),
-					fetchArtistSingles(artistId),
-				]);
+	const fetchArtistData = async () => {
+		try {
+			const [artistDetails, albums, singles] = await Promise.all([
+				fetchArtistDetails(artistId),
+				fetchArtistAlbums(artistId),
+				fetchArtistSingles(artistId),
+			]);
 
-				if (artistDetails.error || albums.error || singles.error) {
-					throw new Error(artistDetails.error || albums.error || singles.error);
-				}
-
-				setArtist(artistDetails);
-				const albumSections = albums.map((album) => ({
-					title: album.title,
-					imgUrl: album.imgUrl,
-					data: album.tracks,
-					releaseDate: album.releaseDate,
-					id: album.id,
-					favorite: album.favorite,
-				}));
-
-				const singlesSection = {
-					title: "Singles",
-					data: singles,
-				};
-
-				const sections = singles.length > 0 ? [singlesSection] : [];
-				if (albums.length > 0) {
-					sections.push({ title: "Albums", data: [] }, ...albumSections);
-				}
-
-				setSections(sections);
-			} catch (error) {
-				setError("Failed to load artist data. Please try again.");
-			} finally {
-				setLoading(false);
+			if (artistDetails.error || albums.error || singles.error) {
+				throw new Error(artistDetails.error || albums.error || singles.error);
 			}
-		};
 
-		fetchArtistData();
-	}, [artistId]);
+			setArtist(artistDetails);
+			const albumSections = albums.map((album) => ({
+				title: album.title,
+				imgUrl: album.imgUrl,
+				data: album.tracks,
+				releaseDate: album.releaseDate,
+				id: album.id,
+				favorite: album.favorite,
+			}));
+
+			const singlesSection = {
+				title: "Singles",
+				data: singles,
+			};
+
+			const sections = singles.length > 0 ? [singlesSection] : [];
+			if (albums.length > 0) {
+				sections.push({ title: "Albums", data: [] }, ...albumSections);
+			}
+
+			setSections(sections);
+		} catch (error) {
+			setError("Failed to load artist data. Please try again.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			fetchArtistData();
+		}, [artistId])
+	);
 
 	if (loading) {
 		return <LoadingIndicator />;
