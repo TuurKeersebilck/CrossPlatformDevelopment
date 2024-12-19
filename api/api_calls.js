@@ -313,21 +313,23 @@ export const addAlbum = async (album) => {
 };
 
 export const addTrack = async (track) => {
-	try {
-		const response = await fetch(`${BASE_URL}/tracks`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(track),
-		});
-		if (!response.ok) {
-			throw new Error(`Network response was not ok: ${response.statusText}`);
-		}
-		return { success: true, location: response.headers.get("Location") };
-	} catch (error) {
-		console.error("Error adding track:", error.message);
-		return { error: error.message };
-	}
+    try {
+        const response = await fetch(`${BASE_URL}/tracks`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(track),
+        });
+        if (!response.ok) {
+            const errorData = await response.json();
+            return { success: false, error: errorData };
+        }
+        const data = response;
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error adding track", error.message);
+        return { success: false, error: { message: error.message } };
+    }
 };
 // --------------------------------------------------------------------------------------------
