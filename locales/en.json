@@ -1,0 +1,12 @@
+{
+  "toggleTheme": "Toggle Theme",
+  "language": "Language",
+  "yourLibrary": "Your Library",
+  "favoriteArtists": "Favorite Artists",
+  "favoriteTracks": "Favorite Tracks",
+  "favoriteAlbums": "Favorite Albums",
+  "noFavorites": "No {title} yet",
+  "toggleDarkMode": "Toggle dark mode, currently",
+  "enabled": "enabled",
+  "disabled": "disabled"
+}

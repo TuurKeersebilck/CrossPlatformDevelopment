@@ -19,10 +19,25 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ArtistRow from "../components/rows/ArtistRow";
 import TrackRow from "../components/rows/TrackRow";
 import AlbumRow from "../components/rows/AlbumRow";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useTranslation } from "react-i18next";
+import i18n from "../config/i18n";
 
 const SettingsScreen = ({ navigation }) => {
 	const { isDarkMode, toggleTheme } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
+	const [language, setLanguage] = useState(i18n.language);
+	const [open, setOpen] = useState(false);
+	const [items, setItems] = useState([
+		{ label: "English", value: "en" },
+		{ label: "Nederlands", value: "nl" },
+	]);
+
+	const changeLanguage = (lang) => {
+		i18n.changeLanguage(lang);
+		setLanguage(lang);
+	};
 
 	const {
 		container,
@@ -36,6 +51,8 @@ const SettingsScreen = ({ navigation }) => {
 		darkModeSection,
 		sectionTitle,
 		libraryTitle,
+		languageSection,
+		pickerStyle,
 	} = createStyles(theme);
 
 	const [favoriteArtists, setFavoriteArtists] = useState([]);
@@ -85,7 +102,9 @@ const SettingsScreen = ({ navigation }) => {
 					contentContainerStyle={favoriteList}
 				/>
 			) : (
-				<Text style={emptyStateMessage}>No {title.toLowerCase()} yet</Text>
+				<Text style={emptyStateMessage}>
+					{t("noFavorites", { title: title.toLowerCase() })}
+				</Text>
 			)}
 		</View>
 	);
@@ -94,7 +113,7 @@ const SettingsScreen = ({ navigation }) => {
 		<SafeAreaView style={container} accessibilityRole="main">
 			<View style={contentContainer}>
 				<View style={darkModeSection}>
-					<Text style={sectionTitle}>Dark Mode</Text>
+					<Text style={sectionTitle}>{t("toggleTheme")}</Text>
 					<TouchableOpacity
 						onPress={toggleTheme}
 						style={headerIconButton}
@@ -112,17 +131,41 @@ const SettingsScreen = ({ navigation }) => {
 					</TouchableOpacity>
 				</View>
 
+				<View style={languageSection}>
+					<Text style={sectionTitle}>{t("language")}</Text>
+					<DropDownPicker
+						open={open}
+						value={language}
+						items={items}
+						setOpen={setOpen}
+						setValue={setLanguage}
+						setItems={setItems}
+						onChangeValue={changeLanguage}
+						style={pickerStyle}
+						containerStyle={{ height: 40 }}
+						dropDownStyle={{ backgroundColor: theme.background }}
+					/>
+				</View>
+
 				<View style={libraryContainer}>
-					<Text style={libraryTitle}>Your Library</Text>
+					<Text style={libraryTitle}>{t("yourLibrary")}</Text>
 					<FlatList
 						data={[
 							{
-								title: "Favorite Artists",
+								title: t("favoriteArtists"),
 								data: favoriteArtists,
 								type: "artist",
 							},
-							{ title: "Favorite Tracks", data: favoriteTracks, type: "track" },
-							{ title: "Favorite Albums", data: favoriteAlbums, type: "album" },
+							{
+								title: t("favoriteTracks"),
+								data: favoriteTracks,
+								type: "track",
+							},
+							{
+								title: t("favoriteAlbums"),
+								data: favoriteAlbums,
+								type: "album",
+							},
 						]}
 						keyExtractor={(item) => item.title}
 						renderItem={({ item }) =>
@@ -143,52 +186,67 @@ const createStyles = (theme) =>
 		},
 		contentContainer: {
 			flex: 1,
-			paddingHorizontal: 20,
-		},
-		libraryContainer: {
-			marginTop: 10,
-			marginBottom: 20,
-		},
-		headerIconButton: {
-			padding: 10,
-			borderRadius: 5,
-			backgroundColor: theme.accent,
-		},
-		favoriteSection: {
-			marginBottom: 20,
-		},
-		sectionHeader: {
-			flexDirection: "row",
-			justifyContent: "space-between",
-			alignItems: "center",
-			marginBottom: 10,
-		},
-		favoriteList: {
-			paddingVertical: 10,
-		},
-		emptyStateMessage: {
-			textAlign: "center",
-			fontStyle: "italic",
-			color: theme.secondaryText,
-			fontSize: theme.fontSizes.medium,
+			paddingHorizontal: 16,
+			paddingTop: 16,
 		},
 		darkModeSection: {
 			flexDirection: "row",
 			justifyContent: "space-between",
 			alignItems: "center",
-			marginBottom: 20,
-			padding: 10,
-			borderRadius: 5,
+			backgroundColor: theme.surface,
+			borderRadius: 12,
+			marginBottom: 24,
+		},
+		headerIconButton: {
+			padding: 12,
+			borderRadius: 8,
+			backgroundColor: theme.accent,
+		},
+		languageSection: {
+			paddingBottom: 50,
+			zIndex: 2,
+			position: "relative",
+		},
+		pickerStyle: {
+			borderColor: theme.border,
+			marginTop: 8,
+			height: 48,
+		},
+		libraryContainer: {
+			flex: 1,
+		},
+		libraryTitle: {
+			fontSize: theme.fontSizes.xlarge,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+			marginBottom: 16,
+		},
+		favoriteSection: {
+			backgroundColor: theme.surface,
+			marginBottom: 16,
+			padding: 16,
+			borderRadius: 12,
+		},
+		sectionHeader: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginBottom: 12,
 		},
 		sectionTitle: {
 			fontSize: theme.fontSizes.large,
 			fontWeight: theme.fontWeights.bold,
 			color: theme.primaryText,
 		},
-		libraryTitle: {
-			fontSize: theme.fontSizes.xlarge,
-			fontWeight: theme.fontWeights.bold,
-			color: theme.primaryText,
+		favoriteList: {
+			paddingTop: 8,
+		},
+		emptyStateMessage: {
+			textAlign: "center",
+			fontStyle: "italic",
+			color: theme.secondaryText,
+			fontSize: theme.fontSizes.medium,
+			paddingVertical: 16,
 		},
 	});
 

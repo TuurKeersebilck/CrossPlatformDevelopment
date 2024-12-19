@@ -1,0 +1,12 @@
+{
+    "toggleTheme": "Wissel Thema",
+    "language": "Taal",
+    "yourLibrary": "Jouw Bibliotheek",
+    "favoriteArtists": "Favoriete Artiesten",
+    "favoriteTracks": "Favoriete Nummers",
+    "favoriteAlbums": "Favoriete Albums",
+    "noFavorites": "Nog geen {title}",
+    "toggleDarkMode": "Schakel donkere modus in, momenteel",
+    "enabled": "ingeschakeld",
+    "disabled": "uitgeschakeld"
+  }
