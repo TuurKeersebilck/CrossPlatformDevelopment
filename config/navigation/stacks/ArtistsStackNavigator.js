@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ArtistsScreen from "../../../screens/ArtistsScreen";
-import AddArtistScreen from "../../../screens/ArtistsScreen";
+import AddArtistScreen from "../../../screens/AddScreens/AddArtistScreen";
 import TrackDetailScreen from "../../../screens/DetailScreens/TrackDetailScreen";
 import ArtistDetailScreen from "../../../screens/DetailScreens/ArtistDetailScreen";
 import AlbumDetailScreen from "../../../screens/DetailScreens/AlbumDetailScreen";

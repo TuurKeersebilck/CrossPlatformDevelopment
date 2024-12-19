@@ -60,6 +60,7 @@ const SettingsScreen = ({ navigation }) => {
 							fontWeight: theme.fontWeights.bold,
 						},
 					]}
+					accessibilityRole="header"
 				>
 					{title}
 				</Text>
@@ -86,6 +87,7 @@ const SettingsScreen = ({ navigation }) => {
 						styles.emptyStateText,
 						{ color: theme.secondaryText, fontSize: theme.fontSizes.medium },
 					]}
+					accessibilityRole="text"
 				>
 					No {title.toLowerCase()} yet
 				</Text>
@@ -96,6 +98,7 @@ const SettingsScreen = ({ navigation }) => {
 	return (
 		<SafeAreaView
 			style={[styles.container, { backgroundColor: theme.background }]}
+			accessibilityRole="main"
 		>
 			<View style={styles.darkModeSection}>
 				<Text
@@ -107,10 +110,17 @@ const SettingsScreen = ({ navigation }) => {
 							fontWeight: theme.fontWeights.bold,
 						},
 					]}
+					accessibilityRole="header"
 				>
 					Dark Mode
 				</Text>
-				<TouchableOpacity onPress={toggleTheme} style={styles.headerIconButton}>
+				<TouchableOpacity
+					onPress={toggleTheme}
+					style={styles.headerIconButton}
+					accessibilityRole="button"
+					accessibilityLabel="Toggle dark mode"
+					accessibilityHint={`Currently ${isDarkMode ? "enabled" : "disabled"}`}
+				>
 					<Icon
 						name={isDarkMode ? "sunny" : "moon"}
 						size={25}
@@ -126,6 +136,7 @@ const SettingsScreen = ({ navigation }) => {
 						fontSize: theme.fontSizes.xlarge,
 						fontWeight: theme.fontWeights.bold,
 					}}
+					accessibilityRole="header"
 				>
 					Your Library
 				</Text>
