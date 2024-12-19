@@ -23,6 +23,20 @@ import AlbumRow from "../components/rows/AlbumRow";
 const SettingsScreen = ({ navigation }) => {
 	const { isDarkMode, toggleTheme } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const {
+		container,
+		headerContainer,
+		headerIconButton,
+		favoriteSection,
+		sectionHeader,
+		favoriteList,
+		emptyStateMessage,
+		darkModeSection,
+		sectionTitle,
+		libraryTitle,
+	} = createStyles(theme);
+
 	const [favoriteArtists, setFavoriteArtists] = useState([]);
 	const [favoriteTracks, setFavoriteTracks] = useState([]);
 	const [favoriteAlbums, setFavoriteAlbums] = useState([]);
@@ -49,21 +63,9 @@ const SettingsScreen = ({ navigation }) => {
 	);
 
 	const renderFavoriteSection = (title, data, type) => (
-		<View style={styles.favoriteSection}>
-			<View style={styles.sectionHeader}>
-				<Text
-					style={[
-						styles.sectionTitle,
-						{
-							color: theme.primaryText,
-							fontSize: theme.fontSizes.large,
-							fontWeight: theme.fontWeights.bold,
-						},
-					]}
-					accessibilityRole="header"
-				>
-					{title}
-				</Text>
+		<View style={favoriteSection}>
+			<View style={sectionHeader}>
+				<Text style={sectionTitle}>{title}</Text>
 			</View>
 			{data.length > 0 ? (
 				<FlatList
@@ -79,44 +81,21 @@ const SettingsScreen = ({ navigation }) => {
 						}
 						return null;
 					}}
-					contentContainerStyle={styles.favoriteList}
+					contentContainerStyle={favoriteList}
 				/>
 			) : (
-				<Text
-					style={[
-						styles.emptyStateText,
-						{ color: theme.secondaryText, fontSize: theme.fontSizes.medium },
-					]}
-					accessibilityRole="text"
-				>
-					No {title.toLowerCase()} yet
-				</Text>
+				<Text style={emptyStateMessage}>No {title.toLowerCase()} yet</Text>
 			)}
 		</View>
 	);
 
 	return (
-		<SafeAreaView
-			style={[styles.container, { backgroundColor: theme.background }]}
-			accessibilityRole="main"
-		>
-			<View style={styles.darkModeSection}>
-				<Text
-					style={[
-						styles.sectionTitle,
-						{
-							color: theme.primaryText,
-							fontSize: theme.fontSizes.large,
-							fontWeight: theme.fontWeights.bold,
-						},
-					]}
-					accessibilityRole="header"
-				>
-					Dark Mode
-				</Text>
+		<SafeAreaView style={container} accessibilityRole="main">
+			<View style={darkModeSection}>
+				<Text style={sectionTitle}>Dark Mode</Text>
 				<TouchableOpacity
 					onPress={toggleTheme}
-					style={styles.headerIconButton}
+					style={headerIconButton}
 					accessibilityRole="button"
 					accessibilityLabel="Toggle dark mode"
 					accessibilityHint={`Currently ${isDarkMode ? "enabled" : "disabled"}`}
@@ -129,17 +108,8 @@ const SettingsScreen = ({ navigation }) => {
 				</TouchableOpacity>
 			</View>
 
-			<View style={styles.headerContainer}>
-				<Text
-					style={{
-						color: theme.primaryText,
-						fontSize: theme.fontSizes.xlarge,
-						fontWeight: theme.fontWeights.bold,
-					}}
-					accessibilityRole="header"
-				>
-					Your Library
-				</Text>
+			<View style={headerContainer}>
+				<Text style={libraryTitle}>Your Library</Text>
 			</View>
 
 			<FlatList
@@ -157,48 +127,58 @@ const SettingsScreen = ({ navigation }) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		paddingHorizontal: 15,
-	},
-	headerContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginTop: 10,
-		marginBottom: 20,
-	},
-	headerActions: {
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	headerIconButton: {
-		marginLeft: 15,
-	},
-	favoriteSection: {
-		marginBottom: 20,
-	},
-	sectionHeader: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginBottom: 10,
-	},
-	favoriteList: {
-		paddingVertical: 10,
-	},
-	emptyStateText: {
-		textAlign: "center",
-		fontStyle: "italic",
-	},
-	darkModeSection: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginBottom: 20,
-		paddingHorizontal: 15,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			paddingHorizontal: 15,
+			backgroundColor: theme.background,
+		},
+		headerContainer: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginTop: 10,
+			marginBottom: 20,
+		},
+		headerIconButton: {
+			marginLeft: 15,
+		},
+		favoriteSection: {
+			marginBottom: 20,
+		},
+		sectionHeader: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginBottom: 10,
+		},
+		favoriteList: {
+			paddingVertical: 10,
+		},
+		emptyStateMessage: {
+			textAlign: "center",
+			fontStyle: "italic",
+			color: theme.secondaryText,
+			fontSize: theme.fontSizes.medium,
+		},
+		darkModeSection: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginBottom: 20,
+			paddingHorizontal: 15,
+		},
+		sectionTitle: {
+			fontSize: theme.fontSizes.large,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+		},
+		libraryTitle: {
+			fontSize: theme.fontSizes.xlarge,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+		},
+	});
 
 export default SettingsScreen;

@@ -15,13 +15,20 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const ArtistDetailScreen = ({ route, navigation }) => {
 	const { artistId } = route.params;
-	const { isDarkMode } = useTheme();
 	const [artist, setArtist] = useState(null);
 	const [sections, setSections] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const { isDarkMode } = useTheme();
+	const theme = isDarkMode ? Themes.dark : Themes.light;
 
-	const colors = isDarkMode ? Themes.dark : Themes.light;
+	const {
+		container,
+		errorText,
+		sectionList,
+		sectionHeader,
+		sectionHeaderText,
+	} = createStyles(theme);
 
 	const fetchArtistData = async () => {
 		try {
@@ -77,18 +84,11 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 		if (section.title === "Albums" || section.title === "Singles") {
 			return (
 				<View
-					style={[
-						styles.sectionHeader,
-						{ backgroundColor: colors.headerBackground },
-					]}
+					style={sectionHeader}
 					accessibilityRole="header"
 					accessibilityLabel={`${section.title} section`}
 				>
-					<Text
-						style={[styles.sectionHeaderText, { color: colors.primaryText }]}
-					>
-						{section.title}
-					</Text>
+					<Text style={sectionHeaderText}>{section.title}</Text>
 				</View>
 			);
 		} else {
@@ -97,12 +97,8 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	};
 
 	return (
-		<View style={[styles.container, { backgroundColor: colors.background }]}>
-			{error && (
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
-					{error}
-				</Text>
-			)}
+		<View style={container}>
+			{error && <Text style={errorText}>{error}</Text>}
 			<SectionList
 				sections={sections}
 				keyExtractor={(item) => item.id}
@@ -119,17 +115,13 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 					artist && (
 						<ArtistHeader
 							artist={artist}
-							isDarkMode={isDarkMode}
 							navigation={navigation}
 							accessibilityRole="header"
 							accessibilityLabel={`Artist: ${artist.name}`}
 						/>
 					)
 				}
-				contentContainerStyle={[
-					styles.sectionList,
-					{ backgroundColor: colors.background },
-				]}
+				contentContainerStyle={sectionList}
 				accessibilityRole="list"
 				accessibilityLabel="List of artist details"
 			/>
@@ -137,29 +129,35 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-	},
-	errorText: {
-		fontSize: 16,
-		textAlign: "center",
-		marginTop: 20,
-	},
-	sectionList: {
-		paddingBottom: 20,
-	},
-	sectionHeader: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderBottomWidth: 1,
-		borderBottomColor: "#ccc",
-	},
-	sectionHeaderText: {
-		fontSize: 18,
-		fontWeight: "bold",
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			padding: 20,
+			backgroundColor: theme.background,
+		},
+		errorText: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginTop: 20,
+			color: theme.errorText,
+		},
+		sectionList: {
+			paddingBottom: 20,
+			backgroundColor: theme.background,
+		},
+		sectionHeader: {
+			paddingVertical: 10,
+			paddingHorizontal: 20,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.border,
+			backgroundColor: theme.headerBackground,
+		},
+		sectionHeaderText: {
+			fontSize: theme.fontSizes.large,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+		},
+	});
 
 export default ArtistDetailScreen;

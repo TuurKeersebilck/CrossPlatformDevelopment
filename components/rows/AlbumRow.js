@@ -8,7 +8,17 @@ import { Themes } from "../../styling/Themes";
 const AlbumRow = ({ album, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(album.favorite);
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Themes.dark : Themes.light;
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const {
+		container,
+		albumRow,
+		albumImage,
+		albumInfo,
+		albumTitle,
+		albumArtist,
+		favoriteButton,
+	} = createStyles(theme);
 
 	const toggleFavorite = async () => {
 		try {
@@ -24,35 +34,31 @@ const AlbumRow = ({ album, navigation }) => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={container}>
 			<TouchableOpacity
 				onPress={() =>
 					navigation.navigate("AlbumDetailScreen", {
 						album: album,
 					})
 				}
-				style={styles.album}
+				style={albumRow}
 				accessibilityRole="button"
 				accessibilityLabel={`View details for album ${album.title}`}
 			>
 				<Image
 					source={{ uri: album.imgUrl }}
-					style={styles.albumImage}
+					style={albumImage}
 					accessibilityRole="image"
 					accessibilityLabel={`Image of album ${album.title}`}
 				/>
-				<View style={styles.albumInfo}>
-					<Text style={[styles.albumTitle, { color: colors.primaryText }]}>
-						{album.title}
-					</Text>
-					<Text style={[styles.albumArtist, { color: colors.secondaryText }]}>
-						{album.artist}
-					</Text>
+				<View style={albumInfo}>
+					<Text style={albumTitle}>{album.title}</Text>
+					<Text style={albumArtist}>{album.artist}</Text>
 				</View>
 			</TouchableOpacity>
 			<TouchableOpacity
 				onPress={toggleFavorite}
-				style={styles.favoriteButton}
+				style={favoriteButton}
 				accessibilityRole="button"
 				accessibilityLabel={
 					isFavorited
@@ -63,49 +69,52 @@ const AlbumRow = ({ album, navigation }) => {
 				<Ionicons
 					name={isFavorited ? "heart" : "heart-outline"}
 					size={24}
-					color={colors.accent}
+					color={theme.accent}
 				/>
 			</TouchableOpacity>
 		</View>
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flexDirection: "row",
-		alignItems: "center",
-		borderRadius: 8,
-		marginVertical: 4,
-		marginHorizontal: 8,
-	},
-	album: {
-		flex: 1,
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 12,
-		borderRadius: 8,
-	},
-	albumImage: {
-		width: 60,
-		height: 60,
-		borderRadius: 8,
-		marginRight: 12,
-	},
-	albumInfo: {
-		flex: 1,
-		justifyContent: "center",
-	},
-	albumTitle: {
-		fontSize: 16,
-		fontWeight: "bold",
-	},
-	albumArtist: {
-		fontSize: 14,
-		marginTop: 4,
-	},
-	favoriteButton: {
-		marginLeft: 10,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flexDirection: "row",
+			alignItems: "center",
+			borderRadius: 8,
+			marginVertical: 4,
+			marginHorizontal: 8,
+		},
+		albumRow: {
+			flex: 1,
+			flexDirection: "row",
+			alignItems: "center",
+			padding: 12,
+			borderRadius: 8,
+		},
+		albumImage: {
+			width: 60,
+			height: 60,
+			borderRadius: 8,
+			marginRight: 12,
+		},
+		albumInfo: {
+			flex: 1,
+			justifyContent: "center",
+		},
+		albumTitle: {
+			fontSize: theme.fontSizes.large,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+		},
+		albumArtist: {
+			fontSize: theme.fontSizes.medium,
+			marginTop: 4,
+			color: theme.secondaryText,
+		},
+		favoriteButton: {
+			marginLeft: 10,
+		},
+	});
 
 export default AlbumRow;

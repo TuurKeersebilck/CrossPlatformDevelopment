@@ -5,7 +5,16 @@ import { Themes } from "../../styling/Themes";
 
 const ArtistRow = ({ artist, navigation }) => {
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Themes.dark : Themes.light;
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const {
+		container,
+		artistRow,
+		artistInfo,
+		artistImage,
+		artistName,
+		artistBio,
+	} = createStyles(theme);
 
 	return (
 		<TouchableOpacity
@@ -15,59 +24,58 @@ const ArtistRow = ({ artist, navigation }) => {
 					name: artist.name,
 				})
 			}
-			style={styles.container}
+			style={container}
 			accessibilityRole="button"
 			accessibilityLabel={`View details for artist ${artist.name}`}
 		>
-			<View style={styles.artist}>
+			<View style={artistRow}>
 				<Image
 					source={{ uri: artist.imgUrl }}
-					style={styles.artistImage}
+					style={artistImage}
 					accessibilityRole="image"
 					accessibilityLabel={`Image of artist ${artist.name}`}
 				/>
-				<View style={styles.artistInfo}>
-					<Text style={[styles.artistName, { color: colors.primaryText }]}>
-						{artist.name}
-					</Text>
-					<Text style={[styles.artistBio, { color: colors.secondaryText }]}>
-						{artist.bio}
-					</Text>
+				<View style={artistInfo}>
+					<Text style={artistName}>{artist.name}</Text>
+					<Text style={artistBio}>{artist.bio}</Text>
 				</View>
 			</View>
 		</TouchableOpacity>
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		borderRadius: 8,
-		marginVertical: 4,
-		marginHorizontal: 8,
-	},
-	artist: {
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 12,
-		borderRadius: 8,
-	},
-	artistInfo: {
-		marginLeft: 12,
-		flex: 1,
-	},
-	artistImage: {
-		width: 60,
-		height: 60,
-		borderRadius: 8,
-	},
-	artistName: {
-		fontSize: 16,
-		fontWeight: "bold",
-	},
-	artistBio: {
-		fontSize: 14,
-		marginTop: 4,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			borderRadius: 8,
+			marginVertical: 4,
+			marginHorizontal: 8,
+		},
+		artistRow: {
+			flexDirection: "row",
+			alignItems: "center",
+			padding: 12,
+			borderRadius: 8,
+		},
+		artistInfo: {
+			marginLeft: 12,
+			flex: 1,
+		},
+		artistImage: {
+			width: 60,
+			height: 60,
+			borderRadius: 8,
+		},
+		artistName: {
+			fontSize: theme.fontSizes.large,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+		},
+		artistBio: {
+			fontSize: theme.fontSizes.medium,
+			marginTop: 4,
+			color: theme.secondaryText,
+		},
+	});
 
 export default ArtistRow;

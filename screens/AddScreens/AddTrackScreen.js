@@ -16,8 +16,6 @@ import useValidUrl from "../../hooks/useValidUrl";
 
 const AddTrackScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;
-	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Themes.dark : Themes.light;
 	const [title, setTitle] = useState("");
 	const [imgUrl, setImgUrl] = useState("");
 	const [duration, setDuration] = useState("");
@@ -27,6 +25,11 @@ const AddTrackScreen = ({ navigation, route }) => {
 	const [errors, setErrors] = useState({});
 	const [errorMessage, setErrorMessage] = useState("");
 	const isValidUrl = useValidUrl();
+	const { isDarkMode } = useTheme();
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const { container, label, input, pickerButton, errorText, placeholder } =
+		createStyles(theme);
 
 	useEffect(() => {
 		const fetchAlbums = async () => {
@@ -101,75 +104,45 @@ const AddTrackScreen = ({ navigation, route }) => {
 	};
 
 	return (
-		<View style={[styles.container, { backgroundColor: colors.background }]}>
-			<Text style={[styles.label, { color: colors.primaryText }]}>Title:*</Text>
-			{errors.title && (
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
-					{errors.title}
-				</Text>
-			)}
+		<View style={container}>
+			<Text style={label}>Title:*</Text>
+			{errors.title && <Text style={errorText}>{errors.title}</Text>}
 			<TextInput
-				style={[
-					styles.input,
-					{ color: colors.primaryText, borderColor: colors.border },
-				]}
+				style={input}
 				value={title}
 				onChangeText={setTitle}
 				placeholder="Enter title"
-				placeholderTextColor={colors.secondaryText}
+				placeholderTextColor={placeholder}
 			/>
 
-			<Text style={[styles.label, { color: colors.primaryText }]}>
-				Image URL:*
-			</Text>
-			{errors.imgUrl && (
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
-					{errors.imgUrl}
-				</Text>
-			)}
+			<Text style={label}>Image URL:*</Text>
+			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
 			<TextInput
-				style={[
-					styles.input,
-					{ color: colors.primaryText, borderColor: colors.border },
-				]}
+				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
 				placeholder="Enter image URL"
-				placeholderTextColor={colors.secondaryText}
+				placeholderTextColor={placeholder}
 			/>
 
-			<Text style={[styles.label, { color: colors.primaryText }]}>
-				Duration:*
-			</Text>
-			{errors.duration && (
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
-					{errors.duration}
-				</Text>
-			)}
+			<Text style={label}>Duration:*</Text>
+			{errors.duration && <Text style={errorText}>{errors.duration}</Text>}
 			<TextInput
-				style={[
-					styles.input,
-					{ color: colors.primaryText, borderColor: colors.border },
-				]}
+				style={input}
 				value={duration}
 				onChangeText={handleDurationChange}
 				placeholder="Enter duration (e.g., 03:45)"
-				placeholderTextColor={colors.secondaryText}
+				placeholderTextColor={placeholder}
 				keyboardType="numeric"
 				maxLength={5}
 			/>
 
-			<Text style={[styles.label, { color: colors.primaryText }]}>
-				Select Album (optional):
-			</Text>
+			<Text style={label}>Select Album (optional):</Text>
 			<TouchableOpacity
-				style={[
-					styles.pickerButton,
-					{ backgroundColor: colors.background, borderColor: colors.border },
-				]}
+				style={pickerButton}
 				onPress={() => setIsAlbumModalVisible(true)}
 			>
-				<Text style={{ color: colors.primaryText }}>
+				<Text style={label}>
 					{selectedAlbum
 						? albums.find((a) => a.id === selectedAlbum)?.title
 						: "Select an album (optional)"}
@@ -182,49 +155,56 @@ const AddTrackScreen = ({ navigation, route }) => {
 				items={albums}
 				onSelect={setSelectedAlbum}
 				title="Select Album"
-				colors={colors}
 			/>
 
-			{errorMessage ? (
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
-					{errorMessage}
-				</Text>
-			) : null}
+			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
 
 			<Button title="Add Track" onPress={handleAddTrack} />
 		</View>
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-		justifyContent: "center",
-	},
-	label: {
-		fontSize: 18,
-		marginBottom: 10,
-	},
-	input: {
-		height: 40,
-		borderWidth: 1,
-		borderRadius: 5,
-		paddingHorizontal: 10,
-		marginBottom: 20,
-	},
-	pickerButton: {
-		height: 40,
-		borderWidth: 1,
-		borderRadius: 5,
-		justifyContent: "center",
-		paddingHorizontal: 10,
-		marginBottom: 20,
-	},
-	errorText: {
-		fontSize: 14,
-		marginBottom: 10,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			padding: 20,
+			justifyContent: "center",
+			backgroundColor: theme.background,
+		},
+		label: {
+			fontSize: theme.fontSizes.medium,
+			marginBottom: 10,
+			color: theme.primaryText,
+		},
+		input: {
+			height: 40,
+			borderWidth: 1,
+			borderRadius: 5,
+			paddingHorizontal: 10,
+			marginBottom: 20,
+			color: theme.primaryText,
+			borderColor: theme.border,
+		},
+		pickerButton: {
+			height: 40,
+			borderWidth: 1,
+			borderRadius: 5,
+			justifyContent: "center",
+			paddingHorizontal: 10,
+			marginBottom: 20,
+			backgroundColor: theme.background,
+			borderColor: theme.border,
+		},
+		errorText: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginTop: 20,
+			color: theme.errorText,
+		},
+		placeholder: {
+			color: theme.secondaryText,
+		},
+	});
 
 export default AddTrackScreen;

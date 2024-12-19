@@ -10,11 +10,23 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { toggleArtistFavorite } from "../api/api_calls";
 import { Themes } from "../styling/Themes";
+import { useTheme } from "../context/ThemeContext";
 
-const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
+const ArtistHeader = ({ artist, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(artist.favorite);
 	const [error, setError] = useState(null);
-	const colors = isDarkMode ? Themes.dark : Themes.light;
+	const { isDarkMode } = useTheme();
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const {
+		header,
+		image,
+		name,
+		bio,
+		favoriteButton,
+		buttonContainer,
+		errorText,
+	} = createStyles(theme);
 
 	const toggleFavorite = async () => {
 		try {
@@ -30,31 +42,28 @@ const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
 	};
 
 	return (
-		<View style={[styles.header, { backgroundColor: colors.background }]}>
+		<View style={header}>
 			{artist && (
 				<>
 					<Image
 						source={{ uri: artist.imgUrl }}
-						style={styles.image}
+						style={image}
 						accessibilityRole="image"
 						accessibilityLabel={`Image of artist ${artist.name}`}
 					/>
 					<Text
-						style={[styles.name, { color: colors.primaryText }]}
+						style={name}
 						accessibilityRole="header"
 						accessibilityLabel={`Artist name: ${artist.name}`}
 					>
 						{artist.name}
 					</Text>
-					<Text
-						style={[styles.bio, { color: colors.secondaryText }]}
-						accessibilityLabel={`Artist bio: ${artist.bio}`}
-					>
+					<Text style={bio} accessibilityLabel={`Artist bio: ${artist.bio}`}>
 						{artist.bio}
 					</Text>
 					<TouchableOpacity
 						onPress={toggleFavorite}
-						style={styles.favoriteButton}
+						style={favoriteButton}
 						accessibilityRole="button"
 						accessibilityLabel={
 							isFavorited
@@ -65,10 +74,10 @@ const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
 						<Ionicons
 							name={isFavorited ? "heart" : "heart-outline"}
 							size={30}
-							color={colors.accent}
+							color={theme.accent}
 						/>
 					</TouchableOpacity>
-					<View style={styles.buttonContainer}>
+					<View style={buttonContainer}>
 						<Button
 							title="Add Track"
 							onPress={() =>
@@ -87,10 +96,7 @@ const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
 						/>
 					</View>
 					{error && (
-						<Text
-							style={styles.errorText}
-							accessibilityLabel={`Error: ${error}`}
-						>
+						<Text style={errorText} accessibilityLabel={`Error: ${error}`}>
 							{error}
 						</Text>
 					)}
@@ -100,42 +106,47 @@ const ArtistHeader = ({ artist, isDarkMode, navigation }) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	header: {
-		alignItems: "center",
-		paddingVertical: 20,
-		paddingHorizontal: 16,
-	},
-	image: {
-		width: 200,
-		height: 200,
-		marginBottom: 20,
-	},
-	name: {
-		fontSize: 24,
-		fontWeight: "bold",
-		marginBottom: 10,
-		textAlign: "center",
-	},
-	bio: {
-		fontSize: 16,
-		textAlign: "center",
-		marginBottom: 20,
-		paddingHorizontal: 20,
-	},
-	favoriteButton: {
-		marginBottom: 10,
-	},
-	buttonContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		width: "25%",
-	},
-	errorText: {
-		fontSize: 14,
-		textAlign: "center",
-		marginTop: 10,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		header: {
+			alignItems: "center",
+			paddingVertical: 20,
+			paddingHorizontal: 16,
+			backgroundColor: theme.background,
+		},
+		image: {
+			width: 200,
+			height: 200,
+			marginBottom: 20,
+		},
+		name: {
+			fontSize: theme.fontSizes.xlarge,
+			fontWeight: theme.fontWeights.bold,
+			marginBottom: 10,
+			textAlign: "center",
+			color: theme.primaryText,
+		},
+		bio: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginBottom: 20,
+			paddingHorizontal: 20,
+			color: theme.secondaryText,
+		},
+		favoriteButton: {
+			marginBottom: 10,
+		},
+		buttonContainer: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			width: "25%",
+		},
+		errorText: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginTop: 20,
+			color: theme.errorText,
+		},
+	});
 
 export default ArtistHeader;

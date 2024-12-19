@@ -7,11 +7,11 @@ import LoadingIndicator from "../../components/Loading";
 
 const TrackDetailScreen = ({ route, navigation }) => {
 	const { trackId } = route.params;
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const [track, setTrack] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const { isDarkMode } = useTheme();
+	const theme = isDarkMode ? Themes.dark : Themes.light;
 
 	// TODO: alle styling destructureren
 	// TODO: settings beter stylen
@@ -35,9 +35,9 @@ const TrackDetailScreen = ({ route, navigation }) => {
 		trackImage,
 		trackTitle,
 		trackArtist,
-		trackDuration,
 		errorText,
-	} = styles;
+		trackDuration,
+	} = createStyles(theme);
 
 	if (loading) {
 		return <LoadingIndicator />;
@@ -45,21 +45,14 @@ const TrackDetailScreen = ({ route, navigation }) => {
 
 	if (error) {
 		return (
-			<View style={[container, { backgroundColor: theme.background }]}>
-				<Text
-					style={[
-						errorText,
-						{ color: theme.errorText, fontSize: theme.fontSizes.medium },
-					]}
-				>
-					Error: {error}
-				</Text>
+			<View style={container}>
+				<Text style={errorText}>Error: {error}</Text>
 			</View>
 		);
 	}
 
 	return (
-		<View style={[container, { backgroundColor: theme.background }]}>
+		<View style={container}>
 			{track && (
 				<>
 					<Image
@@ -69,14 +62,7 @@ const TrackDetailScreen = ({ route, navigation }) => {
 						accessibilityLabel={`Image of track ${track.title}`}
 					/>
 					<Text
-						style={[
-							trackTitle,
-							{
-								color: theme.primaryText,
-								fontSize: theme.fontSizes.xlarge,
-								fontWeight: theme.fontWeights.bold,
-							},
-						]}
+						style={trackTitle}
 						accessibilityRole="header"
 						accessibilityLabel={`Track title: ${track.title}`}
 					>
@@ -92,20 +78,10 @@ const TrackDetailScreen = ({ route, navigation }) => {
 						accessibilityRole="button"
 						accessibilityLabel={`View details for artist ${track.artistName}`}
 					>
-						<Text
-							style={[
-								trackArtist,
-								{ color: theme.linkText, fontSize: theme.fontSizes.large },
-							]}
-						>
-							{track.artistName}
-						</Text>
+						<Text style={trackArtist}>{track.artistName}</Text>
 					</TouchableOpacity>
 					<Text
-						style={[
-							trackDuration,
-							{ color: theme.secondaryText, fontSize: theme.fontSizes.medium },
-						]}
+						style={trackDuration}
 						accessibilityLabel={`Track duration: ${track.duration}`}
 					>
 						{track.duration}
@@ -116,24 +92,42 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 20,
-	},
-	trackImage: {
-		width: 200,
-		height: 200,
-		marginBottom: 20,
-	},
-	trackTitle: {
-		marginBottom: 10,
-	},
-	trackArtist: {
-		marginBottom: 10,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			alignItems: "center",
+			justifyContent: "center",
+			padding: 20,
+			backgroundColor: theme.background,
+		},
+		trackImage: {
+			width: 200,
+			height: 200,
+			marginBottom: 20,
+		},
+		trackTitle: {
+			marginBottom: 10,
+			color: theme.primaryText,
+			fontSize: theme.fontSizes.xlarge,
+			fontWeight: theme.fontWeights.bold,
+		},
+		trackArtist: {
+			marginBottom: 10,
+			color: theme.linkText,
+			fontSize: theme.fontSizes.large,
+		},
+		trackDuration: {
+			marginBottom: 10,
+			color: theme.secondaryText,
+			fontSize: theme.fontSizes.medium,
+		},
+		errorText: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginTop: 20,
+			color: theme.errorText,
+		},
+	});
 
 export default TrackDetailScreen;

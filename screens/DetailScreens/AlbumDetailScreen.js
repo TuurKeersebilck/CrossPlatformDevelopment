@@ -8,11 +8,21 @@ import LoadingIndicator from "../../components/Loading";
 
 const AlbumDetailScreen = ({ route, navigation }) => {
 	const { album } = route.params;
-	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Themes.dark : Themes.light;
 	const [tracks, setTracks] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const { isDarkMode } = useTheme();
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const {
+		container,
+		albumImage,
+		albumTitle,
+		albumArtist,
+		releaseDate,
+		trackList,
+		errorText,
+	} = createStyles(theme);
 
 	useEffect(() => {
 		const fetchTracks = async () => {
@@ -35,29 +45,23 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 
 	if (error) {
 		return (
-			<View style={[styles.container, { backgroundColor: colors.background }]}>
-				<Text style={[styles.errorText, { color: colors.errorText }]}>
-					{error}
-				</Text>
+			<View style={container}>
+				<Text style={errorText}>{error}</Text>
 			</View>
 		);
 	}
 
 	return (
-		<View style={[styles.container, { backgroundColor: colors.background }]}>
+		<View style={container}>
 			<Image
 				source={{ uri: album.imgUrl }}
-				style={styles.albumImage}
+				style={albumImage}
 				accessibilityRole="image"
 				accessibilityLabel={`Image of album ${album.title}`}
 			/>
-			<Text style={[styles.albumTitle, { color: colors.primaryText }]}>
-				{album.title}
-			</Text>
-			<Text style={[styles.albumArtist, { color: colors.secondaryText }]}>
-				{album.artist}
-			</Text>
-			<Text style={[styles.releaseDate, { color: colors.secondaryText }]}>
+			<Text style={albumTitle}>{album.title}</Text>
+			<Text style={albumArtist}>{album.artist}</Text>
+			<Text style={releaseDate}>
 				Released: {new Date(album.releaseDate).toLocaleDateString()}
 			</Text>
 			<FlatList
@@ -66,52 +70,53 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 				renderItem={({ item }) => (
 					<TrackRow track={item} navigation={navigation} />
 				)}
-				contentContainerStyle={styles.trackList}
+				contentContainerStyle={trackList}
 			/>
 		</View>
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 16,
-	},
-	albumImage: {
-		width: 200,
-		height: 200,
-		alignSelf: "center",
-		marginBottom: 16,
-	},
-	albumTitle: {
-		fontSize: 24,
-		fontWeight: "bold",
-		textAlign: "center",
-		marginBottom: 8,
-	},
-	albumArtist: {
-		fontSize: 18,
-		textAlign: "center",
-		marginBottom: 8,
-	},
-	releaseDate: {
-		fontSize: 16,
-		textAlign: "center",
-		marginBottom: 16,
-	},
-	trackList: {
-		paddingBottom: 16,
-	},
-	loadingText: {
-		fontSize: 16,
-		textAlign: "center",
-		marginTop: 20,
-	},
-	errorText: {
-		fontSize: 16,
-		textAlign: "center",
-		marginTop: 20,
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			padding: 16,
+			backgroundColor: theme.background,
+		},
+		albumImage: {
+			width: 200,
+			height: 200,
+			alignSelf: "center",
+			marginBottom: 16,
+		},
+		albumTitle: {
+			fontSize: theme.fontSizes.xlarge,
+			fontWeight: theme.fontWeights.bold,
+			textAlign: "center",
+			marginBottom: 8,
+			color: theme.primaryText,
+		},
+		albumArtist: {
+			fontSize: theme.fontSizes.large,
+			textAlign: "center",
+			marginBottom: 8,
+			color: theme.secondaryText,
+		},
+		releaseDate: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginBottom: 16,
+			color: theme.secondaryText,
+		},
+		trackList: {
+			paddingBottom: 16,
+		},
+		errorText: {
+			fontSize: theme.fontSizes.medium,
+			textAlign: "center",
+			marginTop: 20,
+			color: theme.errorText,
+		},
+	});
 
 export default AlbumDetailScreen;

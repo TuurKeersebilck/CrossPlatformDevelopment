@@ -11,9 +11,9 @@ const ArtistsScreen = ({ navigation }) => {
 	const [artists, setArtists] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Themes.dark : Themes.light;
+	const theme = isDarkMode ? Themes.dark : Themes.light;
 
-	const { container, scrollView, centered } = styles;
+	const { container, scrollView, centered, empty } = createStyles(theme);
 
 	const fetchArtists = async () => {
 		try {
@@ -40,17 +40,17 @@ const ArtistsScreen = ({ navigation }) => {
 	if (artists.length === 0) {
 		return (
 			<View
-				style={[centered, { backgroundColor: colors.background }]}
+				style={centered}
 				accessibilityRole="alert"
 				accessibilityLabel="List of artists is empty"
 			>
-				<Text style={{ color: colors.primaryText }}>No artists available</Text>
+				<Text style={empty}>No artists available</Text>
 			</View>
 		);
 	}
 
 	return (
-		<View style={[container, { backgroundColor: colors.background }]}>
+		<View style={container}>
 			<Button
 				title="Add Artist"
 				onPress={() => navigation.navigate("AddArtistScreen")}
@@ -79,19 +79,28 @@ const ArtistsScreen = ({ navigation }) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	scrollView: {
-		marginVertical: 10,
-		paddingHorizontal: 10,
-	},
-	centered: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: theme.background,
+		},
+		scrollView: {
+			marginVertical: 10,
+			paddingHorizontal: 10,
+		},
+		centered: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: theme.background,
+		},
+		empty: {
+			textAlign: "center",
+			fontStyle: "italic",
+			color: theme.secondaryText,
+			fontSize: theme.fontSizes.medium,
+		},
+	});
 
 export default ArtistsScreen;

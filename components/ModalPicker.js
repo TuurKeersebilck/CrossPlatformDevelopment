@@ -8,8 +8,15 @@ import {
 	Modal,
 	FlatList,
 } from "react-native";
+import { useTheme } from "../context/ThemeContext";
+import { Themes } from "../styling/Themes";
 
-const ModalPicker = ({ visible, onClose, items, onSelect, title, colors }) => {
+const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
+	const { isDarkMode } = useTheme();
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { modalOverlay, modalContainer, modalTitle, modalItem, item } =
+		createStyles(theme);
+
 	return (
 		<Modal
 			transparent={true}
@@ -19,15 +26,10 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title, colors }) => {
 			accessibilityLabel={title}
 			w
 		>
-			<View style={styles.modalOverlay}>
-				<View
-					style={[
-						styles.modalContainer,
-						{ backgroundColor: colors.background },
-					]}
-				>
+			<View style={modalOverlay}>
+				<View style={modalContainer}>
 					<Text
-						style={[styles.modalTitle, { color: colors.primaryText }]}
+						style={modalTitle}
 						accessibilityRole="header"
 						accessibilityLabel={title}
 					>
@@ -38,7 +40,7 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title, colors }) => {
 						keyExtractor={(item) => item.id.toString()}
 						renderItem={({ item }) => (
 							<TouchableOpacity
-								style={styles.modalItem}
+								style={modalItem}
 								onPress={() => {
 									onSelect(item.id);
 									onClose();
@@ -46,9 +48,7 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title, colors }) => {
 								accessibilityRole="button"
 								accessibilityLabel={`Select ${item.name || item.title}`}
 							>
-								<Text style={{ color: colors.primaryText }}>
-									{item.name || item.title}
-								</Text>
+								<Text style={item}>{item.name || item.title}</Text>
 							</TouchableOpacity>
 						)}
 					/>
@@ -64,29 +64,36 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title, colors }) => {
 	);
 };
 
-const styles = StyleSheet.create({
-	modalOverlay: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
-	},
-	modalContainer: {
-		width: "80%",
-		padding: 20,
-		borderRadius: 10,
-	},
-	modalTitle: {
-		fontSize: 18,
-		fontWeight: "bold",
-		marginBottom: 20,
-	},
-	modalItem: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderBottomWidth: 1,
-		borderBottomColor: "#ccc",
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		modalOverlay: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: "rgba(0, 0, 0, 0.5)",
+		},
+		modalContainer: {
+			width: "80%",
+			padding: 20,
+			borderRadius: 10,
+			backgroundColor: theme.background,
+		},
+		modalTitle: {
+			fontSize: theme.fontSizes.large,
+			fontWeight: theme.fontWeights.bold,
+			marginBottom: 20,
+			color: theme.primaryText,
+		},
+		modalItem: {
+			paddingVertical: 10,
+			paddingHorizontal: 20,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.border,
+		},
+		item: {
+			fontSize: theme.fontSizes.medium,
+			color: theme.primaryText,
+		},
+	});
 
 export default ModalPicker;

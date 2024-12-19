@@ -15,7 +15,21 @@ import { Themes } from "../../styling/Themes";
 const TrackRow = ({ track, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(track.favorite);
 	const { isDarkMode } = useTheme();
-	const colors = isDarkMode ? Themes.dark : Themes.light;
+	const theme = isDarkMode ? Themes.dark : Themes.light;
+
+	const {
+		container,
+		trackRow,
+		trackImage,
+		trackInfo,
+		trackTitle,
+		artistName,
+		favoriteButton,
+		trackDurationContainer,
+		trackDuration,
+		albumTitle,
+		trackAlbum,
+	} = createStyles(theme);
 
 	const toggleFavorite = async () => {
 		try {
@@ -32,7 +46,7 @@ const TrackRow = ({ track, navigation }) => {
 	const isMobile = screenWidth < 600;
 
 	return (
-		<View style={styles.container}>
+		<View style={container}>
 			<TouchableOpacity
 				onPress={() =>
 					navigation.navigate("TrackDetailScreen", {
@@ -40,47 +54,44 @@ const TrackRow = ({ track, navigation }) => {
 						title: track.title,
 					})
 				}
-				style={styles.track}
+				style={trackRow}
 				accessibilityRole="button"
 				accessibilityLabel={`View details for track ${track.title}`}
 			>
 				<Image
 					source={{ uri: track.imgUrl }}
-					style={styles.trackImage}
+					style={trackImage}
 					accessibilityRole="image"
 					accessibilityLabel={`Image of track ${track.title}`}
 				/>
-				<View style={styles.trackInfo}>
+				<View style={trackInfo}>
 					<Text
-						style={[styles.trackTitle, { color: colors.primaryText }]}
+						style={trackTitle}
 						accessibilityRole="header"
 						accessibilityLabel={`Track title: ${track.title}`}
 					>
 						{track.title}
 					</Text>
 					<Text
-						style={[styles.artistName, { color: colors.secondaryText }]}
+						style={artistName}
 						accessibilityLabel={`Artist name: ${track.artistName}`}
 					>
 						{track.artistName}
 					</Text>
 				</View>
 
-				<View style={styles.trackAlbum}>
+				<View style={trackAlbum}>
 					<Text
-						style={[styles.albumTitle, isDarkMode && styles.albumTitleDark]}
+						style={albumTitle}
 						accessibilityLabel={`Album title: ${track.albumTitle}`}
 					>
 						{track.albumTitle}
 					</Text>
 				</View>
 				{!isMobile && (
-					<View style={styles.trackDurationContainer}>
+					<View style={trackDurationContainer}>
 						<Text
-							style={[
-								styles.trackDuration,
-								isDarkMode && styles.trackDurationDark,
-							]}
+							style={trackDuration}
 							accessibilityLabel={`Track duration: ${track.duration}`}
 						>
 							{track.duration}
@@ -90,7 +101,7 @@ const TrackRow = ({ track, navigation }) => {
 			</TouchableOpacity>
 			<TouchableOpacity
 				onPress={toggleFavorite}
-				style={styles.favoriteButton}
+				style={favoriteButton}
 				accessibilityRole="button"
 				accessibilityLabel={
 					isFavorited
@@ -101,62 +112,67 @@ const TrackRow = ({ track, navigation }) => {
 				<Ionicons
 					name={isFavorited ? "heart" : "heart-outline"}
 					size={24}
-					color={colors.accent}
+					color={theme.accent}
 				/>
 			</TouchableOpacity>
 		</View>
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		flexDirection: "row",
-		alignItems: "center",
-		borderRadius: 8,
-		marginVertical: 4,
-		marginHorizontal: 8,
-	},
-	track: {
-		flex: 1,
-		flexDirection: "row",
-		alignItems: "center",
-		padding: 12,
-		borderRadius: 8,
-	},
-	trackImage: {
-		width: 60,
-		height: 60,
-		borderRadius: 8,
-		marginRight: 12,
-	},
-	trackInfo: {
-		flex: 1,
-		justifyContent: "center",
-	},
-	trackTitle: {
-		fontSize: 16,
-		fontWeight: "600",
-	},
-	artistName: {
-		fontSize: 14,
-		marginTop: 4,
-	},
-	favoriteButton: {
-		marginLeft: 10,
-	},
-	trackDurationContainer: {
-		marginLeft: 10,
-	},
-	trackDuration: {
-		fontSize: 14,
-	},
-	albumTitle: {
-		fontSize: 14,
-	},
-	trackAlbum: {
-		marginLeft: "auto",
-		justifyContent: "center",
-	},
-});
+const createStyles = (theme) =>
+	StyleSheet.create({
+		container: {
+			flexDirection: "row",
+			alignItems: "center",
+			borderRadius: 8,
+			marginVertical: 4,
+			marginHorizontal: 8,
+		},
+		trackRow: {
+			flex: 1,
+			flexDirection: "row",
+			alignItems: "center",
+			padding: 12,
+			borderRadius: 8,
+		},
+		trackImage: {
+			width: 60,
+			height: 60,
+			borderRadius: 8,
+			marginRight: 12,
+		},
+		trackInfo: {
+			flex: 1,
+			justifyContent: "center",
+		},
+		trackTitle: {
+			fontSize: theme.fontSizes.medium,
+			fontWeight: theme.fontWeights.bold,
+			color: theme.primaryText,
+		},
+		artistName: {
+			fontSize: theme.fontSizes.small,
+			marginTop: 4,
+			color: theme.secondaryText,
+		},
+		favoriteButton: {
+			marginLeft: 10,
+		},
+		trackDurationContainer: {
+			marginLeft: 10,
+		},
+		trackDuration: {
+			fontSize: theme.fontSizes.small,
+			color: theme.secondaryText,
+		},
+		albumTitle: {
+			fontSize: theme.fontSizes.small,
+			color: theme.secondaryText,
+		},
+		trackAlbum: {
+			marginLeft: "auto",
+			justifyContent: "center",
+		},
+	});
 
 export default TrackRow;
