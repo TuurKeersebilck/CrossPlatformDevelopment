@@ -12,6 +12,7 @@ import {
 import { Themes } from "../../styling/Themes";
 import LoadingIndicator from "../../components/Loading";
 import { useFocusEffect } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const ArtistDetailScreen = ({ route, navigation }) => {
 	const { artistId } = route.params;
@@ -21,6 +22,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	const [error, setError] = useState(null);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const {
 		container,
@@ -53,13 +55,13 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 			}));
 
 			const singlesSection = {
-				title: "Singles",
+				title: t("singles"),
 				data: singles,
 			};
 
 			const sections = singles.length > 0 ? [singlesSection] : [];
 			if (albums.length > 0) {
-				sections.push({ title: "Albums", data: [] }, ...albumSections);
+				sections.push({ title: t("albums"), data: [] }, ...albumSections);
 			}
 
 			setSections(sections);
@@ -81,12 +83,12 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	}
 
 	const renderSectionHeader = ({ section }) => {
-		if (section.title === "Albums" || section.title === "Singles") {
+		if (section.title === t("albums") || section.title === t("singles")) {
 			return (
 				<View
 					style={sectionHeader}
 					accessibilityRole="header"
-					accessibilityLabel={`${section.title} section`}
+					accessibilityLabel={`${section.title} ${t("section")}`}
 				>
 					<Text style={sectionHeaderText}>{section.title}</Text>
 				</View>
@@ -108,7 +110,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 						track={item}
 						navigation={navigation}
 						accessibilityRole="button"
-						accessibilityLabel={`Track: ${item.title}`}
+						accessibilityLabel={`${t("track")}: ${item.title}`}
 					/>
 				)}
 				ListHeaderComponent={() =>
@@ -117,13 +119,13 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 							artist={artist}
 							navigation={navigation}
 							accessibilityRole="header"
-							accessibilityLabel={`Artist: ${artist.name}`}
+							accessibilityLabel={`${t("artist")}: ${artist.name}`}
 						/>
 					)
 				}
 				contentContainerStyle={sectionList}
 				accessibilityRole="list"
-				accessibilityLabel="List of artist details"
+				accessibilityLabel={t("artistDetailsList")}
 			/>
 		</View>
 	);

@@ -4,6 +4,7 @@ import { fetchTrackDetails } from "../../api/api_calls";
 import { useTheme } from "../../context/ThemeContext";
 import { Themes } from "../../styling/Themes";
 import LoadingIndicator from "../../components/Loading";
+import { useTranslation } from "react-i18next";
 
 const TrackDetailScreen = ({ route, navigation }) => {
 	const { trackId } = route.params;
@@ -12,6 +13,7 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	const [error, setError] = useState(null);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	// TODO: settings beter stylen
 	useEffect(() => {
@@ -58,12 +60,12 @@ const TrackDetailScreen = ({ route, navigation }) => {
 						source={{ uri: track.imgUrl }}
 						style={trackImage}
 						accessibilityRole="image"
-						accessibilityLabel={`Image of track ${track.title}`}
+						accessibilityLabel={t("trackImage", { title: track.title })}
 					/>
 					<Text
 						style={trackTitle}
 						accessibilityRole="header"
-						accessibilityLabel={`Track title: ${track.title}`}
+						accessibilityLabel={t("trackTitle", { title: track.title })}
 					>
 						{track.title}
 					</Text>
@@ -75,13 +77,13 @@ const TrackDetailScreen = ({ route, navigation }) => {
 							})
 						}
 						accessibilityRole="button"
-						accessibilityLabel={`View details for artist ${track.artistName}`}
+						accessibilityLabel={t("viewArtistDetails", { name: track.artistName })}
 					>
 						<Text style={trackArtist}>{track.artistName}</Text>
 					</TouchableOpacity>
 					<Text
 						style={trackDuration}
-						accessibilityLabel={`Track duration: ${track.duration}`}
+						accessibilityLabel={t("trackDuration", { duration: track.duration })}
 					>
 						{track.duration}
 					</Text>

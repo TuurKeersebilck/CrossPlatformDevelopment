@@ -11,12 +11,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { toggleArtistFavorite } from "../api/api_calls";
 import { Themes } from "../styling/Themes";
 import { useTheme } from "../context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const ArtistHeader = ({ artist, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(artist.favorite);
 	const [error, setError] = useState(null);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const {
 		header,
@@ -34,10 +36,10 @@ const ArtistHeader = ({ artist, navigation }) => {
 			if (response.success) {
 				setIsFavorited(response.isFavorited);
 			} else {
-				setError("Failed to update favorite status.");
+				setError(t("favoriteUpdateFailed"));
 			}
 		} catch (error) {
-			setError("Failed to update favorite status.");
+			setError(t("favoriteUpdateFailed"));
 		}
 	};
 
@@ -49,16 +51,19 @@ const ArtistHeader = ({ artist, navigation }) => {
 						source={{ uri: artist.imgUrl }}
 						style={image}
 						accessibilityRole="image"
-						accessibilityLabel={`Image of artist ${artist.name}`}
+						accessibilityLabel={t("artistImage", { name: artist.name })}
 					/>
 					<Text
 						style={name}
 						accessibilityRole="header"
-						accessibilityLabel={`Artist name: ${artist.name}`}
+						accessibilityLabel={t("artistName", { name: artist.name })}
 					>
 						{artist.name}
 					</Text>
-					<Text style={bio} accessibilityLabel={`Artist bio: ${artist.bio}`}>
+					<Text
+						style={bio}
+						accessibilityLabel={t("artistBio", { bio: artist.bio })}
+					>
 						{artist.bio}
 					</Text>
 					<TouchableOpacity
@@ -67,8 +72,8 @@ const ArtistHeader = ({ artist, navigation }) => {
 						accessibilityRole="button"
 						accessibilityLabel={
 							isFavorited
-								? `Remove ${artist.name} from favorites`
-								: `Add ${artist.name} to favorites`
+								? t("removeFromFavorites", { name: artist.name })
+								: t("addToFavorites", { name: artist.name })
 						}
 					>
 						<Ionicons
@@ -79,24 +84,24 @@ const ArtistHeader = ({ artist, navigation }) => {
 					</TouchableOpacity>
 					<View style={buttonContainer}>
 						<Button
-							title="Add Track"
+							title={t("addTrackButton")}
 							onPress={() =>
 								navigation.navigate("AddTrackScreen", { artistId: artist.id })
 							}
 							accessibilityRole="button"
-							accessibilityLabel="Add artist"
+							accessibilityLabel={t("addTrackButton")}
 						/>
 						<Button
-							title="Add Album"
+							title={t("addAlbumButton")}
 							onPress={() =>
 								navigation.navigate("AddAlbumScreen", { artistId: artist.id })
 							}
 							accessibilityRole="button"
-							accessibilityLabel="Add artist"
+							accessibilityLabel={t("addAlbumButton")}
 						/>
 					</View>
 					{error && (
-						<Text style={errorText} accessibilityLabel={`Error: ${error}`}>
+						<Text style={errorText} accessibilityLabel={t("error", { error })}>
 							{error}
 						</Text>
 					)}

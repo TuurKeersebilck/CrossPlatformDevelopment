@@ -2,10 +2,12 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { Themes } from "../../styling/Themes";
+import { useTranslation } from "react-i18next";
 
 const ArtistRow = ({ artist, navigation }) => {
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const {
 		container,
@@ -26,14 +28,14 @@ const ArtistRow = ({ artist, navigation }) => {
 			}
 			style={container}
 			accessibilityRole="button"
-			accessibilityLabel={`View details for artist ${artist.name}`}
+			accessibilityLabel={t("viewArtistDetails", { name: artist.name })}
 		>
 			<View style={artistRow}>
 				<Image
 					source={{ uri: artist.imgUrl }}
 					style={artistImage}
 					accessibilityRole="image"
-					accessibilityLabel={`Image of artist ${artist.name}`}
+					accessibilityLabel={t("artistImage", { name: artist.name })}
 				/>
 				<View style={artistInfo}>
 					<Text style={artistName}>{artist.name}</Text>

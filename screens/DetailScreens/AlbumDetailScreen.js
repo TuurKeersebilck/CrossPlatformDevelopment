@@ -5,6 +5,7 @@ import { Themes } from "../../styling/Themes";
 import TrackRow from "../../components/rows/TrackRow";
 import { getTracksFromAlbum } from "../../api/api_calls";
 import LoadingIndicator from "../../components/Loading";
+import { useTranslation } from "react-i18next";
 
 const AlbumDetailScreen = ({ route, navigation }) => {
 	const { album } = route.params;
@@ -13,6 +14,7 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 	const [error, setError] = useState(null);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const {
 		container,
@@ -57,20 +59,43 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 				source={{ uri: album.imgUrl }}
 				style={albumImage}
 				accessibilityRole="image"
-				accessibilityLabel={`Image of album ${album.title}`}
+				accessibilityLabel={t("albumImage", { title: album.title })}
 			/>
-			<Text style={albumTitle}>{album.title}</Text>
-			<Text style={albumArtist}>{album.artist}</Text>
-			<Text style={releaseDate}>
-				Released: {new Date(album.releaseDate).toLocaleDateString()}
+			<Text
+				style={albumTitle}
+				accessibilityRole="header"
+				accessibilityLabel={t("albumTitle", { title: album.title })}
+			>
+				{album.title}
+			</Text>
+			<Text
+				style={albumArtist}
+				accessibilityLabel={t("albumArtist", { artist: album.artistName })}
+			>
+				{album.artistName}
+			</Text>
+			<Text
+				style={releaseDate}
+				accessibilityLabel={t("releaseDate", {
+					date: new Date(album.releaseDate).toLocaleDateString(),
+				})}
+			>
+				{new Date(album.releaseDate).toLocaleDateString()}
 			</Text>
 			<FlatList
 				data={tracks}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => (
-					<TrackRow track={item} navigation={navigation} />
+					<TrackRow
+						track={item}
+						navigation={navigation}
+						accessibilityRole="button"
+						accessibilityLabel={`${t("track")}: ${item.title}`}
+					/>
 				)}
 				contentContainerStyle={trackList}
+				accessibilityRole="list"
+				accessibilityLabel={t("trackList")}
 			/>
 		</View>
 	);

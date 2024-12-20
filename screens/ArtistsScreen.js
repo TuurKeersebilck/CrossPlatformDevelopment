@@ -6,12 +6,14 @@ import { useTheme } from "../context/ThemeContext";
 import LoadingIndicator from "../components/Loading";
 import { Themes } from "../styling/Themes";
 import { useFocusEffect } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const ArtistsScreen = ({ navigation }) => {
 	const [artists, setArtists] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const { container, scrollView, centered, empty } = createStyles(theme);
 
@@ -42,9 +44,9 @@ const ArtistsScreen = ({ navigation }) => {
 			<View
 				style={centered}
 				accessibilityRole="alert"
-				accessibilityLabel="List of artists is empty"
+				accessibilityLabel={t("emptyArtistsList")}
 			>
-				<Text style={empty}>No artists available</Text>
+				<Text style={empty}>{t("noArtistsAvailable")}</Text>
 			</View>
 		);
 	}
@@ -52,10 +54,10 @@ const ArtistsScreen = ({ navigation }) => {
 	return (
 		<View style={container}>
 			<Button
-				title="Add Artist"
+				title={t("addArtist")}
 				onPress={() => navigation.navigate("AddArtistScreen")}
 				accessibilityRole="button"
-				accessibilityLabel="Add artist"
+				accessibilityLabel={t("addArtist")}
 			/>
 			<FlatList
 				data={artists}
@@ -65,7 +67,7 @@ const ArtistsScreen = ({ navigation }) => {
 						artist={item}
 						navigation={navigation}
 						accessibilityRole="button"
-						accessibilityLabel={`Artist: ${item.name}`}
+						accessibilityLabel={`${t("artist")}: ${item.name}`}
 						onPress={() =>
 							navigation.navigate("ArtistDetailScreen", { artistId: item.id })
 						}
@@ -73,7 +75,7 @@ const ArtistsScreen = ({ navigation }) => {
 				)}
 				contentContainerStyle={scrollView}
 				accessibilityRole="list"
-				accessibilityLabel="List of artists"
+				accessibilityLabel={t("artistsList")}
 			/>
 		</View>
 	);

@@ -4,6 +4,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { Themes } from "../../styling/Themes";
 import { addArtist } from "../../api/api_calls";
 import useValidUrl from "../../hooks/useValidUrl";
+import { useTranslation } from "react-i18next";
 
 const AddArtistScreen = ({ navigation }) => {
 	const [name, setName] = useState("");
@@ -14,19 +15,20 @@ const AddArtistScreen = ({ navigation }) => {
 	const isValidUrl = useValidUrl();
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const { container, label, input, errorText, placeholder } =
 		createStyles(theme);
 
 	const handleAddArtist = async () => {
 		const newErrors = {};
-		if (!name) newErrors.name = "Name is required";
+		if (!name) newErrors.name = t("nameRequired");
 		if (!imgUrl) {
-			newErrors.imgUrl = "Image URL is required";
+			newErrors.imgUrl = t("imgUrlRequired");
 		} else if (!isValidUrl(imgUrl)) {
-			newErrors.imgUrl = "Image URL must be a valid URL";
+			newErrors.imgUrl = t("imgUrlInvalid");
 		}
-		if (!bio) newErrors.bio = "Bio is required";
+		if (!bio) newErrors.bio = t("bioRequired");
 
 		if (Object.keys(newErrors).length > 0) {
 			setErrors(newErrors);
@@ -45,10 +47,7 @@ const AddArtistScreen = ({ navigation }) => {
 				return;
 			}
 
-			Alert.alert(
-				"Artist Added",
-				`The artist "${name}" has been added successfully.`
-			);
+			Alert.alert(t("artistAddedTitle"), t("artistAddedMessage", { name }));
 			navigation.goBack();
 		} catch (error) {
 			console.error("Error adding artist:", error.message);
@@ -58,39 +57,39 @@ const AddArtistScreen = ({ navigation }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label}>Name:*</Text>
+			<Text style={label}>{t("nameLabel")}:*</Text>
 			{errors.name && <Text style={errorText}>{errors.name}</Text>}
 			<TextInput
 				style={input}
 				value={name}
 				onChangeText={setName}
-				placeholder="Enter name"
-				placeholderTextColor={placeholder}
+				placeholder={t("namePlaceholder")}
+				placeholderTextColor={placeholder.color}
 			/>
 
-			<Text style={label}>Image URL:*</Text>
+			<Text style={label}>{t("imgUrlLabel")}:*</Text>
 			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
 			<TextInput
 				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
-				placeholder="Enter image URL"
-				placeholderTextColor={placeholder}
+				placeholder={t("imgUrlPlaceholder")}
+				placeholderTextColor={placeholder.color}
 			/>
 
-			<Text style={label}>Bio:*</Text>
+			<Text style={label}>{t("bioLabel")}:*</Text>
 			{errors.bio && <Text style={errorText}>{errors.bio}</Text>}
 			<TextInput
 				style={input}
 				value={bio}
 				onChangeText={setBio}
-				placeholder="Enter bio"
-				placeholderTextColor={placeholder}
+				placeholder={t("bioPlaceholder")}
+				placeholderTextColor={placeholder.color}
 			/>
 
 			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
 
-			<Button title="Add Artist" onPress={handleAddArtist} />
+			<Button title={t("addArtistButton")} onPress={handleAddArtist} />
 		</View>
 	);
 };

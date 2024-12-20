@@ -4,11 +4,13 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../context/ThemeContext";
 import { toggleAlbumFavorite } from "../../api/api_calls";
 import { Themes } from "../../styling/Themes";
+import { useTranslation } from "react-i18next";
 
 const AlbumRow = ({ album, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(album.favorite);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const {
 		container,
@@ -26,10 +28,10 @@ const AlbumRow = ({ album, navigation }) => {
 			if (response.success) {
 				setIsFavorited(response.isFavorited);
 			} else {
-				console.error("Failed to update favorite status.");
+				console.error(t("favoriteUpdateFailed"));
 			}
 		} catch (error) {
-			console.error("Failed to update favorite status:", error.message);
+			console.error(t("favoriteUpdateFailed"), error.message);
 		}
 	};
 
@@ -43,13 +45,13 @@ const AlbumRow = ({ album, navigation }) => {
 				}
 				style={albumRow}
 				accessibilityRole="button"
-				accessibilityLabel={`View details for album ${album.title}`}
+				accessibilityLabel={t("viewAlbumDetails", { title: album.title })}
 			>
 				<Image
 					source={{ uri: album.imgUrl }}
 					style={albumImage}
 					accessibilityRole="image"
-					accessibilityLabel={`Image of album ${album.title}`}
+					accessibilityLabel={t("albumImage", { title: album.title })}
 				/>
 				<View style={albumInfo}>
 					<Text style={albumTitle}>{album.title}</Text>
@@ -62,8 +64,8 @@ const AlbumRow = ({ album, navigation }) => {
 				accessibilityRole="button"
 				accessibilityLabel={
 					isFavorited
-						? `Remove ${album.title} from favorites`
-						: `Add ${album.title} to favorites`
+						? t("removeFromFavorites", { title: album.title })
+						: t("addToFavorites", { title: album.title })
 				}
 			>
 				<Ionicons

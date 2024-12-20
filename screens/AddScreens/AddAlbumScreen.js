@@ -4,6 +4,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { Themes } from "../../styling/Themes";
 import { addAlbum } from "../../api/api_calls";
 import useValidUrl from "../../hooks/useValidUrl";
+import { useTranslation } from "react-i18next";
 
 const AddAlbumScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;
@@ -15,22 +16,23 @@ const AddAlbumScreen = ({ navigation, route }) => {
 	const isValidUrl = useValidUrl();
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const { container, label, input, errorText, placeholder } =
 		createStyles(theme);
 
 	const handleAddAlbum = async () => {
 		const newErrors = {};
-		if (!title) newErrors.title = "Title is required";
+		if (!title) newErrors.title = t("titleRequired");
 		if (!imgUrl) {
-			newErrors.imgUrl = "Image URL is required";
+			newErrors.imgUrl = t("imgUrlRequired");
 		} else if (!isValidUrl(imgUrl)) {
-			newErrors.imgUrl = "Image URL must be a valid URL";
+			newErrors.imgUrl = t("imgUrlInvalid");
 		}
-		if (!releaseDate) newErrors.releaseDate = "Release date is required";
+		if (!releaseDate) newErrors.releaseDate = t("releaseDateRequired");
 
 		if (releaseDate && !/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
-			newErrors.releaseDate = "Release date must be in YYYY-MM-DD format";
+			newErrors.releaseDate = t("releaseDateInvalid");
 		}
 
 		if (Object.keys(newErrors).length > 0) {
@@ -50,10 +52,7 @@ const AddAlbumScreen = ({ navigation, route }) => {
 				return;
 			}
 
-			Alert.alert(
-				"Album Added",
-				`The album "${title}" has been added successfully.`
-			);
+			Alert.alert(t("albumAddedTitle"), t("albumAddedMessage", { title }));
 			navigation.goBack();
 		} catch (error) {
 			console.error("Error adding album:", error.message);
@@ -63,27 +62,27 @@ const AddAlbumScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label}>Title:*</Text>
+			<Text style={label}>{t("titleLabel")}:*</Text>
 			{errors.title && <Text style={errorText}>{errors.title}</Text>}
 			<TextInput
 				style={input}
 				value={title}
 				onChangeText={setTitle}
-				placeholder="Enter title"
+				placeholder={t("titlePlaceholder")}
 				placeholderTextColor={placeholder}
 			/>
 
-			<Text style={label}>Image URL:*</Text>
+			<Text style={label}>{t("imgUrlLabel")}:*</Text>
 			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
 			<TextInput
 				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
-				placeholder="Enter image URL"
+				placeholder={t("imgUrlPlaceholder")}
 				placeholderTextColor={placeholder}
 			/>
 
-			<Text style={label}>Release Date:*</Text>
+			<Text style={label}>{t("releaseDateLabel")}:*</Text>
 			{errors.releaseDate && (
 				<Text style={errorText}>{errors.releaseDate}</Text>
 			)}
@@ -91,13 +90,13 @@ const AddAlbumScreen = ({ navigation, route }) => {
 				style={input}
 				value={releaseDate}
 				onChangeText={setReleaseDate}
-				placeholder="Enter release date (YYYY-MM-DD)"
+				placeholder={t("releaseDatePlaceholder")}
 				placeholderTextColor={placeholder}
 			/>
 
 			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
 
-			<Button title="Add Album" onPress={handleAddAlbum} />
+			<Button title={t("addAlbumButton")} onPress={handleAddAlbum} />
 		</View>
 	);
 };

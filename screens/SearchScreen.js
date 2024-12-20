@@ -14,6 +14,7 @@ import { getArtists, getTracks } from "../api/api_calls";
 import { Themes } from "../styling/Themes";
 import { useTheme } from "../context/ThemeContext";
 import LoadingIndicator from "../components/Loading";
+import { useTranslation } from "react-i18next";
 
 const SearchScreen = ({ navigation }) => {
 	const [query, setQuery] = useState("");
@@ -24,6 +25,7 @@ const SearchScreen = ({ navigation }) => {
 	const [loading, setLoading] = useState(true);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const { container, input, scrollView, emptyResult, placeholder } =
 		createStyles(theme);
@@ -106,9 +108,9 @@ const SearchScreen = ({ navigation }) => {
 				style={input}
 				value={query}
 				onChangeText={handleSearch}
-				placeholder="Search artists and tracks"
+				placeholder={t("searchPlaceholder")}
 				placeholderTextColor={placeholder}
-				accessibilityLabel="Search artists and tracks"
+				accessibilityLabel={t("searchPlaceholder")}
 			/>
 			<View style={container}>
 				{loading ? (
@@ -123,13 +125,13 @@ const SearchScreen = ({ navigation }) => {
 							<Text
 								style={emptyResult}
 								accessibilityRole="alert"
-								accessibilityLabel="No results found"
+								accessibilityLabel={t("noResults")}
 							>
-								No results found
+								{t("noResults")}
 							</Text>
 						}
 						accessibilityRole="list"
-						accessibilityLabel="List of search results"
+						accessibilityLabel={t("searchResults")}
 					/>
 				)}
 			</View>

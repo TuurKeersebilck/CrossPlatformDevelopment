@@ -8,11 +8,13 @@ import TrackDetailScreen from "../../../screens/DetailScreens/TrackDetailScreen"
 import AlbumDetailScreen from "../../../screens/DetailScreens/AlbumDetailScreen";
 import AddAlbumScreen from "../../../screens/AddScreens/AddAlbumScreen";
 import AddTrackScreen from "../../../screens/AddScreens/AddTrackScreen";
+import { useTranslation } from "react-i18next";
 
 const Stack = createStackNavigator();
 
 const SettingStackNavigator = () => {
 	const { isDarkMode } = useTheme();
+	const { t } = useTranslation();
 
 	return (
 		<Stack.Navigator
@@ -39,9 +41,8 @@ const SettingStackNavigator = () => {
 			<Stack.Screen
 				name="SettingsScreen"
 				component={SettingsScreen}
-				options={{ title: "Settings" }}
+				options={{ title: t("settingsTitle") }}
 			/>
-
 			<Stack.Screen
 				name="AlbumDetailScreen"
 				component={AlbumDetailScreen}
@@ -50,12 +51,12 @@ const SettingStackNavigator = () => {
 			<Stack.Screen
 				name="AddTrackScreen"
 				component={AddTrackScreen}
-				options={{ title: "Add Track" }}
+				options={{ title: t("addTrackTitle") }}
 			/>
 			<Stack.Screen
-				name="AddAlbumScreenScreen"
+				name="AddAlbumScreen"
 				component={AddAlbumScreen}
-				options={{ title: "Add Album" }}
+				options={{ title: t("addAlbumTitle") }}
 			/>
 			<Stack.Screen
 				name="ArtistDetailScreen"
@@ -66,11 +67,6 @@ const SettingStackNavigator = () => {
 				name="TrackDetailScreen"
 				component={TrackDetailScreen}
 				options={({ route }) => ({ title: route.params.title })}
-			/>
-			<Stack.Screen
-				name="AddAlbumScreen"
-				component={AddAlbumScreen}
-				options={{ title: "Add Album" }}
 			/>
 		</Stack.Navigator>
 	);

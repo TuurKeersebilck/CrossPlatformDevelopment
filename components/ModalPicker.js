@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Themes } from "../styling/Themes";
+import { useTranslation } from "react-i18next";
 
 const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 	const { modalOverlay, modalContainer, modalTitle, modalItem, item } =
 		createStyles(theme);
 
@@ -24,7 +26,6 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
 			animationType="slide"
 			accessibilityViewIsModal={true}
 			accessibilityLabel={title}
-			w
 		>
 			<View style={modalOverlay}>
 				<View style={modalContainer}>
@@ -41,22 +42,18 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
 						renderItem={({ item }) => (
 							<TouchableOpacity
 								style={modalItem}
-								onPress={() => {
-									onSelect(item.id);
-									onClose();
-								}}
+								onPress={() => onSelect(item)}
 								accessibilityRole="button"
-								accessibilityLabel={`Select ${item.name || item.title}`}
+								accessibilityLabel={item.label}
 							>
-								<Text style={item}>{item.name || item.title}</Text>
+								<Text style={item}>{item.label}</Text>
 							</TouchableOpacity>
 						)}
 					/>
 					<Button
-						title="Close"
+						title={t("closeButton")}
 						onPress={onClose}
-						accessibilityRole="button"
-						accessibilityLabel="Close modal"
+						accessibilityLabel={t("closeButton")}
 					/>
 				</View>
 			</View>
@@ -68,21 +65,21 @@ const createStyles = (theme) =>
 	StyleSheet.create({
 		modalOverlay: {
 			flex: 1,
+			backgroundColor: "rgba(0, 0, 0, 0.5)",
 			justifyContent: "center",
 			alignItems: "center",
-			backgroundColor: "rgba(0, 0, 0, 0.5)",
 		},
 		modalContainer: {
 			width: "80%",
-			padding: 20,
-			borderRadius: 10,
 			backgroundColor: theme.background,
+			borderRadius: 10,
+			padding: 20,
 		},
 		modalTitle: {
 			fontSize: theme.fontSizes.large,
 			fontWeight: theme.fontWeights.bold,
-			marginBottom: 20,
 			color: theme.primaryText,
+			marginBottom: 20,
 		},
 		modalItem: {
 			paddingVertical: 10,

@@ -9,11 +9,13 @@ import AddTrackScreen from "../../../screens/AddScreens/AddTrackScreen";
 import AddAlbumScreen from "../../../screens/AddScreens/AddAlbumScreen";
 import { useTheme } from "../../../context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const Stack = createStackNavigator();
 
 const ArtistsStackNavigator = () => {
 	const { isDarkMode } = useTheme();
+	const { t } = useTranslation();
 
 	return (
 		<Stack.Navigator
@@ -38,9 +40,13 @@ const ArtistsStackNavigator = () => {
 			<Stack.Screen
 				name="ArtistsScreen"
 				component={ArtistsScreen}
-				options={{ title: "Artists" }}
+				options={{ title: t("artistsTitle") }}
 			/>
-
+			<Stack.Screen
+				name="AddArtistScreen"
+				component={AddArtistScreen}
+				options={{ title: t("addArtistTitle") }}
+			/>
 			<Stack.Screen
 				name="TrackDetailScreen"
 				component={TrackDetailScreen}
@@ -52,24 +58,19 @@ const ArtistsStackNavigator = () => {
 				options={({ route }) => ({ title: route.params.name })}
 			/>
 			<Stack.Screen
+				name="AlbumDetailScreen"
+				component={AlbumDetailScreen}
+				options={({ route }) => ({ title: route.params.album.title })}
+			/>
+			<Stack.Screen
 				name="AddTrackScreen"
 				component={AddTrackScreen}
-				options={{ title: "Add Track" }}
+				options={{ title: t("addTrackTitle") }}
 			/>
 			<Stack.Screen
 				name="AddAlbumScreen"
 				component={AddAlbumScreen}
-				options={{ title: "Add Album" }}
-			/>
-			<Stack.Screen
-				name="AlbumDetailScreen"
-				component={AlbumDetailScreen}
-				options={({ route }) => ({ title: route.params.title })}
-			/>
-			<Stack.Screen
-				name="AddArtistScreen"
-				component={AddArtistScreen}
-				options={{ title: "Add Artist" }}
+				options={{ title: t("addAlbumTitle") }}
 			/>
 		</Stack.Navigator>
 	);

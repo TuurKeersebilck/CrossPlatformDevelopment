@@ -13,6 +13,7 @@ import { Themes } from "../../styling/Themes";
 import { fetchArtistAlbums, addTrack } from "../../api/api_calls";
 import ModalPicker from "../../components/ModalPicker";
 import useValidUrl from "../../hooks/useValidUrl";
+import { useTranslation } from "react-i18next";
 
 const AddTrackScreen = ({ navigation, route }) => {
 	const { artistId } = route.params;
@@ -27,6 +28,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 	const isValidUrl = useValidUrl();
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const { container, label, input, pickerButton, errorText, placeholder } =
 		createStyles(theme);
@@ -46,16 +48,16 @@ const AddTrackScreen = ({ navigation, route }) => {
 
 	const handleAddTrack = async () => {
 		const newErrors = {};
-		if (!title) newErrors.title = "Title is required";
+		if (!title) newErrors.title = t("titleRequired");
 		if (!imgUrl) {
-			newErrors.imgUrl = "Image URL is required";
+			newErrors.imgUrl = t("imgUrlRequired");
 		} else if (!isValidUrl(imgUrl)) {
-			newErrors.imgUrl = "Image URL must be a valid URL";
+			newErrors.imgUrl = t("imgUrlInvalid");
 		}
 		if (!duration) {
-			newErrors.duration = "Duration is required";
+			newErrors.duration = t("durationRequired");
 		} else if (!/^\d{2}:\d{2}$/.test(duration)) {
-			newErrors.duration = "Duration must be in the format xx:xx";
+			newErrors.duration = t("durationInvalid");
 		}
 
 		if (Object.keys(newErrors).length > 0) {
@@ -81,10 +83,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				return;
 			}
 
-			Alert.alert(
-				"Track Added",
-				`The track "${title}" has been added successfully.`
-			);
+			Alert.alert(t("trackAddedTitle"), t("trackAddedMessage", { title }));
 			navigation.goBack();
 		} catch (error) {
 			console.error("Error adding track:", error.message);
@@ -105,39 +104,39 @@ const AddTrackScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label}>Title:*</Text>
+			<Text style={label}>{t("titleLabel")}:*</Text>
 			{errors.title && <Text style={errorText}>{errors.title}</Text>}
 			<TextInput
 				style={input}
 				value={title}
 				onChangeText={setTitle}
-				placeholder="Enter title"
+				placeholder={t("titlePlaceholder")}
 				placeholderTextColor={placeholder}
 			/>
 
-			<Text style={label}>Image URL:*</Text>
+			<Text style={label}>{t("imgUrlLabel")}:*</Text>
 			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
 			<TextInput
 				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
-				placeholder="Enter image URL"
+				placeholder={t("imgUrlPlaceholder")}
 				placeholderTextColor={placeholder}
 			/>
 
-			<Text style={label}>Duration:*</Text>
+			<Text style={label}>{t("durationLabel")}:*</Text>
 			{errors.duration && <Text style={errorText}>{errors.duration}</Text>}
 			<TextInput
 				style={input}
 				value={duration}
 				onChangeText={handleDurationChange}
-				placeholder="Enter duration (e.g., 03:45)"
+				placeholder={t("durationPlaceholder")}
 				placeholderTextColor={placeholder}
 				keyboardType="numeric"
 				maxLength={5}
 			/>
 
-			<Text style={label}>Select Album (optional):</Text>
+			<Text style={label}>{t("selectAlbum")}:</Text>
 			<TouchableOpacity
 				style={pickerButton}
 				onPress={() => setIsAlbumModalVisible(true)}
@@ -145,7 +144,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				<Text style={label}>
 					{selectedAlbum
 						? albums.find((a) => a.id === selectedAlbum)?.title
-						: "Select an album (optional)"}
+						: t("selectAlbum")}
 				</Text>
 			</TouchableOpacity>
 
@@ -154,12 +153,17 @@ const AddTrackScreen = ({ navigation, route }) => {
 				onClose={() => setIsAlbumModalVisible(false)}
 				items={albums}
 				onSelect={setSelectedAlbum}
-				title="Select Album"
+				title={t("selectAlbum")}
 			/>
 
 			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
 
-			<Button title="Add Track" onPress={handleAddTrack} />
+			<Button
+				title={t("addTrackButton")}
+				onPress={handleAddTrack}
+				color={theme.buttonBackground}
+				accessibilityLabel={t("addTrackButton")}
+			/>
 		</View>
 	);
 };

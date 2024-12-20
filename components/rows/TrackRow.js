@@ -8,14 +8,16 @@ import {
 	Dimensions,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useTheme } from "../../context/ThemeContext";
 import { toggleTrackFavorite } from "../../api/api_calls";
 import { Themes } from "../../styling/Themes";
+import { useTheme } from "../../context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const TrackRow = ({ track, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(track.favorite);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { t } = useTranslation();
 
 	const {
 		container,
@@ -38,7 +40,7 @@ const TrackRow = ({ track, navigation }) => {
 				setIsFavorited(response.isFavorited);
 			}
 		} catch (error) {
-			console.error("Failed to update favorite status:", error.message);
+			console.error(t("favoriteUpdateFailed"), error.message);
 		}
 	};
 
@@ -56,64 +58,38 @@ const TrackRow = ({ track, navigation }) => {
 				}
 				style={trackRow}
 				accessibilityRole="button"
-				accessibilityLabel={`View details for track ${track.title}`}
+				accessibilityLabel={t("viewTrackDetails", { title: track.title })}
 			>
 				<Image
 					source={{ uri: track.imgUrl }}
 					style={trackImage}
 					accessibilityRole="image"
-					accessibilityLabel={`Image of track ${track.title}`}
+					accessibilityLabel={t("trackImage", { title: track.title })}
 				/>
 				<View style={trackInfo}>
-					<Text
-						style={trackTitle}
-						accessibilityRole="header"
-						accessibilityLabel={`Track title: ${track.title}`}
-					>
-						{track.title}
-					</Text>
-					<Text
-						style={artistName}
-						accessibilityLabel={`Artist name: ${track.artistName}`}
-					>
-						{track.artistName}
-					</Text>
-				</View>
-
-				<View style={trackAlbum}>
-					<Text
-						style={albumTitle}
-						accessibilityLabel={`Album title: ${track.albumTitle}`}
-					>
-						{track.albumTitle}
-					</Text>
-				</View>
-				{!isMobile && (
+					<Text style={trackTitle}>{track.title}</Text>
+					<Text style={artistName}>{track.artistName}</Text>
 					<View style={trackDurationContainer}>
-						<Text
-							style={trackDuration}
-							accessibilityLabel={`Track duration: ${track.duration}`}
-						>
-							{track.duration}
-						</Text>
+						<Text style={trackDuration}>{track.duration}</Text>
+						<Text style={albumTitle}>{track.albumTitle}</Text>
 					</View>
-				)}
-			</TouchableOpacity>
-			<TouchableOpacity
-				onPress={toggleFavorite}
-				style={favoriteButton}
-				accessibilityRole="button"
-				accessibilityLabel={
-					isFavorited
-						? `Remove ${track.title} from favorites`
-						: `Add ${track.title} to favorites`
-				}
-			>
-				<Ionicons
-					name={isFavorited ? "heart" : "heart-outline"}
-					size={24}
-					color={theme.accent}
-				/>
+				</View>
+				<TouchableOpacity
+					onPress={toggleFavorite}
+					style={favoriteButton}
+					accessibilityRole="button"
+					accessibilityLabel={
+						isFavorited
+							? t("removeFromFavorites", { title: track.title })
+							: t("addToFavorites", { title: track.title })
+					}
+				>
+					<Ionicons
+						name={isFavorited ? "heart" : "heart-outline"}
+						size={30}
+						color={theme.accent}
+					/>
+				</TouchableOpacity>
 			</TouchableOpacity>
 		</View>
 	);
@@ -122,28 +98,24 @@ const TrackRow = ({ track, navigation }) => {
 const createStyles = (theme) =>
 	StyleSheet.create({
 		container: {
-			flexDirection: "row",
-			alignItems: "center",
-			borderRadius: 8,
-			marginVertical: 4,
-			marginHorizontal: 8,
+			flex: 1,
+			padding: 10,
+			backgroundColor: theme.background,
 		},
 		trackRow: {
-			flex: 1,
 			flexDirection: "row",
 			alignItems: "center",
-			padding: 12,
-			borderRadius: 8,
+			padding: 10,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.border,
 		},
 		trackImage: {
-			width: 60,
-			height: 60,
-			borderRadius: 8,
-			marginRight: 12,
+			width: 50,
+			height: 50,
+			marginRight: 10,
 		},
 		trackInfo: {
 			flex: 1,
-			justifyContent: "center",
 		},
 		trackTitle: {
 			fontSize: theme.fontSizes.medium,
@@ -152,14 +124,14 @@ const createStyles = (theme) =>
 		},
 		artistName: {
 			fontSize: theme.fontSizes.small,
-			marginTop: 4,
 			color: theme.secondaryText,
 		},
 		favoriteButton: {
-			marginLeft: 10,
+			padding: 10,
 		},
 		trackDurationContainer: {
-			marginLeft: 10,
+			flexDirection: "row",
+			justifyContent: "space-between",
 		},
 		trackDuration: {
 			fontSize: theme.fontSizes.small,
@@ -168,10 +140,6 @@ const createStyles = (theme) =>
 		albumTitle: {
 			fontSize: theme.fontSizes.small,
 			color: theme.secondaryText,
-		},
-		trackAlbum: {
-			marginLeft: "auto",
-			justifyContent: "center",
 		},
 	});
 

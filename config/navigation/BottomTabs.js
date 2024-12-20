@@ -1,16 +1,17 @@
 import React from "react";
 import ArtistsStackNavigator from "./stacks/ArtistsStackNavigator";
-import SettingsScreen from "../../screens/SettingsScreen";
+import SettingsStackNavigator from "./stacks/SettingStackNavigator";
 import SearchStackNavigator from "./stacks/SearchStackNavigator";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "../../context/ThemeContext";
-import SettingsStackNavigator from "./stacks/SettingStackNavigator";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabs = () => {
 	const { isDarkMode } = useTheme();
+	const { t } = useTranslation();
 
 	return (
 		<Tab.Navigator
@@ -37,23 +38,34 @@ const BottomTabs = () => {
 					backgroundColor: isDarkMode ? "black" : "white",
 				},
 				headerTintColor: isDarkMode ? "white" : "black",
-				tabBarAccessibilityLabel: route.name,
 			})}
 		>
 			<Tab.Screen
 				name="Artists"
 				component={ArtistsStackNavigator}
-				options={{ headerShown: false, tabBarAccessibilityLabel: "Artists" }}
+				options={{
+					headerShown: false,
+					tabBarLabel: t("artistsTab"),
+					tabBarAccessibilityLabel: t("artistsTab"),
+				}}
 			/>
 			<Tab.Screen
 				name="Search"
 				component={SearchStackNavigator}
-				options={{ headerShown: false, tabBarAccessibilityLabel: "Search" }}
+				options={{
+					headerShown: false,
+					tabBarLabel: t("searchTab"),
+					tabBarAccessibilityLabel: t("searchTab"),
+				}}
 			/>
 			<Tab.Screen
 				name="Settings"
 				component={SettingsStackNavigator}
-				options={{ headerShown: false, tabBarAccessibilityLabel: "Settings" }}
+				options={{
+					headerShown: false,
+					tabBarLabel: t("settingsTab"),
+					tabBarAccessibilityLabel: t("settingsTab"),
+				}}
 			/>
 		</Tab.Navigator>
 	);
