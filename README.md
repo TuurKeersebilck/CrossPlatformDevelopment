@@ -45,3 +45,5 @@ const useValidUrl = () => {
 
 export default useValidUrl;
 ```
+
+Kan je en.json volledig vertalen -> nl.json
