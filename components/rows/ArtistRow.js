@@ -67,7 +67,7 @@ const createStyles = (theme) =>
 		artistImage: {
 			width: 60,
 			height: 60,
-			borderRadius: 30,
+			borderRadius: 10,
 		},
 		artistName: {
 			fontSize: theme.fontSizes.medium,
