@@ -115,7 +115,7 @@ const createStyles = (theme) =>
 			color: theme.secondaryText,
 		},
 		favoriteButton: {
-			marginLeft: 10,
+			padding: 10,
 		},
 	});
 

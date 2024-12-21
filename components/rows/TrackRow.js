@@ -82,7 +82,7 @@ const TrackRow = ({ track, navigation }) => {
 			>
 				<Ionicons
 					name={isFavorited ? "heart" : "heart-outline"}
-					size={30}
+					size={24}
 					color={theme.accent}
 				/>
 			</TouchableOpacity>
@@ -108,11 +108,12 @@ const createStyles = (theme) =>
 		trackImage: {
 			width: 50,
 			height: 50,
-			marginRight: 10,
+			marginRight: 12,
 			borderRadius: 8,
 		},
 		trackInfo: {
 			flex: 1,
+			justifyContent: "center",
 		},
 		trackTitle: {
 			fontSize: theme.fontSizes.medium,
