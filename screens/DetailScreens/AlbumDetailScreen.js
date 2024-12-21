@@ -20,7 +20,6 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 		container,
 		albumImage,
 		albumTitle,
-		albumArtist,
 		releaseDate,
 		trackList,
 		errorText,
@@ -48,7 +47,9 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 	if (error) {
 		return (
 			<View style={container}>
-				<Text style={errorText}>{error}</Text>
+				<Text style={errorText} accessibilityRole="alert">
+					{error}
+				</Text>
 			</View>
 		);
 	}
@@ -69,12 +70,6 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 				{album.title}
 			</Text>
 			<Text
-				style={albumArtist}
-				accessibilityLabel={t("albumArtist", { artist: album.artistName })}
-			>
-				{album.artistName}
-			</Text>
-			<Text
 				style={releaseDate}
 				accessibilityLabel={t("releaseDate", {
 					date: new Date(album.releaseDate).toLocaleDateString(),
@@ -91,6 +86,7 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 						navigation={navigation}
 						accessibilityRole="button"
 						accessibilityLabel={`${t("track")}: ${item.title}`}
+						accessibilityHint={t("navigateToTrackDetails")}
 					/>
 				)}
 				contentContainerStyle={trackList}
@@ -120,12 +116,6 @@ const createStyles = (theme) =>
 			textAlign: "center",
 			marginBottom: 8,
 			color: theme.primaryText,
-		},
-		albumArtist: {
-			fontSize: theme.fontSizes.large,
-			textAlign: "center",
-			marginBottom: 8,
-			color: theme.secondaryText,
 		},
 		releaseDate: {
 			fontSize: theme.fontSizes.medium,

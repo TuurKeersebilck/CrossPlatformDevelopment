@@ -50,15 +50,20 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
 								}}
 								accessibilityRole="button"
 								accessibilityLabel={item.title}
+								accessibilityHint={t("selectItem")}
 							>
 								<Text style={item}>{item.title}</Text>
 							</TouchableOpacity>
 						)}
+						accessibilityRole="list"
+						accessibilityLabel={t("itemList")}
 					/>
 					<Button
 						title={t("closeButton")}
 						onPress={onClose}
+						color={currentTheme.buttonBackground}
 						accessibilityLabel={t("closeButton")}
+						accessibilityHint={t("closeModal")}
 					/>
 				</View>
 			</View>

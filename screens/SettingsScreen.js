@@ -25,7 +25,7 @@ import i18n from "../config/i18n";
 
 const SettingsScreen = ({ navigation }) => {
 	const { theme, toggleTheme } = useTheme();
-	const currentTheme = Themes[theme]; 
+	const currentTheme = Themes[theme];
 
 	const { t } = useTranslation();
 	const [language, setLanguage] = useState(i18n.language);
@@ -156,6 +156,8 @@ const SettingsScreen = ({ navigation }) => {
 						style={pickerStyle}
 						containerStyle={{ height: 40 }}
 						dropDownStyle={{ backgroundColor: currentTheme.background }}
+						accessibilityLabel={t("languagePicker")}
+						accessibilityHint={t("languagePickerHint")}
 					/>
 				</View>
 
@@ -183,6 +185,8 @@ const SettingsScreen = ({ navigation }) => {
 						renderItem={({ item }) =>
 							renderFavoriteSection(item.title, item.data, item.type)
 						}
+						accessibilityLabel={t("libraryList")}
+						accessibilityHint={t("libraryListHint")}
 					/>
 				</View>
 			</View>
@@ -236,9 +240,8 @@ const createStyles = (theme) =>
 		},
 		favoriteSection: {
 			backgroundColor: theme.surface,
-			marginBottom: 16,
-			padding: 16,
 			borderRadius: 12,
+			paddingHorizontal: 10,
 		},
 		sectionHeader: {
 			flexDirection: "row",

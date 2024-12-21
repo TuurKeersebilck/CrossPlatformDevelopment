@@ -63,41 +63,70 @@ const AddAlbumScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label}>{t("titleLabel")}:*</Text>
-			{errors.title && <Text style={errorText}>{errors.title}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("titleLabel")}:*
+			</Text>
+			{errors.title && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.title}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={title}
 				onChangeText={setTitle}
 				placeholder={t("titlePlaceholder")}
-				placeholderTextColor={placeholder}
+				placeholderTextColor={placeholder.color}
+				accessibilityLabel={t("titlePlaceholder")}
 			/>
 
-			<Text style={label}>{t("imgUrlLabel")}:*</Text>
-			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("imgUrlLabel")}:*
+			</Text>
+			{errors.imgUrl && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.imgUrl}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
 				placeholder={t("imgUrlPlaceholder")}
-				placeholderTextColor={placeholder}
+				placeholderTextColor={placeholder.color}
+				accessibilityLabel={t("imgUrlPlaceholder")}
 			/>
 
-			<Text style={label}>{t("releaseDateLabel")}:*</Text>
+			<Text style={label} accessibilityRole="label">
+				{t("releaseDateLabel")}:*
+			</Text>
 			{errors.releaseDate && (
-				<Text style={errorText}>{errors.releaseDate}</Text>
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.releaseDate}
+				</Text>
 			)}
 			<TextInput
 				style={input}
 				value={releaseDate}
 				onChangeText={setReleaseDate}
 				placeholder={t("releaseDatePlaceholder")}
-				placeholderTextColor={placeholder}
+				placeholderTextColor={placeholder.color}
+				accessibilityLabel={t("releaseDatePlaceholder")}
 			/>
 
-			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
+			{errorMessage ? (
+				<Text style={errorText} accessibilityRole="alert">
+					{errorMessage}
+				</Text>
+			) : null}
 
-			<Button title={t("addAlbumButton")} onPress={handleAddAlbum} />
+			<Button
+				title={t("addAlbumButton")}
+				onPress={handleAddAlbum}
+				color={theme.buttonBackground}
+				accessibilityLabel={t("addAlbumButton")}
+				accessibilityHint={t("addAlbumButtonHint")}
+			/>
 		</View>
 	);
 };

@@ -30,7 +30,6 @@ const TrackRow = ({ track, navigation }) => {
 		favoriteButton,
 		trackDurationContainer,
 		trackDuration,
-		albumTitle,
 	} = createStyles(currentTheme);
 
 	const toggleFavorite = async () => {
@@ -107,8 +106,8 @@ const createStyles = (theme) =>
 			borderRadius: 8,
 		},
 		trackImage: {
-			width: 50,
-			height: 50,
+			width: 60,
+			height: 60,
 			marginRight: 12,
 			borderRadius: 8,
 		},
@@ -133,10 +132,6 @@ const createStyles = (theme) =>
 			justifyContent: "space-between",
 		},
 		trackDuration: {
-			fontSize: theme.fontSizes.small,
-			color: theme.secondaryText,
-		},
-		albumTitle: {
 			fontSize: theme.fontSizes.small,
 			color: theme.secondaryText,
 		},

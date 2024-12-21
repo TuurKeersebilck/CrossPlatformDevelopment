@@ -105,8 +105,16 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	};
 
 	return (
-		<View style={container}>
-			{error && <Text style={errorText}>{error}</Text>}
+		<View
+			style={container}
+			accessibilityRole="main"
+			accessibilityLabel={t("artistDetailScreen")}
+		>
+			{error && (
+				<Text style={errorText} accessibilityRole="alert">
+					{error}
+				</Text>
+			)}
 			<SectionList
 				sections={sections}
 				keyExtractor={(item) => item.id}

@@ -128,6 +128,7 @@ const SearchScreen = ({ navigation }) => {
 		<KeyboardAvoidingView
 			style={container}
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			accessibilityRole="form"
 		>
 			<TextInput
 				style={input}
@@ -136,6 +137,7 @@ const SearchScreen = ({ navigation }) => {
 				placeholder={t("searchPlaceholder")}
 				placeholderTextColor={placeholder}
 				accessibilityLabel={t("searchPlaceholder")}
+				accessibilityHint={t("searchHint")}
 			/>
 			<View style={container}>
 				{loading ? (

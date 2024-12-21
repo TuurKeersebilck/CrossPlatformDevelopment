@@ -58,39 +58,70 @@ const AddArtistScreen = ({ navigation }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label}>{t("nameLabel")}:*</Text>
-			{errors.name && <Text style={errorText}>{errors.name}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("nameLabel")}:*
+			</Text>
+			{errors.name && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.name}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={name}
 				onChangeText={setName}
 				placeholder={t("namePlaceholder")}
 				placeholderTextColor={placeholder.color}
+				accessibilityLabel={t("namePlaceholder")}
 			/>
 
-			<Text style={label}>{t("imgUrlLabel")}:*</Text>
-			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("imgUrlLabel")}:*
+			</Text>
+			{errors.imgUrl && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.imgUrl}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
 				placeholder={t("imgUrlPlaceholder")}
 				placeholderTextColor={placeholder.color}
+				accessibilityLabel={t("imgUrlPlaceholder")}
 			/>
 
-			<Text style={label}>{t("bioLabel")}:*</Text>
-			{errors.bio && <Text style={errorText}>{errors.bio}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("bioLabel")}:*
+			</Text>
+			{errors.bio && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.bio}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={bio}
 				onChangeText={setBio}
 				placeholder={t("bioPlaceholder")}
 				placeholderTextColor={placeholder.color}
+				accessibilityLabel={t("bioPlaceholder")}
 			/>
 
-			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
+			{errorMessage ? (
+				<Text style={errorText} accessibilityRole="alert">
+					{errorMessage}
+				</Text>
+			) : null}
 
-			<Button title={t("addArtistButton")} onPress={handleAddArtist} />
+			<Button
+				title={t("addArtistButton")}
+				onPress={handleAddArtist}
+				color={theme.buttonBackground}
+				accessibilityLabel={t("addArtistButton")}
+				accessibilityHint={t("addArtistButtonHint")}
+			/>
 		</View>
 	);
 };

@@ -45,7 +45,7 @@ const TrackDetailScreen = ({ route, navigation }) => {
 
 	if (error) {
 		return (
-			<View style={container}>
+			<View style={container} accessibilityRole="alert">
 				<Text style={errorText}>Error: {error}</Text>
 			</View>
 		);

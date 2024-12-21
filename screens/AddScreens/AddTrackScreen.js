@@ -104,28 +104,48 @@ const AddTrackScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label}>{t("titleLabel")}:*</Text>
-			{errors.title && <Text style={errorText}>{errors.title}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("titleLabel")}:*
+			</Text>
+			{errors.title && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.title}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={title}
 				onChangeText={setTitle}
 				placeholder={t("titlePlaceholder")}
 				placeholderTextColor={placeholder}
+				accessibilityLabel={t("titlePlaceholder")}
 			/>
 
-			<Text style={label}>{t("imgUrlLabel")}:*</Text>
-			{errors.imgUrl && <Text style={errorText}>{errors.imgUrl}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("imgUrlLabel")}:*
+			</Text>
+			{errors.imgUrl && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.imgUrl}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={imgUrl}
 				onChangeText={setImgUrl}
 				placeholder={t("imgUrlPlaceholder")}
 				placeholderTextColor={placeholder}
+				accessibilityLabel={t("imgUrlPlaceholder")}
 			/>
 
-			<Text style={label}>{t("durationLabel")}:*</Text>
-			{errors.duration && <Text style={errorText}>{errors.duration}</Text>}
+			<Text style={label} accessibilityRole="label">
+				{t("durationLabel")}:*
+			</Text>
+			{errors.duration && (
+				<Text style={errorText} accessibilityRole="alert">
+					{errors.duration}
+				</Text>
+			)}
 			<TextInput
 				style={input}
 				value={duration}
@@ -134,12 +154,18 @@ const AddTrackScreen = ({ navigation, route }) => {
 				placeholderTextColor={placeholder}
 				keyboardType="numeric"
 				maxLength={5}
+				accessibilityLabel={t("durationPlaceholder")}
 			/>
 
-			<Text style={label}>{t("selectAlbum")}:</Text>
+			<Text style={label} accessibilityRole="label">
+				{t("selectAlbum")}:
+			</Text>
 			<TouchableOpacity
 				style={pickerButton}
 				onPress={() => setIsAlbumModalVisible(true)}
+				accessibilityRole="button"
+				accessibilityLabel={t("selectAlbum")}
+				accessibilityHint={t("openAlbumPicker")}
 			>
 				<Text style={label}>
 					{selectedAlbum ? selectedAlbum.title : t("selectAlbum")}
@@ -152,15 +178,21 @@ const AddTrackScreen = ({ navigation, route }) => {
 				items={albums}
 				onSelect={(album) => setSelectedAlbum(album)}
 				title={t("selectAlbum")}
+				accessibilityLabel={t("albumPicker")}
 			/>
 
-			{errorMessage ? <Text style={errorText}>{errorMessage}</Text> : null}
+			{errorMessage ? (
+				<Text style={errorText} accessibilityRole="alert">
+					{errorMessage}
+				</Text>
+			) : null}
 
 			<Button
 				title={t("addTrackButton")}
 				onPress={handleAddTrack}
 				color={theme.buttonBackground}
 				accessibilityLabel={t("addTrackButton")}
+				accessibilityHint={t("addTrackButtonHint")}
 			/>
 		</View>
 	);
