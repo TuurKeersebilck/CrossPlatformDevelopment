@@ -12,10 +12,10 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 	const [tracks, setTracks] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
 
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 	const {
 		container,
 		albumImage,
@@ -24,7 +24,7 @@ const AlbumDetailScreen = ({ route, navigation }) => {
 		releaseDate,
 		trackList,
 		errorText,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	useEffect(() => {
 		const fetchTracks = async () => {

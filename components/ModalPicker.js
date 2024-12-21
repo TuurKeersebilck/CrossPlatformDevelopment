@@ -13,12 +13,14 @@ import { Themes } from "../styling/Themes";
 import { useTranslation } from "react-i18next";
 
 const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
+
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
+
 	const { modalOverlay, modalContainer, modalTitle, modalItem, item } =
-		createStyles(theme);
-		
+		createStyles(currentTheme);
+
 	return (
 		<Modal
 			transparent={true}

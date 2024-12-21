@@ -8,9 +8,10 @@ import { useTranslation } from "react-i18next";
 
 const AlbumRow = ({ album, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(album.favorite);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
+
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 
 	const {
 		container,
@@ -20,7 +21,7 @@ const AlbumRow = ({ album, navigation }) => {
 		albumTitle,
 		albumArtist,
 		favoriteButton,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	const toggleFavorite = async () => {
 		try {
@@ -71,7 +72,7 @@ const AlbumRow = ({ album, navigation }) => {
 				<Ionicons
 					name={isFavorited ? "heart" : "heart-outline"}
 					size={24}
-					color={theme.accent}
+					color={currentTheme.accent}
 				/>
 			</TouchableOpacity>
 		</View>

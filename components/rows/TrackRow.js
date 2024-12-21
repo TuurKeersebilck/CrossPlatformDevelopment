@@ -15,9 +15,10 @@ import { useTranslation } from "react-i18next";
 
 const TrackRow = ({ track, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(track.favorite);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
+
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 
 	const {
 		container,
@@ -30,7 +31,7 @@ const TrackRow = ({ track, navigation }) => {
 		trackDurationContainer,
 		trackDuration,
 		albumTitle,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	const toggleFavorite = async () => {
 		try {
@@ -83,7 +84,7 @@ const TrackRow = ({ track, navigation }) => {
 				<Ionicons
 					name={isFavorited ? "heart" : "heart-outline"}
 					size={24}
-					color={theme.accent}
+					color={currentTheme.accent}
 				/>
 			</TouchableOpacity>
 		</View>

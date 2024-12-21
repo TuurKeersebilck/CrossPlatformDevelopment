@@ -13,12 +13,13 @@ const AddArtistScreen = ({ navigation }) => {
 	const [errors, setErrors] = useState({});
 	const [errorMessage, setErrorMessage] = useState("");
 	const isValidUrl = useValidUrl();
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
 
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
+
 	const { container, label, input, errorText, placeholder } =
-		createStyles(theme);
+		createStyles(currentTheme);
 
 	const handleAddArtist = async () => {
 		const newErrors = {};

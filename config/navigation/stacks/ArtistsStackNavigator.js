@@ -8,13 +8,15 @@ import AlbumDetailScreen from "../../../screens/DetailScreens/AlbumDetailScreen"
 import AddTrackScreen from "../../../screens/AddScreens/AddTrackScreen";
 import AddAlbumScreen from "../../../screens/AddScreens/AddAlbumScreen";
 import { useTheme } from "../../../context/ThemeContext";
+import { Themes } from "../../../styling/Themes";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
 const Stack = createStackNavigator();
 
 const ArtistsStackNavigator = () => {
-	const { isDarkMode } = useTheme();
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 	const { t } = useTranslation();
 
 	return (
@@ -22,18 +24,14 @@ const ArtistsStackNavigator = () => {
 			initialRouteName="ArtistsScreen"
 			screenOptions={{
 				headerStyle: {
-					backgroundColor: isDarkMode ? "black" : "white",
+					backgroundColor: currentTheme.background,
 				},
-				headerTintColor: isDarkMode ? "white" : "black",
+				headerTintColor: currentTheme.primaryText,
 				headerBackTitleStyle: {
-					color: isDarkMode ? "tomato" : "blue",
+					color: currentTheme.primaryText,
 				},
 				headerBackImage: () => (
-					<Ionicons
-						name="arrow-back"
-						size={24}
-						color={isDarkMode ? "tomato" : "blue"}
-					/>
+					<Ionicons name="arrow-back" size={24} color={currentTheme.accent} />
 				),
 			}}
 		>
@@ -42,11 +40,7 @@ const ArtistsStackNavigator = () => {
 				component={ArtistsScreen}
 				options={{ title: t("artistsTitle") }}
 			/>
-			<Stack.Screen
-				name="AddArtistScreen"
-				component={AddArtistScreen}
-				options={{ title: t("addArtistTitle") }}
-			/>
+
 			<Stack.Screen
 				name="TrackDetailScreen"
 				component={TrackDetailScreen}
@@ -61,6 +55,11 @@ const ArtistsStackNavigator = () => {
 				name="AlbumDetailScreen"
 				component={AlbumDetailScreen}
 				options={({ route }) => ({ title: route.params.album.title })}
+			/>
+			<Stack.Screen
+				name="AddArtistScreen"
+				component={AddArtistScreen}
+				options={{ title: t("addArtistTitle") }}
 			/>
 			<Stack.Screen
 				name="AddTrackScreen"

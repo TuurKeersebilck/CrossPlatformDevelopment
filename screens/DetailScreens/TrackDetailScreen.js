@@ -11,10 +11,10 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	const [track, setTrack] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
 
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 	useEffect(() => {
 		const getTrackDetails = async () => {
 			try {
@@ -37,7 +37,7 @@ const TrackDetailScreen = ({ route, navigation }) => {
 		trackArtist,
 		errorText,
 		trackDuration,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	if (loading) {
 		return <LoadingIndicator />;
@@ -76,13 +76,17 @@ const TrackDetailScreen = ({ route, navigation }) => {
 							})
 						}
 						accessibilityRole="button"
-						accessibilityLabel={t("viewArtistDetails", { name: track.artistName })}
+						accessibilityLabel={t("viewArtistDetails", {
+							name: track.artistName,
+						})}
 					>
 						<Text style={trackArtist}>{track.artistName}</Text>
 					</TouchableOpacity>
 					<Text
 						style={trackDuration}
-						accessibilityLabel={t("trackDuration", { duration: track.duration })}
+						accessibilityLabel={t("trackDuration", {
+							duration: track.duration,
+						})}
 					>
 						{track.duration}
 					</Text>

@@ -16,9 +16,10 @@ import { useTranslation } from "react-i18next";
 const ArtistHeader = ({ artist, navigation }) => {
 	const [isFavorited, setIsFavorited] = useState(artist.favorite);
 	const [error, setError] = useState(null);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
+
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 
 	const {
 		header,
@@ -28,7 +29,7 @@ const ArtistHeader = ({ artist, navigation }) => {
 		favoriteButton,
 		buttonContainer,
 		errorText,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	const toggleFavorite = async () => {
 		try {
@@ -79,7 +80,7 @@ const ArtistHeader = ({ artist, navigation }) => {
 						<Ionicons
 							name={isFavorited ? "heart" : "heart-outline"}
 							size={30}
-							color={theme.accent}
+							color={currentTheme.accent}
 						/>
 					</TouchableOpacity>
 					<View style={buttonContainer}>

@@ -11,11 +11,11 @@ import { useTranslation } from "react-i18next";
 const ArtistsScreen = ({ navigation }) => {
 	const [artists, setArtists] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 
-	const { container, scrollView, centered, empty } = createStyles(theme);
+	const { container, scrollView, centered, empty } = createStyles(currentTheme);
 
 	const fetchArtists = async () => {
 		try {

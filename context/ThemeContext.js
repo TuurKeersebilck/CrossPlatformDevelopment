@@ -1,33 +1,37 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { StatusBar } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Themes } from "../styling/Themes";
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-	const [isDarkMode, setIsDarkMode] = useState(false);
+	const [theme, setTheme] = useState("light");
 
 	useEffect(() => {
 		const loadTheme = async () => {
 			const savedTheme = await AsyncStorage.getItem("theme");
 			if (savedTheme !== null) {
-				setIsDarkMode(savedTheme === "dark");
+				setTheme(savedTheme);
 			}
 		};
 		loadTheme();
 	}, []);
 
 	const toggleTheme = async () => {
-		const newTheme = !isDarkMode;
-		setIsDarkMode(newTheme);
-		await AsyncStorage.setItem("theme", newTheme ? "dark" : "light");
+		const themeKeys = Object.keys(Themes);
+		const currentIndex = themeKeys.indexOf(theme);
+		const nextIndex = (currentIndex + 1) % themeKeys.length;
+		const newTheme = themeKeys[nextIndex];
+		setTheme(newTheme);
+		await AsyncStorage.setItem("theme", newTheme);
 	};
 
 	return (
-		<ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+		<ThemeContext.Provider value={{ theme, toggleTheme }}>
 			<StatusBar
-				barStyle={isDarkMode ? "light-content" : "dark-content"}
-				backgroundColor={isDarkMode ? "#000000" : "#FFFFFF"}
+				barStyle={theme === "dark" ? "light-content" : "dark-content"}
+				backgroundColor={Themes[theme].background}
 			/>
 			{children}
 		</ThemeContext.Provider>

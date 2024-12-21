@@ -39,4 +39,24 @@ export const Themes = {
 			bold: "700",
 		},
 	},
+	pastel: {
+		background: "#FFF8E7", // Warmer and softer background
+		primaryText: "#3A3A3A", // Slightly darker for better contrast
+		secondaryText: "#6E6E6E", // Subtle contrast
+		accent: "#FF85A1", // Brighter pastel pink
+		border: "#FFD4D1", // Softer border to match the palette
+		headerBackground: "#FFE4E1", // Warmer header background
+		linkText: "#5CA4E8", // More vibrant link color
+		errorText: "#FF867C", // Brighter error text
+		fontSizes: {
+			small: 12,
+			medium: 14,
+			large: 18,
+			xlarge: 22,
+		},
+		fontWeights: {
+			normal: "400",
+			bold: "700",
+		},
+	},
 };

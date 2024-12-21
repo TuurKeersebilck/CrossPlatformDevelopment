@@ -5,9 +5,10 @@ import { Themes } from "../../styling/Themes";
 import { useTranslation } from "react-i18next";
 
 const ArtistRow = ({ artist, navigation }) => {
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
+
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 
 	const {
 		container,
@@ -16,7 +17,7 @@ const ArtistRow = ({ artist, navigation }) => {
 		artistImage,
 		artistName,
 		artistBio,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	return (
 		<TouchableOpacity

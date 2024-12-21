@@ -24,8 +24,9 @@ import { useTranslation } from "react-i18next";
 import i18n from "../config/i18n";
 
 const SettingsScreen = ({ navigation }) => {
-	const { isDarkMode, toggleTheme } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
+	const { theme, toggleTheme } = useTheme(); // Use the useTheme hook to get the current theme and toggleTheme function
+	const currentTheme = Themes[theme]; // Get the current theme styles
+
 	const { t } = useTranslation();
 	const [language, setLanguage] = useState(i18n.language);
 	const [open, setOpen] = useState(false);
@@ -53,7 +54,7 @@ const SettingsScreen = ({ navigation }) => {
 		libraryTitle,
 		languageSection,
 		pickerStyle,
-	} = createStyles(theme);
+	} = createStyles(currentTheme);
 
 	const [favoriteArtists, setFavoriteArtists] = useState([]);
 	const [favoriteTracks, setFavoriteTracks] = useState([]);
@@ -109,6 +110,19 @@ const SettingsScreen = ({ navigation }) => {
 		</View>
 	);
 
+	const getIconName = (theme) => {
+		switch (theme) {
+			case "light":
+				return "sunny";
+			case "dark":
+				return "moon";
+			case "pastel":
+				return "color-palette";
+			default:
+				return "sunny";
+		}
+	};
+
 	return (
 		<SafeAreaView style={container} accessibilityRole="main">
 			<View style={contentContainer}>
@@ -118,15 +132,13 @@ const SettingsScreen = ({ navigation }) => {
 						onPress={toggleTheme}
 						style={headerIconButton}
 						accessibilityRole="button"
-						accessibilityLabel={`Toggle dark mode, currently ${
-							isDarkMode ? "enabled" : "disabled"
-						}`}
-						accessibilityHint="Double tap to toggle dark mode"
+						accessibilityLabel={`Toggle theme, currently ${theme}`}
+						accessibilityHint="Double tap to toggle theme"
 					>
 						<Icon
-							name={isDarkMode ? "sunny" : "moon"}
+							name={getIconName(theme)} // Adjust icon based on theme
 							size={25}
-							color={theme.primaryText}
+							color={currentTheme.primaryText}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -143,7 +155,7 @@ const SettingsScreen = ({ navigation }) => {
 						onChangeValue={changeLanguage}
 						style={pickerStyle}
 						containerStyle={{ height: 40 }}
-						dropDownStyle={{ backgroundColor: theme.background }}
+						dropDownStyle={{ backgroundColor: currentTheme.background }}
 					/>
 				</View>
 
@@ -196,6 +208,7 @@ const createStyles = (theme) =>
 			backgroundColor: theme.surface,
 			borderRadius: 12,
 			marginBottom: 24,
+			padding: 16,
 		},
 		headerIconButton: {
 			padding: 12,

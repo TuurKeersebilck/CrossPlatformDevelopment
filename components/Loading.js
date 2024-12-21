@@ -5,10 +5,11 @@ import { Themes } from "../styling/Themes";
 import { useTranslation } from "react-i18next";
 
 const Loading = () => {
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
-	const { centered } = createStyles(theme);
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
+
+	const { centered } = createStyles(currentTheme);
 
 	return (
 		<View
@@ -18,7 +19,7 @@ const Loading = () => {
 		>
 			<ActivityIndicator
 				size="large"
-				color={isDarkMode ? "white" : "black"}
+				color={currentTheme.primaryText}
 				accessibilityRole="progressbar"
 				accessibilityLabel={t("loadingIndicator")}
 			/>
@@ -32,7 +33,7 @@ const createStyles = (theme) =>
 			flex: 1,
 			justifyContent: "center",
 			alignItems: "center",
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.background,
 		},
 	});
 

@@ -27,12 +27,12 @@ const SearchScreen = ({ navigation }) => {
 	const [allArtists, setAllArtists] = useState([]);
 	const [allAlbums, setAllAlbums] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const { isDarkMode } = useTheme();
-	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
 
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 	const { container, input, scrollView, emptyResult, placeholder } =
-		createStyles(theme);
+		createStyles(currentTheme);
 
 	useFocusEffect(
 		React.useCallback(() => {

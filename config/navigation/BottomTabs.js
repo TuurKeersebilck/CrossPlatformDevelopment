@@ -1,17 +1,19 @@
 import React from "react";
-import ArtistsStackNavigator from "./stacks/ArtistsStackNavigator";
-import SettingsStackNavigator from "./stacks/SettingStackNavigator";
-import SearchStackNavigator from "./stacks/SearchStackNavigator";
-import Icon from "react-native-vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../context/ThemeContext";
+import { Themes } from "../../styling/Themes";
 import { useTranslation } from "react-i18next";
+import ArtistsStackNavigator from "./stacks/ArtistsStackNavigator";
+import SearchStackNavigator from "./stacks/SearchStackNavigator";
+import SettingsStackNavigator from "./stacks/SettingStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabs = () => {
-	const { isDarkMode } = useTheme();
 	const { t } = useTranslation();
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 
 	return (
 		<Tab.Navigator
@@ -32,12 +34,12 @@ const BottomTabs = () => {
 				tabBarActiveTintColor: "tomato",
 				tabBarInactiveTintColor: "gray",
 				tabBarStyle: {
-					backgroundColor: isDarkMode ? "black" : "white",
+					backgroundColor: currentTheme.background,
 				},
 				headerStyle: {
-					backgroundColor: isDarkMode ? "black" : "white",
+					backgroundColor: currentTheme.background,
 				},
-				headerTintColor: isDarkMode ? "white" : "black",
+				headerTintColor: currentTheme.primaryText,
 			})}
 		>
 			<Tab.Screen

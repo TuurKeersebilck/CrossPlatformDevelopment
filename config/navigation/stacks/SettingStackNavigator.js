@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../../context/ThemeContext";
+import { Themes } from "../../../styling/Themes";
 import SettingsScreen from "../../../screens/SettingsScreen";
 import ArtistDetailScreen from "../../../screens/DetailScreens/ArtistDetailScreen";
 import TrackDetailScreen from "../../../screens/DetailScreens/TrackDetailScreen";
@@ -13,28 +14,25 @@ import { useTranslation } from "react-i18next";
 const Stack = createStackNavigator();
 
 const SettingStackNavigator = () => {
-	const { isDarkMode } = useTheme();
+	const { theme } = useTheme();
+	const currentTheme = Themes[theme];
 	const { t } = useTranslation();
 
 	return (
 		<Stack.Navigator
 			screenOptions={{
 				headerStyle: {
-					backgroundColor: isDarkMode ? "black" : "white",
+					backgroundColor: currentTheme.background,
 				},
-				headerTintColor: isDarkMode ? "white" : "black",
+				headerTintColor: currentTheme.primaryText,
 				headerTitleStyle: {
 					fontWeight: "bold",
 				},
 				headerBackTitleStyle: {
-					color: isDarkMode ? "tomato" : "blue",
+					color: currentTheme.primaryText,
 				},
 				headerBackImage: () => (
-					<Ionicons
-						name="arrow-back"
-						size={24}
-						color={isDarkMode ? "tomato" : "blue"}
-					/>
+					<Ionicons name="arrow-back" size={24} color={currentTheme.accent} />
 				),
 			}}
 		>
@@ -42,6 +40,17 @@ const SettingStackNavigator = () => {
 				name="SettingsScreen"
 				component={SettingsScreen}
 				options={{ title: t("settingsTitle") }}
+			/>
+
+			<Stack.Screen
+				name="TrackDetailScreen"
+				component={TrackDetailScreen}
+				options={({ route }) => ({ title: route.params.title })}
+			/>
+			<Stack.Screen
+				name="ArtistDetailScreen"
+				component={ArtistDetailScreen}
+				options={({ route }) => ({ title: route.params.name })}
 			/>
 			<Stack.Screen
 				name="AlbumDetailScreen"
@@ -57,16 +66,6 @@ const SettingStackNavigator = () => {
 				name="AddAlbumScreen"
 				component={AddAlbumScreen}
 				options={{ title: t("addAlbumTitle") }}
-			/>
-			<Stack.Screen
-				name="ArtistDetailScreen"
-				component={ArtistDetailScreen}
-				options={({ route }) => ({ title: route.params.name })}
-			/>
-			<Stack.Screen
-				name="TrackDetailScreen"
-				component={TrackDetailScreen}
-				options={({ route }) => ({ title: route.params.title })}
 			/>
 		</Stack.Navigator>
 	);
