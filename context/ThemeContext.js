@@ -11,7 +11,7 @@ export const ThemeProvider = ({ children }) => {
 	useEffect(() => {
 		const loadTheme = async () => {
 			const savedTheme = await AsyncStorage.getItem("theme");
-			if (savedTheme !== null) {
+			if (savedTheme && Themes[savedTheme]) {
 				setTheme(savedTheme);
 			}
 		};

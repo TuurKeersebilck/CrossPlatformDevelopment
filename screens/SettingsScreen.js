@@ -24,8 +24,8 @@ import { useTranslation } from "react-i18next";
 import i18n from "../config/i18n";
 
 const SettingsScreen = ({ navigation }) => {
-	const { theme, toggleTheme } = useTheme(); // Use the useTheme hook to get the current theme and toggleTheme function
-	const currentTheme = Themes[theme]; // Get the current theme styles
+	const { theme, toggleTheme } = useTheme();
+	const currentTheme = Themes[theme]; 
 
 	const { t } = useTranslation();
 	const [language, setLanguage] = useState(i18n.language);
@@ -116,8 +116,8 @@ const SettingsScreen = ({ navigation }) => {
 				return "sunny";
 			case "dark":
 				return "moon";
-			case "pastel":
-				return "color-palette";
+			case "grandma":
+				return "glasses-outline";
 			default:
 				return "sunny";
 		}
@@ -136,7 +136,7 @@ const SettingsScreen = ({ navigation }) => {
 						accessibilityHint="Double tap to toggle theme"
 					>
 						<Icon
-							name={getIconName(theme)} // Adjust icon based on theme
+							name={getIconName(theme)}
 							size={25}
 							color={currentTheme.primaryText}
 						/>

@@ -48,4 +48,4 @@ export default useValidUrl;
 
 Kan je en.json volledig vertalen -> nl.json
 
-Kan je mij een 3de theme geven met pastel kleuren -> Themes.js -> pastel
+Kan je mij een 3de theme geven grandma mode -> Themes -> grandma
