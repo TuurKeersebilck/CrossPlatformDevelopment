@@ -30,7 +30,6 @@ const TrackRow = ({ track, navigation }) => {
 		trackDurationContainer,
 		trackDuration,
 		albumTitle,
-		trackAlbum,
 	} = createStyles(theme);
 
 	const toggleFavorite = async () => {
@@ -43,9 +42,6 @@ const TrackRow = ({ track, navigation }) => {
 			console.error(t("favoriteUpdateFailed"), error.message);
 		}
 	};
-
-	const screenWidth = Dimensions.get("window").width;
-	const isMobile = screenWidth < 600;
 
 	return (
 		<View style={container}>
@@ -71,7 +67,6 @@ const TrackRow = ({ track, navigation }) => {
 					<Text style={artistName}>{track.artistName}</Text>
 					<View style={trackDurationContainer}>
 						<Text style={trackDuration}>{track.duration}</Text>
-						<Text style={albumTitle}>{track.albumTitle}</Text>
 					</View>
 				</View>
 				<TouchableOpacity
