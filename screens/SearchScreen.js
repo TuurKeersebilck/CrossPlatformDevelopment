@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import TrackRow from "../components/rows/TrackRow";
 import ArtistRow from "../components/rows/ArtistRow";
-import { getArtists, getTracks } from "../api/api_calls";
+import AlbumRow from "../components/rows/AlbumRow";
+import { getArtists, getTracks, getAlbums } from "../api/api_calls";
 import { Themes } from "../styling/Themes";
 import { useTheme } from "../context/ThemeContext";
 import LoadingIndicator from "../components/Loading";
@@ -20,8 +21,10 @@ const SearchScreen = ({ navigation }) => {
 	const [query, setQuery] = useState("");
 	const [filteredTracks, setFilteredTracks] = useState([]);
 	const [filteredArtists, setFilteredArtists] = useState([]);
+	const [filteredAlbums, setFilteredAlbums] = useState([]);
 	const [allTracks, setAllTracks] = useState([]);
 	const [allArtists, setAllArtists] = useState([]);
+	const [allAlbums, setAllAlbums] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? Themes.dark : Themes.light;
@@ -33,9 +36,10 @@ const SearchScreen = ({ navigation }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const [artistsData, tracksData] = await Promise.all([
+				const [artistsData, tracksData, albumsData] = await Promise.all([
 					getArtists(),
 					getTracks(),
+					getAlbums(),
 				]);
 
 				setQuery("");
@@ -43,6 +47,8 @@ const SearchScreen = ({ navigation }) => {
 				setFilteredArtists(artistsData);
 				setAllTracks(tracksData);
 				setFilteredTracks(tracksData);
+				setAllAlbums(albumsData);
+				setFilteredAlbums(albumsData);
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			} finally {
@@ -65,9 +71,15 @@ const SearchScreen = ({ navigation }) => {
 				track.title.toLowerCase().includes(text.toLowerCase())
 			);
 			setFilteredTracks(filteredTracks);
+
+			const filteredAlbums = allAlbums.filter((album) =>
+				album.title.toLowerCase().includes(text.toLowerCase())
+			);
+			setFilteredAlbums(filteredAlbums);
 		} else {
 			setFilteredArtists(allArtists);
 			setFilteredTracks(allTracks);
+			setFilteredAlbums(allAlbums);
 		}
 	};
 
@@ -90,6 +102,15 @@ const SearchScreen = ({ navigation }) => {
 					accessibilityLabel={`Track: ${item.title}`}
 				/>
 			);
+		} else if (item.type === "album") {
+			return (
+				<AlbumRow
+					album={item}
+					navigation={navigation}
+					accessibilityRole="button"
+					accessibilityLabel={`Album: ${item.title}`}
+				/>
+			);
 		}
 		return null;
 	};
@@ -97,6 +118,7 @@ const SearchScreen = ({ navigation }) => {
 	const combinedData = [
 		...filteredArtists.map((artist) => ({ ...artist, type: "artist" })),
 		...filteredTracks.map((track) => ({ ...track, type: "track" })),
+		...filteredAlbums.map((album) => ({ ...album, type: "album" })),
 	];
 
 	return (

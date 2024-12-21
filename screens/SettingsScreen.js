@@ -87,7 +87,7 @@ const SettingsScreen = ({ navigation }) => {
 			</View>
 			{data.length > 0 ? (
 				<FlatList
-					data={data.slice(0, 5)}
+					data={data}
 					keyExtractor={(item) => item.id.toString()}
 					renderItem={({ item }) => {
 						if (type === "artist") {
