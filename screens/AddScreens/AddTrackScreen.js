@@ -71,7 +71,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				imgUrl,
 				duration,
 				artistId,
-				albumId: selectedAlbum.id,
+				albumId: selectedAlbum ? selectedAlbum.id : null,
 			};
 			const result = await addTrack(track);
 
