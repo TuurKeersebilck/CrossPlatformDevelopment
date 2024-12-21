@@ -47,6 +47,7 @@ const AlbumRow = ({ album, navigation }) => {
 				style={albumRow}
 				accessibilityRole="button"
 				accessibilityLabel={t("viewAlbumDetails", { title: album.title })}
+				accessibilityHint={t("navigateToAlbumDetails")}
 			>
 				<Image
 					source={{ uri: album.imgUrl }}

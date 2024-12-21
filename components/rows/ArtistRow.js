@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 
 const ArtistRow = ({ artist, navigation }) => {
 	const { t } = useTranslation();
-
 	const { theme } = useTheme();
 	const currentTheme = Themes[theme];
 
@@ -30,6 +29,7 @@ const ArtistRow = ({ artist, navigation }) => {
 			style={container}
 			accessibilityRole="button"
 			accessibilityLabel={t("viewArtistDetails", { name: artist.name })}
+			accessibilityHint={t("navigateToArtistDetails")}
 		>
 			<View style={artistRow}>
 				<Image
@@ -67,16 +67,15 @@ const createStyles = (theme) =>
 		artistImage: {
 			width: 60,
 			height: 60,
-			borderRadius: 8,
+			borderRadius: 30,
 		},
 		artistName: {
-			fontSize: theme.fontSizes.large,
+			fontSize: theme.fontSizes.medium,
 			fontWeight: theme.fontWeights.bold,
 			color: theme.primaryText,
 		},
 		artistBio: {
-			fontSize: theme.fontSizes.medium,
-			marginTop: 4,
+			fontSize: theme.fontSizes.small,
 			color: theme.secondaryText,
 		},
 	});
