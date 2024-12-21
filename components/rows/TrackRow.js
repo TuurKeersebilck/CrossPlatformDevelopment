@@ -69,22 +69,22 @@ const TrackRow = ({ track, navigation }) => {
 						<Text style={trackDuration}>{track.duration}</Text>
 					</View>
 				</View>
-				<TouchableOpacity
-					onPress={toggleFavorite}
-					style={favoriteButton}
-					accessibilityRole="button"
-					accessibilityLabel={
-						isFavorited
-							? t("removeFromFavorites", { title: track.title })
-							: t("addToFavorites", { title: track.title })
-					}
-				>
-					<Ionicons
-						name={isFavorited ? "heart" : "heart-outline"}
-						size={30}
-						color={theme.accent}
-					/>
-				</TouchableOpacity>
+			</TouchableOpacity>
+			<TouchableOpacity
+				onPress={toggleFavorite}
+				style={favoriteButton}
+				accessibilityRole="button"
+				accessibilityLabel={
+					isFavorited
+						? t("removeFromFavorites", { title: track.title })
+						: t("addToFavorites", { title: track.title })
+				}
+			>
+				<Ionicons
+					name={isFavorited ? "heart" : "heart-outline"}
+					size={30}
+					color={theme.accent}
+				/>
 			</TouchableOpacity>
 		</View>
 	);
@@ -93,21 +93,23 @@ const TrackRow = ({ track, navigation }) => {
 const createStyles = (theme) =>
 	StyleSheet.create({
 		container: {
-			flex: 1,
+			flexDirection: "row",
+			alignItems: "center",
 			padding: 10,
 			backgroundColor: theme.background,
 		},
 		trackRow: {
+			flex: 1,
 			flexDirection: "row",
 			alignItems: "center",
-			padding: 10,
-			borderBottomWidth: 1,
-			borderBottomColor: theme.border,
+			padding: 12,
+			borderRadius: 8,
 		},
 		trackImage: {
 			width: 50,
 			height: 50,
 			marginRight: 10,
+			borderRadius: 8,
 		},
 		trackInfo: {
 			flex: 1,
