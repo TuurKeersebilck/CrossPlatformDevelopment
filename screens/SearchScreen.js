@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 	View,
 	Text,
@@ -16,6 +16,7 @@ import { Themes } from "../styling/Themes";
 import { useTheme } from "../context/ThemeContext";
 import LoadingIndicator from "../components/Loading";
 import { useTranslation } from "react-i18next";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SearchScreen = ({ navigation }) => {
 	const [query, setQuery] = useState("");
@@ -33,31 +34,33 @@ const SearchScreen = ({ navigation }) => {
 	const { container, input, scrollView, emptyResult, placeholder } =
 		createStyles(theme);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const [artistsData, tracksData, albumsData] = await Promise.all([
-					getArtists(),
-					getTracks(),
-					getAlbums(),
-				]);
+	useFocusEffect(
+		React.useCallback(() => {
+			const fetchData = async () => {
+				try {
+					const [artistsData, tracksData, albumsData] = await Promise.all([
+						getArtists(),
+						getTracks(),
+						getAlbums(),
+					]);
 
-				setQuery("");
-				setAllArtists(artistsData);
-				setFilteredArtists(artistsData);
-				setAllTracks(tracksData);
-				setFilteredTracks(tracksData);
-				setAllAlbums(albumsData);
-				setFilteredAlbums(albumsData);
-			} catch (error) {
-				console.error("Error fetching data:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
+					setQuery("");
+					setAllArtists(artistsData);
+					setFilteredArtists(artistsData);
+					setAllTracks(tracksData);
+					setFilteredTracks(tracksData);
+					setAllAlbums(albumsData);
+					setFilteredAlbums(albumsData);
+				} catch (error) {
+					console.error("Error fetching data:", error);
+				} finally {
+					setLoading(false);
+				}
+			};
 
-		fetchData();
-	}, []);
+			fetchData();
+		}, [])
+	);
 
 	const handleSearch = (text) => {
 		setQuery(text);

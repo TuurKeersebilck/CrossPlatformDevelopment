@@ -142,9 +142,11 @@ const createStyles = (theme) =>
 			marginBottom: 10,
 		},
 		buttonContainer: {
-			flexDirection: "row",
+			flexDirection: "column",
 			justifyContent: "space-between",
-			width: "25%",
+			width: "50%",
+			paddingHorizontal: 20,
+			marginTop: 20,
 		},
 		errorText: {
 			fontSize: theme.fontSizes.medium,

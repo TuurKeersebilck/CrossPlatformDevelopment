@@ -18,7 +18,7 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
 	const { t } = useTranslation();
 	const { modalOverlay, modalContainer, modalTitle, modalItem, item } =
 		createStyles(theme);
-
+		
 	return (
 		<Modal
 			transparent={true}
@@ -42,11 +42,14 @@ const ModalPicker = ({ visible, onClose, items, onSelect, title }) => {
 						renderItem={({ item }) => (
 							<TouchableOpacity
 								style={modalItem}
-								onPress={() => onSelect(item)}
+								onPress={() => {
+									onSelect(item);
+									onClose();
+								}}
 								accessibilityRole="button"
-								accessibilityLabel={item.label}
+								accessibilityLabel={item.title}
 							>
-								<Text style={item}>{item.label}</Text>
+								<Text style={item}>{item.title}</Text>
 							</TouchableOpacity>
 						)}
 					/>

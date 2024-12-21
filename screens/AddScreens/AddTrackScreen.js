@@ -59,7 +59,6 @@ const AddTrackScreen = ({ navigation, route }) => {
 		} else if (!/^\d{2}:\d{2}$/.test(duration)) {
 			newErrors.duration = t("durationInvalid");
 		}
-
 		if (Object.keys(newErrors).length > 0) {
 			setErrors(newErrors);
 			return;
@@ -71,7 +70,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				imgUrl,
 				duration,
 				artistId,
-				albumId: selectedAlbum,
+				albumId: selectedAlbum.id,
 			};
 			const result = await addTrack(track);
 
@@ -142,9 +141,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				onPress={() => setIsAlbumModalVisible(true)}
 			>
 				<Text style={label}>
-					{selectedAlbum
-						? albums.find((a) => a.id === selectedAlbum)?.title
-						: t("selectAlbum")}
+					{selectedAlbum ? selectedAlbum.title : t("selectAlbum")}
 				</Text>
 			</TouchableOpacity>
 
@@ -152,7 +149,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				visible={isAlbumModalVisible}
 				onClose={() => setIsAlbumModalVisible(false)}
 				items={albums}
-				onSelect={setSelectedAlbum}
+				onSelect={(album) => setSelectedAlbum(album)}
 				title={t("selectAlbum")}
 			/>
 
