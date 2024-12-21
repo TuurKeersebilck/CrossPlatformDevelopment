@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
-    "@react-native-async-storage/async-storage": "^2.1.0",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/bottom-tabs": "^7.0.3",
     "@react-navigation/native": "^7.0.2",
     "@react-navigation/stack": "^7.0.2",
-    "expo": "^52.0.18",
+    "expo": "^52.0.20",
     "expo-status-bar": "~2.0.0",
     "express": "^4.17.1",
     "i18next": "^24.1.2",
