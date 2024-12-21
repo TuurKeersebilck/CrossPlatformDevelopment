@@ -15,7 +15,6 @@ const TrackDetailScreen = ({ route, navigation }) => {
 	const theme = isDarkMode ? Themes.dark : Themes.light;
 	const { t } = useTranslation();
 
-	// TODO: settings beter stylen
 	useEffect(() => {
 		const getTrackDetails = async () => {
 			try {
