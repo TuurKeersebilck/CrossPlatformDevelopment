@@ -104,7 +104,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("titleLabel")}:*
 			</Text>
 			{errors.title && (
@@ -121,7 +121,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				accessibilityLabel={t("titlePlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("imgUrlLabel")}:*
 			</Text>
 			{errors.imgUrl && (
@@ -138,7 +138,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				accessibilityLabel={t("imgUrlPlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("durationLabel")}:*
 			</Text>
 			{errors.duration && (
@@ -157,7 +157,7 @@ const AddTrackScreen = ({ navigation, route }) => {
 				accessibilityLabel={t("durationPlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("selectAlbum")}:
 			</Text>
 			<TouchableOpacity

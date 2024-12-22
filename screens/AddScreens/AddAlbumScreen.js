@@ -63,7 +63,7 @@ const AddAlbumScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("titleLabel")}:*
 			</Text>
 			{errors.title && (
@@ -80,7 +80,7 @@ const AddAlbumScreen = ({ navigation, route }) => {
 				accessibilityLabel={t("titlePlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("imgUrlLabel")}:*
 			</Text>
 			{errors.imgUrl && (
@@ -97,7 +97,7 @@ const AddAlbumScreen = ({ navigation, route }) => {
 				accessibilityLabel={t("imgUrlPlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("releaseDateLabel")}:*
 			</Text>
 			{errors.releaseDate && (

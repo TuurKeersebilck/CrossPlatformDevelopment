@@ -124,7 +124,7 @@ const SettingsScreen = ({ navigation }) => {
 	};
 
 	return (
-		<SafeAreaView style={container} accessibilityRole="main">
+		<SafeAreaView style={container} accessibilityRole="header">
 			<View style={contentContainer}>
 				<View style={darkModeSection}>
 					<Text style={sectionTitle}>{t("toggleTheme")}</Text>

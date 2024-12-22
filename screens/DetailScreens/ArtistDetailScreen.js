@@ -107,7 +107,7 @@ const ArtistDetailScreen = ({ route, navigation }) => {
 	return (
 		<View
 			style={container}
-			accessibilityRole="main"
+			accessibilityRole="header"
 			accessibilityLabel={t("artistDetailScreen")}
 		>
 			{error && (

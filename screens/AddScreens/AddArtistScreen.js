@@ -58,7 +58,7 @@ const AddArtistScreen = ({ navigation }) => {
 
 	return (
 		<View style={container}>
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("nameLabel")}:*
 			</Text>
 			{errors.name && (
@@ -75,7 +75,7 @@ const AddArtistScreen = ({ navigation }) => {
 				accessibilityLabel={t("namePlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("imgUrlLabel")}:*
 			</Text>
 			{errors.imgUrl && (
@@ -92,7 +92,7 @@ const AddArtistScreen = ({ navigation }) => {
 				accessibilityLabel={t("imgUrlPlaceholder")}
 			/>
 
-			<Text style={label} accessibilityRole="label">
+			<Text style={label} accessibilityRole="text">
 				{t("bioLabel")}:*
 			</Text>
 			{errors.bio && (
