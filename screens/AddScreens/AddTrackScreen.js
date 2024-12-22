@@ -91,14 +91,21 @@ const AddTrackScreen = ({ navigation, route }) => {
 		}
 	};
 
-	const handleDurationChange = (text) => {
+		const handleDurationChange = (text) => {
 		const cleaned = text.replace(/[^0-9]/g, "");
-
+	
 		let formatted = cleaned;
 		if (cleaned.length >= 2) {
-			formatted = `${cleaned.slice(0, 2)}:${cleaned.slice(2, 4)}`;
+			let minutes = cleaned.slice(0, 2);
+			let seconds = cleaned.slice(2, 4);
+	
+			if (seconds.length > 0 && parseInt(seconds[0], 10) > 5) {
+				seconds = "5" + (seconds.length > 1 ? seconds[1] : "");
+			}
+	
+			formatted = `${minutes}:${seconds}`;
 		}
-
+	
 		setDuration(formatted);
 	};
 
